@@ -15,7 +15,7 @@
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
     "ts": "tsc --noEmit && node --no-warnings=ExperimentalWarning --loader ts-node/esm",
-    "ts-main": "tsc --noEmit && node --no-warnings=ExperimentalWarning --loader ts-node/esm ./src/main.ts"
+    "ts-main": "npm run ts ./src/main.ts"
   },
   "devDependencies": {
     "@types/node": "20.12.7",
