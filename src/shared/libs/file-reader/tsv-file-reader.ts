@@ -8,10 +8,10 @@ export class TSVFileReader implements FileReader {
 
   constructor(
     private readonly filename: string
-  ) {}
+  ) { }
 
   private validateRawData(): void {
-    if (! this.rawData) {
+    if (!this.rawData) {
       throw new Error('File was not read');
     }
   }
@@ -31,7 +31,7 @@ export class TSVFileReader implements FileReader {
       image,
       type,
       price,
-      categories,
+      //categories,
       firstname,
       lastname,
       email,
@@ -44,15 +44,15 @@ export class TSVFileReader implements FileReader {
       postDate: new Date(createdDate),
       image,
       type: OfferType[type as 'Buy' | 'Sell'],
-      categories: this.parseCategories(categories),
+      //categories: this.parseCategories(categories),
       price: this.parsePrice(price),
       user: this.parseUser(firstname, lastname, email, avatarPath),
     };
   }
 
-  private parseCategories(categoriesString: string): { name: string }[] {
-    return categoriesString.split(';').map((name) => ({ name }));
-  }
+  // private parseCategories(categoriesString: string): { name: string }[] {
+  //   return categoriesString.split(';').map((name) => ({ name }));
+  // }
 
   private parsePrice(priceString: string): number {
     return Number.parseInt(priceString, 10);

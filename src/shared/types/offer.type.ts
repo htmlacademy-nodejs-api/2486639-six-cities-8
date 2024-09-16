@@ -1,5 +1,5 @@
 import { OfferType } from './offer-type.enum.js';
-import { Category } from './category.type.js';
+//import { Category } from './category.type.js';
 import { User } from './user.type.js';
 
 export type Offer = {
@@ -9,6 +9,6 @@ export type Offer = {
   image: string;
   type: OfferType
   price: number;
-  categories: Category[];
+  //  categories: Category[];
   user: User;
 }
