@@ -6,7 +6,7 @@ import { User } from './user.type.js';
 
 export type OfferId = string;
 
-export type BaseOffer = {
+export type Offer = {
   id: OfferId;
   type: OfferType;
   title: string;
@@ -17,22 +17,13 @@ export type BaseOffer = {
   isPremium: boolean;
   rating: number;
   user: User;
+  previewImage: string;
+  description: string;
+  bedrooms: number;
+  goods: OfferGoods;
+  host: User;
+  images: string[];
+  maxAdults: number;
 };
 
-export type Offer = BaseOffer & { previewImage: string };
-
 export type Offers = Offer[];
-
-//! нужно?
-export type DetailOffer =
-  BaseOffer
-  & {
-    description: string;
-    bedrooms: number;
-    goods: OfferGoods;
-    host: User;
-    images: string[];
-    maxAdults: number;
-  };
-
-export type DetailOffers = DetailOffer[];

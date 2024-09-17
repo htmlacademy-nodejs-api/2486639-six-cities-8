@@ -1,25 +1,16 @@
 import { OfferId } from './offer.type.js';
 import { User } from './user.type.js';
 
-//! если не понадобится то объеденить в Review
-export type BaseReview = {
-  comment: string;
-  rating: number;
-};
-
-//! если не понадобится то объеденить в Review
-export type OfferBaseReview =
-  { offerId: OfferId }
-  & BaseReview;
-
 export type ReviewId = string;
 
 export type Review =
   {
     id: ReviewId;
+    offerId: OfferId;
     date: string;
     user: User;
+    comment: string;
+    rating: number;
   }
-  & BaseReview;
 
 export type Reviews = Review[];
