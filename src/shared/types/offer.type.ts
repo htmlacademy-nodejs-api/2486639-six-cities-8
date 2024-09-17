@@ -8,22 +8,23 @@ export type OfferId = string;
 
 export type Offer = {
   id: OfferId;
-  type: OfferType;
   title: string;
-  price: number;
-  city: City;
-  location: Location;
-  isFavorite: boolean;
-  isPremium: boolean;
-  rating: number;
-  user: User;
-  previewImage: string;
   description: string;
-  bedrooms: number;
+  publishDate: string;
+  city: City;
+  previewImage: string;
+  images: string[];
+  isPremium: boolean;
+  isFavorite: boolean;
+  rating: number;
+  type: OfferType;
+  rooms: number;
+  maxAdults: number;
+  price: number;
   goods: OfferGoods;
   host: User;
-  images: string[];
-  maxAdults: number;
+  reviewCount: number;
+  location: Location;
 };
 
 export type Offers = Offer[];
