@@ -1,14 +1,37 @@
+import { City } from './city.type.js';
+import { Location } from './location.type.js';
 import { OfferType } from './offer-type.enum.js';
-//import { Category } from './category.type.js';
 import { User } from './user.type.js';
 
-export type Offer = {
-  title: string;
-  description: string;
-  postDate: Date;
-  image: string;
+export type OfferId = string;
+
+export type BaseOffer = {
+  id: OfferId;
   type: OfferType
+  title: string;
   price: number;
-  //  categories: Category[];
+  city: City;
+  location: Location;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
   user: User;
-}
+};
+
+export type Offer = BaseOffer & { previewImage: string };
+
+export type Offers = Offer[];
+
+//! нужно?
+export type DetailOffer =
+  BaseOffer
+  & {
+    description: string;
+    bedrooms: number;
+    goods: string[];
+    host: User;
+    images: string[];
+    maxAdults: number;
+  };
+
+export type DetailOffers = DetailOffer[];
