@@ -1,5 +1,6 @@
 import { City } from './city.type.js';
 import { Location } from './location.type.js';
+import { OfferGoods } from './offer-goods.type.js';
 import { OfferType } from './offer-type.type.js';
 import { User } from './user.type.js';
 
@@ -28,7 +29,7 @@ export type DetailOffer =
   & {
     description: string;
     bedrooms: number;
-    goods: string[];
+    goods: OfferGoods;
     host: User;
     images: string[];
     maxAdults: number;
