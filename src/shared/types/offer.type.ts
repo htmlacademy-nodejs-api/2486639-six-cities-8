@@ -1,13 +1,13 @@
 import { City } from './city.type.js';
 import { Location } from './location.type.js';
-import { OfferType } from './offer-type.enum.js';
+import { OfferType } from './offer-type.type.js';
 import { User } from './user.type.js';
 
 export type OfferId = string;
 
 export type BaseOffer = {
   id: OfferId;
-  type: OfferType
+  type: OfferType;
   title: string;
   price: number;
   city: City;
