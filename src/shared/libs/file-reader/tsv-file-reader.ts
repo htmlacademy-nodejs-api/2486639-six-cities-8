@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { Offer, OfferType, User } from '../../types/index.js';
+import { Offer, /*OfferType,User, UserType*/ } from '../../types/index.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -17,50 +17,52 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim().length > 0)
-      .map((line) => this.parseLineToOffer(line));
+    return [];
+
+    // return this.rawData
+    //   .split('\n')
+    //   .filter((row) => row.trim().length > 0)
+    //   .map((line) => this.parseLineToOffer(line));
   }
 
-  private parseLineToOffer(line: string): Offer {
-    const [
-      title,
-      description,
-      createdDate,
-      image,
-      type,
-      price,
-      //categories,
-      firstname,
-      lastname,
-      email,
-      avatarPath
-    ] = line.split('\t');
+  // private parseLineToOffer(line: string): Offer {
+  //   const [
+  //     title,
+  //     description,
+  //     createdDate,
+  //     image,
+  //     type,
+  //     price,
+  //     //categories,
+  //     firstname,
+  //     lastname,
+  //     email,
+  //     avatarPath
+  //   ] = line.split('\t');
 
-    return {
-      title,
-      description,
-      postDate: new Date(createdDate),
-      image,
-      type: OfferType[type as 'Buy' | 'Sell'],
-      //categories: this.parseCategories(categories),
-      price: this.parsePrice(price),
-      user: this.parseUser(firstname, lastname, email, avatarPath),
-    };
-  }
+  //   return {
+  //     title,
+  //     description,
+  //     postDate: new Date(createdDate),
+  //     image,
+  //     type: OfferType[type as 'Buy' | 'Sell'],
+  //     //categories: this.parseCategories(categories),
+  //     price: this.parsePrice(price),
+  //     user: this.parseUser(firstname, lastname, email, avatarPath),
+  //   };
+  // }
 
   // private parseCategories(categoriesString: string): { name: string }[] {
   //   return categoriesString.split(';').map((name) => ({ name }));
   // }
 
-  private parsePrice(priceString: string): number {
-    return Number.parseInt(priceString, 10);
-  }
+  // private parsePrice(priceString: string): number {
+  //   return Number.parseInt(priceString, 10);
+  // }
 
-  private parseUser(firstname: string, lastname: string, email: string, avatarPath: string): User {
-    return { email, firstname, lastname, avatarPath };
-  }
+  // private parseUser(firstname: string, lastname: string, email: string, avatarPath: string): User {
+  //   return { email, type: UserType.Pro, firstname, lastname, avatarPath };
+  // }
 
   public read(): void {
     this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
