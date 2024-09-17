@@ -8,6 +8,6 @@ export const OFFER_GOODS = [
   'Fridge'
 ] as const;
 
-type OfferGood = typeof OFFER_GOODS[number];
+export type OfferGood = typeof OFFER_GOODS[number];
 
 export type OfferGoods = Set<OfferGood>;

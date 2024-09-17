@@ -23,7 +23,7 @@ export type Offer = {
   price: number;
   goods: OfferGoods;
   host: User;
-  reviewCount: number;
+  reviewCount?: number;
   location: Location;
 };
 
