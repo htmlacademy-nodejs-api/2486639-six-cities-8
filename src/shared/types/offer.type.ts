@@ -10,7 +10,7 @@ export type Offer = {
   id: OfferId;
   title: string;
   description: string;
-  publishDate: string;
+  publishDate: Date;
   city: City;
   previewImage: string;
   images: string[];

@@ -3,9 +3,10 @@ import { FileReader } from './file-reader.interface.js';
 import {
   City, Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
-  User, UserType
+  User, UserType,
+  CityName
 } from '../../types/index.js';
-import { CITIES } from '../../../const.js';
+import { CITY_LOCATIONS } from '../../../const.js';
 import { getValue } from '../../../utils/common.js';
 
 export class TSVFileReader implements FileReader {
@@ -22,14 +23,15 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseCity(cityName: string): City {
-    //! похожий код на parseType и д.т. только сначала нужно проверить по перечислениею с названием городов, а потом и координатах
-    const city = CITIES.find((item) => (item.name === cityName));
+    const name = CityName[cityName as CityName];
 
-    if (!city) {
+    if (!name) {
       throw new Error(`City "${cityName}" not found!`);
     }
 
-    return city;
+    const { location } = CITY_LOCATIONS[name]; // если появится 7 и т.д. город, то тут будет ошибка, т.к. необходимо заполнить координаты нового города
+
+    return { name, location };
   }
 
   private parseImages(images: string): string[] {
@@ -54,14 +56,21 @@ export class TSVFileReader implements FileReader {
     return getValue(type, [...OFFER_TYPES]);
   }
 
-  private parseUser(email: string, userType: string, avatarPath: string, firstname: string, lastname: string): User {
+  private parseUser(name: string, email: string, avatarPath: string, userType: string): User {
+    //! тоже бы обернуть дженериком
     const type = UserType[userType as UserType];
 
     if (!type) {
       throw new Error(`User type "${userType}" not found!`);
     }
 
-    return { email, type, avatarPath, firstname, lastname };
+    return {
+      name,
+      email,
+      avatarPath,
+      password: '', //! может совсем свойство убрать
+      type
+    };
   }
 
   private parseLocation(latitude: string, longitude: string): Location {
@@ -110,11 +119,10 @@ export class TSVFileReader implements FileReader {
       maxAdults,
       price,
       goods,
+      name,
       email,
-      userType,
       avatarPath,
-      firstname,
-      lastname,
+      userType,
       latitude,
       longitude,
     ] = line.split('\t');
@@ -123,8 +131,8 @@ export class TSVFileReader implements FileReader {
       id: `offer-id-${index + 1}`, //! временно
       title,
       description,
-      publishDate,
-      city: this.parseCity(city),
+      publishDate: new Date(publishDate),
+      city: this.parseCity(city), //! возможно будет только ссылка на имя города
       previewImage: previewImage,
       images: this.parseImages(images),
       isPremium: Boolean(isPremium),
@@ -135,7 +143,7 @@ export class TSVFileReader implements FileReader {
       maxAdults: this.parseNumber(maxAdults),
       price: this.parseNumber(price),
       goods: this.parseGoods(goods),
-      host: this.parseUser(email, userType, avatarPath, firstname, lastname),
+      host: this.parseUser(name, email, avatarPath, userType),
       location: this.parseLocation(latitude, longitude)
     };
   }
