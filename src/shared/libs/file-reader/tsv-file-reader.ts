@@ -3,8 +3,7 @@ import { FileReader } from './file-reader.interface.js';
 import {
   City, Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
-  User, UserType,
-  CityName
+  User, UserType, CityName
 } from '../../types/index.js';
 import { CITY_LOCATIONS } from '../../../const.js';
 import { getValue } from '../../../utils/common.js';
@@ -22,7 +21,18 @@ export class TSVFileReader implements FileReader {
     }
   }
 
+  private parseDate(publishDate: string): Date {
+    const convertedDate = new Date(publishDate);
+
+    if (isNaN(convertedDate.getTime())) {
+      throw new Error(`Date "${publishDate}" not date!`);
+    }
+
+    return convertedDate;
+  }
+
   private parseCity(cityName: string): City {
+    //! одинаковый код, тоже бы обернуть дженериком
     const name = CityName[cityName as CityName];
 
     if (!name) {
@@ -57,7 +67,7 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseUser(name: string, email: string, avatarPath: string, userType: string): User {
-    //! тоже бы обернуть дженериком
+    //! одинаковый код, тоже бы обернуть дженериком
     const type = UserType[userType as UserType];
 
     if (!type) {
@@ -131,7 +141,7 @@ export class TSVFileReader implements FileReader {
       id: `offer-id-${index + 1}`, //! временно
       title,
       description,
-      publishDate: new Date(publishDate),
+      publishDate: this.parseDate(publishDate),
       city: this.parseCity(city), //! возможно будет только ссылка на имя города
       previewImage: previewImage,
       images: this.parseImages(images),
