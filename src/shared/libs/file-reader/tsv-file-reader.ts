@@ -6,7 +6,6 @@ import {
   User, UserType, CityName
 } from '../../types/index.js';
 import { CITY_LOCATIONS } from '../../../const.js';
-import { getValue } from '../../../utils/common.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -31,15 +30,21 @@ export class TSVFileReader implements FileReader {
     return convertedDate;
   }
 
-  private parseCity(cityName: string): City {
-    //! одинаковый код, тоже бы обернуть дженериком
-    const name = CityName[cityName as CityName];
-
-    if (!name) {
-      throw new Error(`City "${cityName}" not found!`);
+  private validateValueInArray(value: string, items: string[]) {
+    if (!items.includes(value)) {
+      throw new Error(`Value "${value}" not found in "${items.join(', ')}"!`);
     }
+  }
 
-    const { location } = CITY_LOCATIONS[name]; // если появится 7 и т.д. город, то тут будет ошибка, т.к. необходимо заполнить координаты нового города
+  private validateValueInObject(value: string, dictionary: object) {
+    this.validateValueInArray(value, Object.values(dictionary));
+  }
+
+  private parseCity(cityName: string): City {
+    this.validateValueInObject(cityName, CityName);
+
+    const name = cityName as CityName;
+    const { location } = CITY_LOCATIONS[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
 
     return { name, location };
   }
@@ -68,27 +73,16 @@ export class TSVFileReader implements FileReader {
     return convertFloat;
   }
 
-  private parseType(type: string): OfferType {
-    /*
-    //! похожий код
-    const offerType = OFFER_TYPES.find((item) => (item === type));
+  private parseOfferType(offerType: string): OfferType {
+    this.validateValueInArray(offerType, [...OFFER_TYPES]);
 
-    if (!offerType) {
-      throw new Error(`Offer type "${type}" not found!`);
-    }
-
-    return offerType;
-    */
-    return getValue(type, [...OFFER_TYPES]);
+    return offerType as OfferType;
   }
 
   private parseUser(name: string, email: string, avatarPath: string, userType: string): User {
-    //! одинаковый код, тоже бы обернуть дженериком
-    const type = UserType[userType as UserType];
-
-    if (!type) {
-      throw new Error(`User type "${userType}" not found!`);
-    }
+    this.validateValueInObject(userType, UserType);
+    //! одинаковый код, тоже бы обернуть дженериком но enum это не type, а фактически Object, а если в enum key!==value, Property 'Ordinary12345' does not exist on type 'typeof UserType'.
+    const type = userType as UserType;
 
     return {
       name,
@@ -106,24 +100,17 @@ export class TSVFileReader implements FileReader {
     };
   }
 
-  private parseGood(good: string): OfferGood {
-    /*
-    //! похожий код
-    const offerGood = OFFER_GOODS.find((value) => (value === good));
+  private parseOfferGood(offerGood: string): OfferGood {
+    this.validateValueInArray(offerGood, [...OFFER_GOODS]);
 
-    if (!offerGood) {
-      throw new Error(`Offer good "${offerGood}" not found!`);
-    }
-
-    return offerGood;*/
-    return getValue(good, [...OFFER_GOODS]);
+    return offerGood as OfferGood;
   }
 
-  private parseGoods(goods: string): OfferGoods {
+  private parseOfferGoods(goods: string): OfferGoods {
     const offerGoods = new Set<OfferGood>();
 
     goods.split(';').map(
-      (good) => offerGoods.add(this.parseGood(good))
+      (good) => offerGoods.add(this.parseOfferGood(good))
     );
 
     return offerGoods;
@@ -164,11 +151,11 @@ export class TSVFileReader implements FileReader {
       isPremium: Boolean(isPremium),
       isFavorite: Boolean(isFavorite),
       rating: this.parseFloat(rating),
-      type: this.parseType(type),
+      type: this.parseOfferType(type),
       rooms: this.parseInteger(rooms),
       maxAdults: this.parseInteger(maxAdults),
       price: this.parseFloat(price),
-      goods: this.parseGoods(goods),
+      goods: this.parseOfferGoods(goods),
       host: this.parseUser(name, email, avatarPath, userType),
       location: this.parseLocation(latitude, longitude)
     };
