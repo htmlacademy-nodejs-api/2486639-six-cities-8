@@ -48,8 +48,24 @@ export class TSVFileReader implements FileReader {
     return images.split(';').map((image) => (image));
   }
 
-  private parseNumber(value: string): number {
-    return Number.parseInt(value, 10);
+  private parseInteger(value: string): number {
+    const convertInteger = Number.parseInt(value, 10);
+
+    if (isNaN(convertInteger)) {
+      throw new Error(`String "${value}" is not integer!`);
+    }
+
+    return convertInteger;
+  }
+
+  private parseFloat(value: string): number {
+    const convertFloat = Number.parseFloat(value);
+
+    if (isNaN(convertFloat)) {
+      throw new Error(`String "${value}" is not float!`);
+    }
+
+    return convertFloat;
   }
 
   private parseType(type: string): OfferType {
@@ -85,8 +101,8 @@ export class TSVFileReader implements FileReader {
 
   private parseLocation(latitude: string, longitude: string): Location {
     return {
-      latitude: this.parseNumber(latitude),
-      longitude: this.parseNumber(longitude)
+      latitude: this.parseFloat(latitude),
+      longitude: this.parseFloat(longitude)
     };
   }
 
@@ -147,11 +163,11 @@ export class TSVFileReader implements FileReader {
       images: this.parseImages(images),
       isPremium: Boolean(isPremium),
       isFavorite: Boolean(isFavorite),
-      rating: this.parseNumber(rating),
+      rating: this.parseFloat(rating),
       type: this.parseType(type),
-      rooms: this.parseNumber(rooms),
-      maxAdults: this.parseNumber(maxAdults),
-      price: this.parseNumber(price),
+      rooms: this.parseInteger(rooms),
+      maxAdults: this.parseInteger(maxAdults),
+      price: this.parseFloat(price),
       goods: this.parseGoods(goods),
       host: this.parseUser(name, email, avatarPath, userType),
       location: this.parseLocation(latitude, longitude)
