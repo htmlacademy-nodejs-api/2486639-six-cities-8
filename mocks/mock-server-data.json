@@ -1,0 +1,134 @@
+{
+  "api": {
+    "titles": [
+      "first offer",
+      "second offer",
+      "third offer",
+      "fourth offer",
+      "fifth offer",
+      "sixth offer",
+      "fouseventhrth"
+    ],
+    "descriptions": [
+      "first offer description",
+      "second offer description",
+      "third offer description",
+      "fourth offer description",
+      "fifth offer description",
+      "sixth offer description",
+      "fouseventhrth description"
+    ],
+    "publishDate": {
+      "min": "2024-07-01T00:00:00.000Z",
+      "max": "2024-10-01T00:00:00.000Z"
+    },
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previewImages": [
+      "preview-img-1.jpg",
+      "preview-img-2.jpg",
+      "preview-img-3.jpg",
+      "preview-img-4.jpg",
+      "preview-img-5.jpg",
+      "preview-img-6.jpg",
+      "preview-img-7.jpg",
+      "preview-img-8.jpg",
+      "preview-img-9.jpg"
+    ],
+    "images": [
+      "img-1.jpg",
+      "img-2.jpg",
+      "img-3.jpg",
+      "img-4.jpg",
+      "img-5.jpg"
+    ],
+    "rating": {
+      "min": 10,
+      "max": 50,
+      "orderDivisor": 1
+    },
+    "types": [
+      "apartment",
+      "house",
+      "room",
+      "hotel"
+    ],
+    "rooms": {
+      "min": 1,
+      "max": 8
+    },
+    "maxAdults": {
+      "min": 1,
+      "max": 10
+    },
+    "price": {
+      "min": 100,
+      "max": 200
+    },
+    "goods": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "user": {
+      "names": [
+        "Igor",
+        "Andrey",
+        "Pavel",
+        "Max",
+        "Alice"
+      ],
+      "emails": [
+        "snow@pisem.local",
+        "president@dka.local",
+        "fish@big.local",
+        "test@pisem.local",
+        "freedom@pisem.local",
+        "rolan@pochta.local",
+        "author@mir.local",
+        "test@lost.loca",
+        "kujo-fan@story.local"
+      ],
+      "avatarPaths": [
+        "avatar-1.jpg",
+        "avatar-2.jpg",
+        "avatar-3.jpg",
+        "avatar-4.jpg",
+        "avatar-5.jpg"
+      ],
+      "passwords": [
+        "password1",
+        "password2",
+        "password3",
+        "password4",
+        "password5"
+      ],
+      "types": [
+        "Ordinary",
+        "Pro"
+      ]
+    },
+    "location": {
+      "latitude": {
+        "min": 40,
+        "max": 60,
+        "orderDivisor": 6
+      },
+      "longitude": {
+        "min": 2,
+        "max": 4,
+        "orderDivisor": 6
+      }
+    }
+  }
+}
