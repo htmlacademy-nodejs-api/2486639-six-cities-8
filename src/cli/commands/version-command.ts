@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Command } from './command.interface.js';
-import { getPackageVersion } from '../../utils/package-json-config.js';
+import { getPackageVersion } from '#utils/package-json-config.js';
 import { CommandType } from './const.js';
 
 export class VersionCommand implements Command {
