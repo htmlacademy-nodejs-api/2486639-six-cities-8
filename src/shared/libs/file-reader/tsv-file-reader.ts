@@ -4,8 +4,8 @@ import {
   City, Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
   User, UserType, CityName
-} from '../../types/index.js';
-import { CITY_LOCATIONS } from '../../../const.js';
+} from '#shared/types/index.js';
+import { CITY_LOCATIONS } from '#const.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
