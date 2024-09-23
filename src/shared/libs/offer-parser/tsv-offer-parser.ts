@@ -96,6 +96,10 @@ export class TSVOfferParser implements OfferParser {
   private parseOfferGoods(goods: string): OfferGoods {
     const offerGoods = new Set<OfferGood>();
 
+    if (!goods) {
+      return offerGoods;
+    }
+
     goods.split(';').map(
       (good) => offerGoods.add(this.parseOfferGood(good))
     );
