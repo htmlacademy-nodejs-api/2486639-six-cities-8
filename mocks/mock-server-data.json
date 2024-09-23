@@ -22,14 +22,6 @@
       "min": "2024-07-01T00:00:00.000Z",
       "max": "2024-10-01T00:00:00.000Z"
     },
-    "cities": [
-      "Paris",
-      "Cologne",
-      "Brussels",
-      "Amsterdam",
-      "Hamburg",
-      "Dusseldorf"
-    ],
     "previewImages": [
       "preview-img-1.jpg",
       "preview-img-2.jpg",
@@ -42,16 +34,28 @@
       "preview-img-9.jpg"
     ],
     "images": [
-      "img-1.jpg",
-      "img-2.jpg",
-      "img-3.jpg",
-      "img-4.jpg",
-      "img-5.jpg"
+      "img-01.jpg",
+      "img-02.jpg",
+      "img-03.jpg",
+      "img-04.jpg",
+      "img-05.jpg",
+      "img-06.jpg",
+      "img-07.jpg",
+      "img-08.jpg",
+      "img-09.jpg",
+      "img-10.jpg",
+      "img-11.jpg",
+      "img-12.jpg",
+      "img-13.jpg",
+      "img-14.jpg",
+      "img-15.jpg",
+      "img-16.jpg",
+      "img-17.jpg"
     ],
     "rating": {
-      "min": 10,
-      "max": 50,
-      "orderDivisor": 1
+      "min": 1,
+      "max": 5,
+      "numAfterDigit": 1
     },
     "rooms": {
       "min": 1,
@@ -101,14 +105,14 @@
     },
     "deltaCityLocation": {
       "latitude": {
-        "min": -5,
-        "max": 5,
-        "orderDivisor": 6
+        "min": -0.1,
+        "max": 0.1,
+        "numAfterDigit": 6
       },
       "longitude": {
-        "min": -1,
-        "max": 1,
-        "orderDivisor": 6
+        "min": -0.001,
+        "max": 0.001,
+        "numAfterDigit": 6
       }
     }
   }
