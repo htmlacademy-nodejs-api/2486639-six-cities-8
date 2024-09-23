@@ -4,7 +4,7 @@ import {
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
   User, UserType, CityName, OfferId
 } from '#shared/types/index.js';
-import { CITY_LOCATIONS } from '#const.js';
+import { CityLocation } from '#const.js';
 
 export class TSVOfferParser implements OfferParser {
   private parseDate(publishDate: string): Date {
@@ -31,7 +31,7 @@ export class TSVOfferParser implements OfferParser {
     this.validateValueInObject(cityName, CityName);
 
     const name = cityName as CityName;
-    const { location } = CITY_LOCATIONS[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
+    const { location } = CityLocation[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
 
     return { name, location };
   }

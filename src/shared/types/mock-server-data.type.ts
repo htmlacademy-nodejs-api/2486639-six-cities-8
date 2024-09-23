@@ -1,7 +1,7 @@
 export type randomNumberOption = {
   min: number,
   max: number,
-  orderDivisor?: number
+  numAfterDigit?: number
 };
 
 export type MockServerData = {
@@ -11,9 +11,8 @@ export type MockServerData = {
     min: string;
     max: string;
   };
-  cities: string[];
-  categoryImages: string[];
   previewImages: string[];
+  images: string[];
   rating: randomNumberOption;
   rooms: randomNumberOption;
   maxAdults: randomNumberOption;

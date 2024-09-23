@@ -1,6 +1,6 @@
 import { CityName } from './shared/types/index.js';
 
-export const CITY_LOCATIONS = {
+export const CityLocation = {
   [CityName.Paris]: {
     location: {
       latitude: 48.85661,
@@ -38,3 +38,5 @@ export const CITY_LOCATIONS = {
     }
   }
 };
+
+export const IMAGES_COUNT = 6;
