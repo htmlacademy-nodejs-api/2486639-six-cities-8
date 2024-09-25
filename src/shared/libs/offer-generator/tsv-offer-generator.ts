@@ -1,6 +1,12 @@
 import { OfferGenerator } from './offer-generator.interface.js';
-import { CityName, MockServerData, OFFER_GOODS, OFFER_TYPES, randomNumberOption, UserType } from '#shared/types/index.js';
-import { getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem, round, getRandomItems } from '#shared/helpers/index.js';
+import {
+  CityName, MockServerData, OFFER_GOODS, OFFER_TYPES,
+  randomNumberOption, UserType
+} from '#shared/types/index.js';
+import {
+  getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem,
+  round, getRandomItems, getRandomObjectKey
+} from '#shared/helpers/index.js';
 import { CityLocation, IMAGES_COUNT } from '#const.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
@@ -13,13 +19,12 @@ export class TSVOfferGenerator implements OfferGenerator {
   public generate(): string {
     const { mockData } = this;
     const { deltaCityLocation } = mockData;
-    const cityName = getRandomItem<CityName>(Object.values(CityName));
+    const cityName = getRandomObjectKey(CityName);
     const { location } = CityLocation[cityName];
 
     const title = getRandomItem(mockData.titles);
     const description = getRandomItem(mockData.descriptions);
     const publishDate = getRandomDate(mockData.publishDate.min, mockData.publishDate.max).toISOString();
-    const city = cityName;
     const previewImage = getRandomItem(mockData.previewImages);
     const images = getRandomItems(mockData.images, IMAGES_COUNT, IMAGES_COUNT).join(';');
     const isPremium = getRandomBoolean();
@@ -33,7 +38,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const name = getRandomItem(mockData.user.names);
     const email = getRandomItem(mockData.user.emails);
     const avatarPath = getRandomItem(mockData.user.avatarPaths);
-    const userType = getRandomItem(Object.values(UserType));
+    const userType = getRandomObjectKey(UserType);
     const latitude = round(location.latitude + this.getRandomNumber(deltaCityLocation.latitude), deltaCityLocation.latitude.numAfterDigit);
     const longitude = round(location.longitude + this.getRandomNumber(deltaCityLocation.longitude), deltaCityLocation.latitude.numAfterDigit);
 
@@ -41,7 +46,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       title,
       description,
       publishDate,
-      city,
+      cityName,
       previewImage,
       images,
       isPremium,
