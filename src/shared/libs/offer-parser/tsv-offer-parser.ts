@@ -3,8 +3,8 @@ import {
   City, Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
   User, UserType, CityName, OfferId
-} from '#shared/types/index.js';
-import { CityLocation } from '#const.js';
+} from '#src/shared/types/index.js';
+import { CityLocation } from '#src/const.js';
 
 export class TSVOfferParser implements OfferParser {
   private parseDate(publishDate: string): Date {
