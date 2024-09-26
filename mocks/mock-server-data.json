@@ -1,0 +1,119 @@
+{
+  "api": {
+    "titles": [
+      "first offer",
+      "second offer",
+      "third offer",
+      "fourth offer",
+      "fifth offer",
+      "sixth offer",
+      "fouseventhrth"
+    ],
+    "descriptions": [
+      "first offer description",
+      "second offer description",
+      "third offer description",
+      "fourth offer description",
+      "fifth offer description",
+      "sixth offer description",
+      "seventh description"
+    ],
+    "publishDate": {
+      "min": "2024-07-01T00:00:00.000Z",
+      "max": "2024-10-01T00:00:00.000Z"
+    },
+    "previewImages": [
+      "preview-img-1.jpg",
+      "preview-img-2.jpg",
+      "preview-img-3.jpg",
+      "preview-img-4.jpg",
+      "preview-img-5.jpg",
+      "preview-img-6.jpg",
+      "preview-img-7.jpg",
+      "preview-img-8.jpg",
+      "preview-img-9.jpg"
+    ],
+    "images": [
+      "img-01.jpg",
+      "img-02.jpg",
+      "img-03.jpg",
+      "img-04.jpg",
+      "img-05.jpg",
+      "img-06.jpg",
+      "img-07.jpg",
+      "img-08.jpg",
+      "img-09.jpg",
+      "img-10.jpg",
+      "img-11.jpg",
+      "img-12.jpg",
+      "img-13.jpg",
+      "img-14.jpg",
+      "img-15.jpg",
+      "img-16.jpg",
+      "img-17.jpg"
+    ],
+    "rating": {
+      "min": 1,
+      "max": 5,
+      "numAfterDigit": 1
+    },
+    "rooms": {
+      "min": 1,
+      "max": 8
+    },
+    "maxAdults": {
+      "min": 1,
+      "max": 10
+    },
+    "price": {
+      "min": 100,
+      "max": 200
+    },
+    "user": {
+      "names": [
+        "Igor",
+        "Andrey",
+        "Pavel",
+        "Max",
+        "Alice"
+      ],
+      "emails": [
+        "snow@pisem.local",
+        "president@dka.local",
+        "fish@big.local",
+        "test@pisem.local",
+        "freedom@pisem.local",
+        "rolan@pochta.local",
+        "author@mir.local",
+        "test@lost.loca",
+        "kujo-fan@story.local"
+      ],
+      "avatarPaths": [
+        "avatar-1.jpg",
+        "avatar-2.jpg",
+        "avatar-3.jpg",
+        "avatar-4.jpg",
+        "avatar-5.jpg"
+      ],
+      "passwords": [
+        "password1",
+        "password2",
+        "password3",
+        "password4",
+        "password5"
+      ]
+    },
+    "deltaCityLocation": {
+      "latitude": {
+        "min": -0.1,
+        "max": 0.1,
+        "numAfterDigit": 6
+      },
+      "longitude": {
+        "min": -0.001,
+        "max": 0.001,
+        "numAfterDigit": 6
+      }
+    }
+  }
+}

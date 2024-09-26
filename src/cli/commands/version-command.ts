@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Command } from './command.interface.js';
-import { getPackageVersion } from '../../utils/package-json-config.js';
+import { getErrorMessage, getPackageVersion } from '#src/shared/helpers/index.js';
 import { CommandType } from './const.js';
 
 export class VersionCommand implements Command {
@@ -14,9 +14,7 @@ export class VersionCommand implements Command {
       const version = getPackageVersion();
       console.info(chalk.green(version));
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
+      getErrorMessage(error);
     }
   }
 }
