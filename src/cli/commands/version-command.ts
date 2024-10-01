@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Command } from './command.interface.js';
-import { getErrorMessage, getPackageVersion } from '#src/shared/helpers/index.js';
+import { getErrorMessage, getPackageVersion } from '../../shared/helpers/index.js';
 import { CommandType } from './const.js';
 
 export class VersionCommand implements Command {

@@ -1,7 +1,7 @@
 import { Command } from './command.interface.js';
-import { TSVFileReader } from '#src/shared/libs/file-reader/index.js';
-import { getErrorMessage } from '#src/shared/helpers/index.js';
-import { Offer } from '#src/shared/types/index.js';
+import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
+import { getErrorMessage } from '../../shared/helpers/index.js';
+import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
 
 export class ImportCommand implements Command {

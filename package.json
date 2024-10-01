@@ -7,15 +7,23 @@
     "api",
     "node.js"
   ],
-  "main": "main.js",
+  "main": "./src/main.cli.js",
   "scripts": {
-    "start": "npm run build && node ./dist/main.js",
+    "start": "npm run build && node ./dist/src/main.js",
+    "start:cli": "npm run build && node ./dist/src/main.cli.js",
+    "start:dev:cli": "nodemon --exec npm run ts ./src/main.cli.ts",
+    "start:dev:cli:version": "npm run start:dev:cli -- -- -- --version",
+    "start:dev:cli:help": "npm run start:dev:cli -- -- -- --help",
+    "start:dev:cli:none": "npm run start:dev:cli -- -- -- --none",
+    "start:dev:cli:import": "npm run start:dev:cli -- -- -- --import ./mocks/offers.tsv",
+    "start:dev:cli:generate": "npm run start:dev:cli -- -- -- --generate 50 ./mocks/offers.tsv http://localhost:3123/api",
     "build": "npm run clean && npm run compile",
-    "lint": "eslint src/ --ext .ts",
-    "compile": "tsc -p tsconfig.json",
+    "lint": "tsc --noEmit && eslint src/ --ext .ts",
+    "lint:fix": "eslint src/ --ext .ts --fix",
+    "compile": "tsc",
     "clean": "rimraf dist",
     "ts": "tsc --noEmit && node --no-warnings=ExperimentalWarning --loader ts-node/esm",
-    "mock:server": "json-server ./mocks/mock-server-data.json --port 3123 --host localhost"
+    "mock:server": "json-server ./mocks/mock-server-data.json --port 3123"
   },
   "devDependencies": {
     "@types/node": "20.12.7",
@@ -23,11 +31,12 @@
     "@typescript-eslint/parser": "6.7.0",
     "eslint": "8.49.0",
     "eslint-config-htmlacademy": "9.1.1",
+    "json-server": "0.17.3",
+    "nodemon": "3.1.7",
     "rimraf": "5.0.1",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5",
-    "json-server": "0.17.3",
-    "tslib": "2.6.2"
+    "tslib": "2.6.2",
+    "typescript": "5.4.5"
   },
   "type": "module",
   "engines": {
@@ -38,8 +47,5 @@
     "chalk": "5.3.0",
     "dayjs": "1.11.10",
     "got": "14.2.1"
-  },
-  "imports": {
-    "#src/*": "./src/*"
   }
 }

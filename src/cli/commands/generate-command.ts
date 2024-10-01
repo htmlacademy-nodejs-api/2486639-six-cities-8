@@ -1,9 +1,9 @@
 import got from 'got';
 import { Command } from './command.interface.js';
-import { TSVOfferGenerator } from '#src/shared/libs/offer-generator/index.js';
-import { TSVFileWriter } from '#src/shared/libs/file-writer/index.js';
-import { getErrorMessage } from '#src/shared/helpers/index.js';
-import { MockServerData } from '#src/shared/types/index.js';
+import { TSVOfferGenerator } from '../../shared/libs/offer-generator/index.js';
+import { TSVFileWriter } from '../../shared/libs/file-writer/index.js';
+import { getErrorMessage } from '../../shared/helpers/index.js';
+import { MockServerData } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
 
 export class GenerateCommand implements Command {
