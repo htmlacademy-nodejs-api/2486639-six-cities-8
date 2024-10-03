@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm run build && node ./dist/src/main.js",
     "start:cli": "npm run build && node ./dist/src/main.cli.js",
-    "start:dev:cli": "nodemon --exec npm run ts ./src/main.cli.ts",
+    "start:dev:cli": "nodemon --exec npm run ts ./src/main.cli.ts || exit 1",
     "start:dev:cli:version": "npm run start:dev:cli -- -- -- --version",
     "start:dev:cli:help": "npm run start:dev:cli -- -- -- --help",
     "start:dev:cli:none": "npm run start:dev:cli -- -- -- --none",
