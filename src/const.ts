@@ -37,6 +37,8 @@ export const CityLocation = {
       longitude: 6.776314
     }
   }
-};
+} as const;
 
 export const IMAGES_COUNT = 6;
+
+export const LOG_PATH = 'logs/rest.log';
