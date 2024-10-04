@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import 'reflect-metadata'; // временно
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { CLIApplication, GenerateCommand, HelpCommand, ImportCommand, VersionCommand } from './cli/index.js';
 import { PinoLogger } from './shared/libs/logger/pino.logger.js';
-import { getCurrentModuleDirectoryPath } from './shared/helpers/index.js';
+import { getSrcDirectoryPath } from './shared/helpers/index.js';
 import { LOG_PATH } from './const.js';
 
 function bootstrap() {
@@ -16,17 +16,7 @@ function bootstrap() {
     new GenerateCommand()
   ]);
 
-  const modulePath = getCurrentModuleDirectoryPath();
-  const srcPath = '../../../';
-  const logPath = resolve(modulePath, srcPath, LOG_PATH);
-
-  new PinoLogger(logPath);
-  /*
-  const modulePath = getCurrentModuleDirectoryPath();
-  const srcPath = '../../../';
-  const destination = resolve(modulePath, srcPath, LOG_PATH);
-  console.log('11111111', destination);
-  */
+  new PinoLogger(resolve(getSrcDirectoryPath(), LOG_PATH));
 
   cliApplication.processCommand(process.argv);
 }

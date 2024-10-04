@@ -11,15 +11,15 @@ export class PinoLogger implements Logger {
       targets: [
         {
           target: 'pino/file',
-          options: { logPath },
-          level: 'debug'
+          level: 'debug',
+          options: { destination: logPath }
         },
         {
           target: 'pino/file',
           level: 'info',
-          options: {},
+          options: {}
         }
-      ],
+      ]
     });
 
     this.logger = pino({}, multiTransport);
