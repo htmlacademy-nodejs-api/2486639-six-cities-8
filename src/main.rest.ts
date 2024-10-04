@@ -5,7 +5,7 @@ import { /*Logger,*/ PinoLogger } from './shared/libs/logger/index.js';
 import { RestApplication } from './rest/index.js';
 //import { /*Config,*/ RestConfig, /*RestSchema*/ } from './shared/libs/config/index.js';
 //import { Component } from './shared/types/index.js';
-import { getSrcDirectoryPath } from './shared/helpers/file-system.js';
+import { getRootDirectoryPath } from './shared/helpers/file-system.js';
 import { LOG_PATH } from './const.js';
 
 async function bootstrap() {
@@ -16,7 +16,7 @@ async function bootstrap() {
 
   //const application = container.get<RestApplication>(Component.RestApplication);
 
-  const logger = new PinoLogger(resolve(getSrcDirectoryPath(), LOG_PATH));
+  const logger = new PinoLogger(resolve(getRootDirectoryPath(), LOG_PATH));
   //const config = new RestConfig();
   const application = new RestApplication(logger/*, config*/);
 
