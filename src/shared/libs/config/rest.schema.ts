@@ -27,5 +27,5 @@ export const configRestSchema = convict<RestSchema>({
     format: 'ipaddress',
     env: 'DB_HOST',
     default: '127.0.0.1'
-  },
+  }
 });
