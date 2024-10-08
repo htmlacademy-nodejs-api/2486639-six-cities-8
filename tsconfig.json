@@ -18,10 +18,16 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": ".",
-    "emitDecoratorMetadata": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@src/shared": [
+        "./src/shared"
+      ]
+    },
     "types": [
       "node",
     ],

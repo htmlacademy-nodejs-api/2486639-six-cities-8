@@ -2,12 +2,12 @@ import { OfferGenerator } from './offer-generator.interface.js';
 import {
   CityName, MockServerData, OFFER_GOODS, OFFER_TYPES,
   randomNumberOption, UserType
-} from '#src/shared/types/index.js';
+} from '../../types/index.js';
 import {
   getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem,
   round, getRandomItems, getRandomObjectKey
-} from '#src/shared/helpers/index.js';
-import { CityLocation, IMAGES_COUNT } from '#src/const.js';
+} from '../../helpers/index.js';
+import { CityLocation, IMAGES_COUNT } from '../../../const.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) { }
