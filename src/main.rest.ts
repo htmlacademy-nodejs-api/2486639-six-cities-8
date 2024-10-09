@@ -25,14 +25,16 @@ bootstrap();
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
   3. а как передать параметр для конструктора? если понадобится
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
+  4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
+  5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
 
-  3. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  10. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  4. скрипты запуска js из dist
+  11. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",
