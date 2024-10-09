@@ -4,6 +4,8 @@ import { Logger, PinoLogger } from './shared/libs/logger/index.js';
 import { RestApplication } from './rest/index.js';
 import { Config, RestConfig, RestSchema } from './shared/libs/config/index.js';
 import { Component } from './shared/types/index.js';
+import { MongoDatabaseClient } from './shared/libs/database-client/index.js';
+import { getMongoURI } from './shared/helpers/index.js';
 
 async function bootstrap() {
   const container = new Container();
@@ -14,6 +16,12 @@ async function bootstrap() {
   const application = container.get<RestApplication>(Component.RestApplication);
 
   await application.init();
+
+  //! временно
+  const logger = new PinoLogger();
+  const config = new RestConfig(logger);
+  const databaseClient = new MongoDatabaseClient(logger);
+  databaseClient.connect(getMongoURI(config.get('DB_USER'), config.get('DB_PASSWORD'), config.get('DB_HOST'), config.get('DB_PORT'), config.get('DB_NAME')));
 }
 
 bootstrap();
