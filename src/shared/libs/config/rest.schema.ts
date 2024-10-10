@@ -54,6 +54,6 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Database name (MongoDB)',
     format: String,
     env: 'DB_NAME',
-    default: 'six-cities-api'
+    default: 'six-cities'
   }
 });
