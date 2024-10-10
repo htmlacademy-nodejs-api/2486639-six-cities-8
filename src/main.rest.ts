@@ -27,6 +27,10 @@ bootstrap();
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
   4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
   5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
+  6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
+      this.onImportedOffer = this.onImportedOffer.bind(this);
+      this.onCompleteImport = this.onCompleteImport.bind(this);
+
 
   10. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
