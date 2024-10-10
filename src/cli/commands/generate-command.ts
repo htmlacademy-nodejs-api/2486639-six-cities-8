@@ -37,7 +37,7 @@ export class GenerateCommand implements Command {
 
       console.info(`File ${filepath} was created!`);
     } catch (error: unknown) {
-      console.error('Can\'t generate data');
+      console.error('Can\'t generate data!');
       console.error(getErrorMessage(error));
     }
   }

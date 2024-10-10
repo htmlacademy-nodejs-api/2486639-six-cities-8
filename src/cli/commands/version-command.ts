@@ -14,7 +14,8 @@ export class VersionCommand implements Command {
       const version = getPackageVersion();
       console.info(chalk.green(version));
     } catch (error: unknown) {
-      getErrorMessage(error);
+      console.error('Can\'t read version!');
+      console.error(getErrorMessage(error));
     }
   }
 }
