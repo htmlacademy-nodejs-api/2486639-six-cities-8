@@ -1,24 +1,46 @@
 import { Command } from './command.interface.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
-import { getErrorMessage } from '../../shared/helpers/index.js';
+import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
+import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
+import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
 
 export class ImportCommand implements Command {
+  private databaseClient: DatabaseClient;
+  private logger: Logger;
+  private salt: string;
+
   private onImportedOffer(offer: Offer): void {
-    console.info(offer);
+    this.logger.info('ImportedOffer: ', offer);
   }
 
   private onCompleteImport(count: number) {
-    console.info(`${count} rows imported.`);
+    this.logger.info(`${count} rows imported.`);
+  }
+
+  constructor() {
+    this.onImportedOffer = this.onImportedOffer.bind(this);
+    this.onCompleteImport = this.onCompleteImport.bind(this);
+
+    this.logger = new ConsoleLogger();
+    this.databaseClient = new MongoDatabaseClient(this.logger);
   }
 
   public getName(): string {
     return CommandType.Import;
   }
 
-  public execute(...parameters: string[]): void {
-    const [filename] = parameters;
+  public async execute(...parameters: string[]): Promise<void> {
+    const [filename, databaseLogin, databasePassword, databaseHost, databasePort, databaseName, salt] = parameters;
+
+    const uri = getMongoURI(databaseLogin, databasePassword, databaseHost, databasePort, databaseName);
+    this.salt = salt;
+    //! временно
+    this.logger.info(this.salt);
+
+    await this.databaseClient.connect(uri);
+
     const fileReader = new TSVFileReader(filename.trim());
 
     fileReader.on('line', this.onImportedOffer);
@@ -27,8 +49,7 @@ export class ImportCommand implements Command {
     try {
       fileReader.read();
     } catch (error: unknown) {
-      console.error(`Can't import data from file: ${filename}`);
-      getErrorMessage(error);
+      this.logger.error(`Can't import data from file: ${filename}!`, error);
     }
   }
 }
