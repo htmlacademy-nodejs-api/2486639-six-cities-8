@@ -1,18 +1,23 @@
 import { Command } from './command.interface.js';
-import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
-import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
 import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
+import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
+import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
+import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
 
 export class ImportCommand implements Command {
-  private databaseClient: DatabaseClient;
   private logger: Logger;
   private salt: string;
+  private databaseClient: DatabaseClient;
+  private userService: UserService;
 
-  private onImportedOffer(offer: Offer): void {
-    this.logger.info('ImportedOffer: ', offer);
+  private async onImportedOffer(offer: Offer): Promise<void> {
+    //this.logger.info('ImportedOffer: ', offer);
+    //! временно
+    const a = await this.userService.findOrCreate({ ...offer.host, password: '12345' }, this.salt);
+    this.logger.info('result db ->', a);
   }
 
   private onCompleteImport(count: number) {
@@ -25,6 +30,7 @@ export class ImportCommand implements Command {
 
     this.logger = new ConsoleLogger();
     this.databaseClient = new MongoDatabaseClient(this.logger);
+    this.userService = new DefaultUserService(this.logger, UserModel);
   }
 
   public getName(): string {
