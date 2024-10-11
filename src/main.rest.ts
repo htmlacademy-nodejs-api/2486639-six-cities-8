@@ -5,7 +5,6 @@ import { createRestApplicationContainer, RestApplication } from './rest/index.js
 import { createUserContainer } from './shared/modules/user/index.js';
 
 async function bootstrap() {
-
   const appContainer = Container.merge(
     createRestApplicationContainer(),
     createUserContainer()
@@ -29,15 +28,27 @@ bootstrap();
   6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
       this.onImportedOffer = this.onImportedOffer.bind(this);
       this.onCompleteImport = this.onCompleteImport.bind(this);
+  7. обязательно ли .exec()? для .findById(id).exec() и .findOne({...}).exec()
+  8. Для описания пропа "type: UserType" обязательно ли указывать все? без указания все отрабоатывает
+    @prop({
+      required: true,
+      type: () => String,
+      enum: UserType
+    })
+    public type: UserType;
+  9. а можно проще при запуске события EventEmitter.emit ?
+      await new Promise((resolve) => {
+        this.emit('line', parsedOffer, resolve);
+      });
+  10. всем полям UserEntity добавить трим?
 
-
-  10. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  11. скрипты запуска js из dist
+  21. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",

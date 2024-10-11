@@ -13,11 +13,13 @@ export class ImportCommand implements Command {
   private databaseClient: DatabaseClient;
   private userService: UserService;
 
-  private async onImportedOffer(offer: Offer): Promise<void> {
+  private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {
     //this.logger.info('ImportedOffer: ', offer);
     //! временно
+    this.logger.info('offer.host.email ->', offer.host.email);
     const a = await this.userService.findOrCreate({ ...offer.host, password: '12345' }, this.salt);
     this.logger.info('result db ->', a);
+    resolve();
   }
 
   private onCompleteImport(count: number) {

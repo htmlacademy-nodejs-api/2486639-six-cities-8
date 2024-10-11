@@ -7,7 +7,6 @@ import { User } from './user.type.js';
 export type OfferId = string;
 
 export type Offer = {
-  id: OfferId;
   title: string;
   description: string;
   publishDate: Date;

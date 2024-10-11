@@ -23,6 +23,10 @@ export class DefaultUserService implements UserService {
     return result;
   }
 
+  public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel.findById(id);
+  }
+
   public async findByEmail(email: string): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findOne({ email });
   }
@@ -31,9 +35,11 @@ export class DefaultUserService implements UserService {
     const existedUser = await this.findByEmail(dto.email);
 
     if (existedUser) {
+      this.logger.info(`User finded by email: ${dto.email}`);
+
       return existedUser;
     }
 
-    return this.create(dto, salt);
+    return await this.create(dto, salt);
   }
 }

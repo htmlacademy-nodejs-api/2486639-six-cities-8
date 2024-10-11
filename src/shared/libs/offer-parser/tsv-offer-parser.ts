@@ -2,7 +2,7 @@ import { OfferParser } from './offer-parser.interface.js';
 import {
   City, Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
-  User, UserType, CityName, OfferId
+  User, UserType, CityName
 } from '../../types/index.js';
 import { CityLocation } from '../../../const.js';
 
@@ -106,7 +106,7 @@ export class TSVOfferParser implements OfferParser {
     return offerGoods;
   }
 
-  public parse(line: string, id: OfferId): Offer {
+  public parse(line: string): Offer {
     const [
       title,
       description,
@@ -131,7 +131,6 @@ export class TSVOfferParser implements OfferParser {
     ] = line.split('\t');
 
     return {
-      id, //! временно
       title,
       description,
       publishDate: this.parseDate(publishDate),
