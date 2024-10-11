@@ -75,7 +75,6 @@ export class TSVOfferParser implements OfferParser {
       name,
       email,
       avatarPath,
-      password: '', //! может совсем свойство убрать
       type
     };
   }
