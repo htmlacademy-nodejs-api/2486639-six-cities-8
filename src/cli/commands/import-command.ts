@@ -22,8 +22,11 @@ export class ImportCommand implements Command {
     resolve();
   }
 
-  private onCompleteImport(count: number) {
+  private async onCompleteImport(count: number) {
     this.logger.info(`${count} rows imported.`);
+
+    // await ?
+    await this.databaseClient.disconnect();
   }
 
   constructor() {
