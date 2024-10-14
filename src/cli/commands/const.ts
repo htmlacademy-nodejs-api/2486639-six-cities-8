@@ -10,7 +10,7 @@ export enum CommandType {
 export const CommandTypeParams = {
   [CommandType.Version]: '',
   [CommandType.Help]: '',
-  [CommandType.Import]: '<path>',
+  [CommandType.Import]: '<path> <dblogin> <dbpass> <dbhost> <dbport> <dbname> <salt>',
   [CommandType.Generate]: '<n> <path> <url>',
 } as const;
 

@@ -22,9 +22,7 @@ export class RestConfig implements Config<RestSchema> {
     try {
       configRestSchema.validate({ allowed: 'strict' });
     } catch (error) {
-      if (error instanceof Error) {
-        logger.error(error.message, error);
-      }
+      logger.error('Error RestSchema validate!', error);
 
       throw new Error('Error validate env params!');
     }

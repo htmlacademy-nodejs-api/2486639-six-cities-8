@@ -1,18 +1,18 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { Logger, PinoLogger } from './shared/libs/logger/index.js';
-import { RestApplication } from './rest/index.js';
-import { Config, RestConfig, RestSchema } from './shared/libs/config/index.js';
 import { Component } from './shared/types/index.js';
+import { createRestApplicationContainer, RestApplication } from './rest/index.js';
+import { createUserContainer } from './shared/modules/user/index.js';
+import { createOfferContainer } from './shared/modules/offer/offer.container.js';
 
 async function bootstrap() {
-  const container = new Container();
-  container.bind<RestApplication>(Component.RestApplication).to(RestApplication).inSingletonScope();
-  container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
-  container.bind<Config<RestSchema>>(Component.Config).to(RestConfig).inSingletonScope();
+  const appContainer = Container.merge(
+    createRestApplicationContainer(),
+    createUserContainer(),
+    createOfferContainer()
+  );
 
-  const application = container.get<RestApplication>(Component.RestApplication);
-
+  const application = appContainer.get<RestApplication>(Component.RestApplication);
   await application.init();
 }
 
@@ -25,14 +25,44 @@ bootstrap();
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
   3. а как передать параметр для конструктора? если понадобится
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
+  4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
+  5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
+  6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
+      this.onImportedOffer = this.onImportedOffer.bind(this);
+      this.onCompleteImport = this.onCompleteImport.bind(this);
+  7. обязательно ли .exec()? для .findById(id).exec() и .findOne({...}).exec()
+  8. Для описания пропа "type: UserType" обязательно ли указывать все? без указания все отрабоатывает
+    @prop({
+      required: true,
+      type: () => String,
+      enum: UserType
+    })
+    public type: UserType;
+  9. а можно проще при запуске события EventEmitter.emit ?
+      await new Promise((resolve) => {
+        this.emit('line', parsedOffer, resolve);
+      });
+  10. всем полям UserEntity добавить трим?
+  11. Координаты городов буду в константах, а в типе только название города. можно и БД закинуть.
+      CityLocation[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
+  12. Можно сделать для массива избранных у пользователя
+      @prop({
+        ref: CategoryEntity,
+        required: true,
+        default: [],
+        _id: false
+      })
+    public categories!: Ref<CategoryEntity>[];
+  13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
+      в следующих лекциях глянуть почему
 
-  3. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  4. скрипты запуска js из dist
+  21. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",

@@ -13,11 +13,11 @@
     "start:dev": "nodemon --exec npm run ts ./src/main.rest.ts | pino-pretty --colorize --translateTime SYS:standard",
     "start:cli": "npm run build && node ./dist/src/main.cli.js",
     "start:cli:dev": "nodemon --exec npm run ts ./src/main.cli.ts",
-    "start:cli:dev:version": "npm run start:dev:cli -- -- -- --version",
-    "start:cli:dev:help": "npm run start:dev:cli -- -- -- --help",
-    "start:cli:dev:none": "npm run start:dev:cli -- -- -- --none",
-    "start:cli:dev:import": "npm run start:dev:cli -- -- -- --import ./mocks/offers.tsv",
-    "start:cli:dev:generate": "npm run start:dev:cli -- -- -- --generate 50 ./mocks/offers.tsv http://localhost:3123/api",
+    "start:cli:dev:version": "npm run start:cli:dev -- -- -- --version",
+    "start:cli:dev:help": "npm run start:cli:dev -- -- -- --help",
+    "start:cli:dev:none": "npm run start:cli:dev -- -- -- --none",
+    "start:cli:dev:import": "npm run start:cli:dev -- -- -- --import ./mocks/offers.tsv admin test localhost 27017 six-cities abcdefg",
+    "start:cli:dev:generate": "npm run start:cli:dev -- -- -- --generate 10 ./mocks/offers.tsv http://localhost:3123/api",
     "build": "npm run clean && npm run compile",
     "lint": "tsc --noEmit && eslint src/ --ext .ts",
     "lint:fix": "eslint src/ --ext .ts --fix",
@@ -49,6 +49,7 @@
     "npm": ">=10"
   },
   "dependencies": {
+    "@typegoose/typegoose": "12.4.0",
     "chalk": "5.3.0",
     "convict": "6.2.4",
     "convict-format-with-validator": "6.2.0",
@@ -56,6 +57,7 @@
     "dotenv": "16.4.5",
     "got": "14.2.1",
     "inversify": "6.0.2",
+    "mongoose": "8.3.4",
     "pino": "9.0.0",
     "reflect-metadata": "0.2.2"
   }

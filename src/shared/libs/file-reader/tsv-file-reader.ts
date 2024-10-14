@@ -31,8 +31,11 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
 
-        const parsedOffer = offerParser.parse(completeRow, `offer-id-${importedRowCount}`);
-        this.emit('line', parsedOffer);
+        const parsedOffer = offerParser.parse(completeRow);
+
+        await new Promise((resolve) => {
+          this.emit('line', parsedOffer, resolve);
+        });
       }
     }
 

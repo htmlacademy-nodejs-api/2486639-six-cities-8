@@ -1,10 +1,9 @@
 import { OfferParser } from './offer-parser.interface.js';
 import {
-  City, Location, Offer, OFFER_TYPES,
+  Location, Offer, OFFER_TYPES,
   OfferType, OFFER_GOODS, OfferGood, OfferGoods,
-  User, UserType, CityName, OfferId
+  User, UserType, CityName
 } from '../../types/index.js';
-import { CityLocation } from '../../../const.js';
 
 export class TSVOfferParser implements OfferParser {
   private parseDate(publishDate: string): Date {
@@ -27,13 +26,12 @@ export class TSVOfferParser implements OfferParser {
     this.validateValueInArray(value, Object.values(dictionary));
   }
 
-  private parseCity(cityName: string): City {
+  private parseCity(cityName: string): CityName {
     this.validateValueInObject(cityName, CityName);
 
     const name = cityName as CityName;
-    const { location } = CityLocation[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
 
-    return { name, location };
+    return name;
   }
 
   private parseImages(images: string): string[] {
@@ -75,7 +73,6 @@ export class TSVOfferParser implements OfferParser {
       name,
       email,
       avatarPath,
-      password: '', //! может совсем свойство убрать
       type
     };
   }
@@ -94,20 +91,20 @@ export class TSVOfferParser implements OfferParser {
   }
 
   private parseOfferGoods(goods: string): OfferGoods {
-    const offerGoods = new Set<OfferGood>();
+    const offerGoods: OfferGoods = [];
 
     if (!goods) {
       return offerGoods;
     }
 
     goods.split(';').map(
-      (good) => offerGoods.add(this.parseOfferGood(good))
+      (good) => offerGoods.push(this.parseOfferGood(good))
     );
 
     return offerGoods;
   }
 
-  public parse(line: string, id: OfferId): Offer {
+  public parse(line: string): Offer {
     const [
       title,
       description,
@@ -132,11 +129,10 @@ export class TSVOfferParser implements OfferParser {
     ] = line.split('\t');
 
     return {
-      id, //! временно
       title,
       description,
       publishDate: this.parseDate(publishDate),
-      city: this.parseCity(city), //! возможно будет только ссылка на имя города
+      cityName: this.parseCity(city),
       previewImage: previewImage,
       images: this.parseImages(images),
       isPremium: Boolean(isPremium),
