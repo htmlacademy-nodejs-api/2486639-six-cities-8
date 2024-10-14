@@ -2,30 +2,74 @@ import { Command } from './command.interface.js';
 import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
 import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
 import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
+import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
+import { DEFAULT_USER_PASSWORD } from '../../const.js';
 
 export class ImportCommand implements Command {
   private logger: Logger;
   private salt: string;
   private databaseClient: DatabaseClient;
   private userService: UserService;
+  offerService: OfferService;
+
+  private async saveOffer(offer: Offer) {
+    const {
+      title,
+      description,
+      publishDate,
+      cityName,
+      previewImage,
+      images,
+      isPremium,
+      isFavorite,
+      rating,
+      type,
+      rooms,
+      maxAdults,
+      price,
+      goods,
+      host,
+      location
+    } = offer;
+
+    const hostEntity = await this.userService.findOrCreate({
+      ...host,
+      password: DEFAULT_USER_PASSWORD
+    }, this.salt);
+
+    await this.offerService.create({
+      title,
+      description,
+      publishDate,
+      cityName,
+      previewImage,
+      images,
+      isPremium,
+      isFavorite,
+      rating,
+      type,
+      rooms,
+      maxAdults,
+      price,
+      goods,
+      hostId: hostEntity.id,
+      location
+    });
+  }
 
   private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {
-    //this.logger.info('ImportedOffer: ', offer);
-    //! временно
-    this.logger.info('offer.host.email ->', offer.host.email);
-    const a = await this.userService.findOrCreate({ ...offer.host, password: '12345' }, this.salt);
-    this.logger.info('result db ->', a);
+    await this.saveOffer(offer);
+
     resolve();
   }
 
   private async onCompleteImport(count: number) {
     this.logger.info(`${count} rows imported.`);
 
-    // await ?
     await this.databaseClient.disconnect();
   }
 
@@ -36,6 +80,7 @@ export class ImportCommand implements Command {
     this.logger = new ConsoleLogger();
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.userService = new DefaultUserService(this.logger, UserModel);
+    this.offerService = new DefaultOfferService(this.logger, OfferModel);
   }
 
   public getName(): string {
@@ -47,8 +92,6 @@ export class ImportCommand implements Command {
 
     const uri = getMongoURI(databaseLogin, databasePassword, databaseHost, databasePort, databaseName);
     this.salt = salt;
-    //! временно
-    this.logger.info(this.salt);
 
     await this.databaseClient.connect(uri);
 
