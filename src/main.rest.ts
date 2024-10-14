@@ -3,11 +3,13 @@ import { Container } from 'inversify';
 import { Component } from './shared/types/index.js';
 import { createRestApplicationContainer, RestApplication } from './rest/index.js';
 import { createUserContainer } from './shared/modules/user/index.js';
+import { createOfferContainer } from './shared/modules/offer/offer.container.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(
     createRestApplicationContainer(),
-    createUserContainer()
+    createUserContainer(),
+    createOfferContainer()
   );
 
   const application = appContainer.get<RestApplication>(Component.RestApplication);
@@ -41,6 +43,18 @@ bootstrap();
         this.emit('line', parsedOffer, resolve);
       });
   10. всем полям UserEntity добавить трим?
+  11. Координаты городов буду в константах, а в типе только название города. можно и БД закинуть.
+      CityLocation[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
+  12. Можно сделать для массива избранных у пользователя
+      @prop({
+        ref: CategoryEntity,
+        required: true,
+        default: [],
+        _id: false
+      })
+    public categories!: Ref<CategoryEntity>[];
+  13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
+      в следующих лекциях глянуть почему
 
   20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
