@@ -23,11 +23,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./",
-    "paths": {
-      "@src/shared": [
-        "./src/shared"
-      ]
-    },
     "types": [
       "node",
     ],
