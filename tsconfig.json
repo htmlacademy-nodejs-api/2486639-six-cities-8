@@ -21,7 +21,7 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
       "@src/shared": [
