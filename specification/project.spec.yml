@@ -1,12 +1,16 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: API сервер для демо-проекта «Шесть городов».
-  description: |-
-    * Список ресурсов и маршрутов сервера «Шесть городов».
+  description: Список ресурсов и маршрутов сервера «Шесть городов».
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
+servers:
+  - url: http://localhost
+security:
+  - ApiKeyAuth: []
+
 tags:
   - name: users
     description: Действия с пользователем.
@@ -16,85 +20,152 @@ tags:
     description: Действия с комментариями.
 
 paths:
-  /users/register:
+  /users:
     post:
       tags:
         - users
-      summary: Регистрация пользователя
-      description: Регистрирует нового пользователя.
+      summary: Создание нового пользователя
+      description: Создание нового пользователя. Создавать новых пользователей могут только анонимные клиенты. Email создаваемого пользователя уникален. В системе не может быть двух пользователей с одинаковым email.
 
       requestBody:
         description: Информация для создания нового пользователя.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/createUser'
+              $ref: "#/components/schemas/createUser"
         required: true
 
       responses:
-        "201":
+        201:
           description: Пользователь зарегистрирован. Объект пользователя.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
-
-        "409":
-          description: Пользователь с таким email уже существует.
-
+                $ref: "#/components/schemas/user"
+        409:
+          description: Не корректные данные или пользователь с таким email уже существует.
 
   /users/login:
     post:
       tags:
         - users
-      summary: Авторизация пользователя
-      description: Авторизует пользователя на основе логина и пароля
+      summary: Вход в закрытую часть приложения
+      description: Ресурс для аутентификации и авторизации пользователя
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/authUser"
+        required: true
+
+      responses:
+        201:
+          description: Авторизация пройдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/token"
+        403:
+          description: Не верный логин или пароль или пользователь не существует
 
     get:
       tags:
         - users
       summary: Проверка состояния пользователя
       description: Возвращает информацию по авторизованному пользователю
+      responses:
+        201:
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        403:
+          description: Пользователь не авторизован
 
-  /users/{userId}/avatar:
-    post:
+  /users/logout:
+    delete:
       tags:
         - users
-      summary: Загрузить изображение аватара
-      description: Загружает изображение аватара пользователя. Изображение
-        аватара должно быть в формате `png` или `jpg`.
+      summary: Выход из закрытой части приложения
+      description: Ресурс для завершения пользовательского сеанса
 
+      responses:
+        200:
+          description: Пользовательский сеанс завершен
+        404:
+          description: Не найдено
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-token
+      in: header
+
   schemas:
+    userType:
+      type: string
+      enum:
+        - Ordinary
+        - Pro
+      example: Pro
+
+    userName:
+      type: string
+      example: Andrey
+
+    userEmail:
+      type: string
+      example: andrey@test.ru
+
+    userAvatarPath:
+      type: string
+      example: http://test.ru/1.jpg
+
+    userPassword:
+      type: string
+      example: 123456
+
     createUser:
       type: object
-
       properties:
+        name:
+          $ref: "#/components/schemas/userName"
         email:
-          type: string
-          example: keks@htmlacademy.ru
-
-        firstname:
-          type: string
-          example: Keks
-
-        lastname:
-          type: string
-          example: Cat
-
+          $ref: "#/components/schemas/userEmail"
+        avatarPath:
+          $ref: "#/components/schemas/userAvatarPath"
         password:
-          type: string
-          example: 123456
+          $ref: "#/components/schemas/userPassword"
+        type:
+          $ref: "#/components/schemas/userType"
 
     user:
       type: object
-
       properties:
-        id:
-          type: string
-          example: 6329c3d6a04ab1061c6425ea
-
+        name:
+          $ref: "#/components/schemas/userName"
         email:
+          $ref: "#/components/schemas/userEmail"
+        avatarPath:
+          $ref: "#/components/schemas/userAvatarPath"
+        type:
+          $ref: "#/components/schemas/userType"
+
+    authUser:
+      type: object
+      properties:
+        email:
+          $ref: "#/components/schemas/userEmail"
+        password:
+          $ref: "#/components/schemas/userPassword"
+
+    token:
+      type: object
+      properties:
+        token:
           type: string
-          example: keks@htmlacademy.ru
+          example: qwewQWEQWEasdasdaASDADzxc
