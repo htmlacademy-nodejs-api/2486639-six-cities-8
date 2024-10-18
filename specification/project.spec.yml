@@ -45,6 +45,49 @@ paths:
         409:
           description: Не корректные данные или пользователь с таким email уже существует.
 
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
+
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          example: qweqweQWEQWqwewqe
+          required: true
+
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: base64
+      #              format: binary
+      #          "image/jpeg":
+      #            schema:
+      #              type: string
+      #              format: base64
+      #              format: binary
+      #          "image/png":
+      #            schema:
+      #              type: string
+      #              format: base64
+      #              format: binary
+
+      responses:
+        201:
+          description: Аватар загружен. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        409:
+          description: Не корректные данные
+
   /users/login:
     post:
       tags:
