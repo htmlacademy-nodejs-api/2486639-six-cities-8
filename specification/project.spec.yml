@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: API сервер для демо-проекта «Шесть городов».
   description: Список ресурсов и маршрутов сервера «Шесть городов».
@@ -141,6 +141,31 @@ paths:
         404:
           description: Не найдено
 
+  /offers:
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Сервис предоставляет ресурс для создания новых предложений. Создавать предложения могут только авторизованные клиенты.
+
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createOffer"
+        required: true
+
+      responses:
+        201:
+          description: Предложение добавлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+        409:
+          description: Не корректные данные.
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -172,20 +197,6 @@ components:
       type: string
       example: 123456
 
-    createUser:
-      type: object
-      properties:
-        name:
-          $ref: "#/components/schemas/userName"
-        email:
-          $ref: "#/components/schemas/userEmail"
-        avatarPath:
-          $ref: "#/components/schemas/userAvatarPath"
-        password:
-          $ref: "#/components/schemas/userPassword"
-        type:
-          $ref: "#/components/schemas/userType"
-
     user:
       type: object
       properties:
@@ -197,6 +208,14 @@ components:
           $ref: "#/components/schemas/userAvatarPath"
         type:
           $ref: "#/components/schemas/userType"
+
+    createUser:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/user"
+      properties:
+        password:
+          $ref: "#/components/schemas/userPassword"
 
     authUser:
       type: object
@@ -212,3 +231,72 @@ components:
         token:
           type: string
           example: qwewQWEQWEasdasdaASDADzxc
+
+    localion:
+      type: object
+      properties:
+        latitude:
+          type: number
+          example: 10.5
+        longitude:
+          type: number
+          example: 11.5
+
+    offerCityName:
+      type: string
+      example: Paris
+
+    offer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: offer title
+        description:
+          type: string
+          example: offer title
+        publishDate:
+          type: string
+          example: "2024-07-09T11:24:14.495Z"
+        city:
+          type: object
+          properties:
+            name:
+              $ref: "#/components/schemas/offerCityName"
+            location:
+              $ref: "#/components/schemas/localion"
+        previewImage:
+          type: string
+          example: preview-img-4.jpg
+        images:
+          type: array
+          items:
+            type: string
+          example:
+            - img-16.jpg
+            - img-11.jpg
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: true
+
+    #
+    #rating: number;
+    #type: OfferType;
+    #rooms: number;
+    #maxAdults: number;
+    #price: number;
+    #goods: OfferGoods;
+    #host: User;
+    #reviewCount?: number;
+    #location: Location;
+
+    createOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/offer"
+      properties:
+        city:
+          $ref: "#/components/schemas/offerCityName"
