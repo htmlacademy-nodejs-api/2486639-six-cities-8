@@ -57,7 +57,7 @@ paths:
           in: path
           schema:
             type: string
-          example: qweqweQWEQWqwewqe
+          example: user-id-user-id
           required: true
 
       requestBody:
@@ -146,7 +146,7 @@ paths:
       tags:
         - offers
       summary: Создание нового предложения
-      description: Сервис предоставляет ресурс для создания новых предложений. Создавать предложения могут только авторизованные клиенты.
+      description: Ресурс для создания новых предложений. Создавать предложения могут только авторизованные клиенты.
 
       requestBody:
         description: Информация для создания нового предложения.
@@ -165,6 +165,81 @@ paths:
                 $ref: "#/components/schemas/offer"
         409:
           description: Не корректные данные.
+
+    get:
+      tags:
+        - offers
+      summary: Список предложений
+      description: Ресурс для получения списка предложений.
+
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+
+      responses:
+        201:
+          description: Предложение добавлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offer"
+
+  /offers/{offerId}:
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения
+      description: Ресурс для редактирования предложения. Клиент может редактировать предложения по аренде, созданные им
+
+      parameters:
+        - name: offerId
+          in: path
+          schema:
+            $ref: "#/components/schemas/offerId"
+          required: true
+
+      requestBody:
+        description: Информация редактируемого предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createOffer"
+        required: true
+
+      responses:
+        201:
+          description: Предложение обновлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+        403:
+          description: Доступ запрещен.
+        409:
+          description: Не корректные данные.
+
+    delete:
+      tags:
+        - offers
+      summary: Удадение предложения
+      description: Ресурс для удаления предложения. Клиент может редактировать предложения по аренде, созданные им
+
+      parameters:
+        - name: offerId
+          in: path
+          schema:
+            $ref: "#/components/schemas/offerId"
+          required: true
+
+      responses:
+        200:
+          description: Предложение удалено.
+        403:
+          description: Доступ запрещен.
 
 components:
   securitySchemes:
@@ -242,11 +317,24 @@ components:
           type: number
           example: 11.5
 
+    offerId:
+      type: string
+      example: offer-id-offer-id
+
     offerCityName:
       type: string
       example: Paris
 
-    offer:
+    offerType:
+      type: string
+      enum:
+        - apartment
+        - house
+        - room
+        - hotel
+      example: room
+
+    baseOffer:
       type: object
       properties:
         title:
@@ -268,6 +356,35 @@ components:
         previewImage:
           type: string
           example: preview-img-4.jpg
+        isPremium:
+          type: boolean
+          example: true
+        type:
+          $ref: "#/components/schemas/offerType"
+        rooms:
+          type: integer
+          example: 2
+        maxAdults:
+          type: integer
+          example: 4
+        price:
+          type: number
+          example: 99.9
+        goods:
+          type: array
+          items:
+            type: string
+          example:
+            - Washer
+            - Breakfast
+        location:
+          $ref: "#/components/schemas/localion"
+
+    baseDetailOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseOffer"
+      properties:
         images:
           type: array
           items:
@@ -275,28 +392,34 @@ components:
           example:
             - img-16.jpg
             - img-11.jpg
-        isPremium:
-          type: boolean
-          example: true
-        isFavorite:
-          type: boolean
-          example: true
-
-    #
-    #rating: number;
-    #type: OfferType;
-    #rooms: number;
-    #maxAdults: number;
-    #price: number;
-    #goods: OfferGoods;
-    #host: User;
-    #reviewCount?: number;
-    #location: Location;
 
     createOffer:
       type: object
       allOf:
-        - $ref: "#/components/schemas/offer"
+        - $ref: "#/components/schemas/baseDetailOffer"
       properties:
         city:
           $ref: "#/components/schemas/offerCityName"
+
+    offer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseOffer"
+      properties:
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 3.5
+        reviewCount:
+          type: integer
+          example: 5
+
+    detailOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseDetailOffer"
+      properties:
+        host:
+          $ref: "#/components/schemas/user"
