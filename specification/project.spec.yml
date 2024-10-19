@@ -16,7 +16,7 @@ tags:
     description: Действия с пользователем.
   - name: offers
     description: Действия с предложениями.
-  - name: comments
+  - name: reviews
     description: Действия с комментариями.
 
 paths:
@@ -162,7 +162,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/offer"
+                $ref: "#/components/schemas/detailOffer"
+        403:
+          description: Доступ запрещен.
         409:
           description: Не корректные данные.
 
@@ -180,7 +182,7 @@ paths:
 
       responses:
         201:
-          description: Предложение добавлено. Объект предложения.
+          description: Список предложений.
           content:
             application/json:
               schema:
@@ -216,7 +218,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/offer"
+                $ref: "#/components/schemas/detailOffer"
         403:
           description: Доступ запрещен.
         409:
@@ -230,7 +232,7 @@ paths:
 
       responses:
         201:
-          description: Предложение добавлено. Объект предложения.
+          description: Детальный объект предложения.
           content:
             application/json:
               schema:
@@ -244,18 +246,61 @@ paths:
       summary: Удадение предложения
       description: Ресурс для удаления предложения. Клиент может редактировать предложения по аренде, созданные им
 
-      parameters:
-        - name: offerId
-          in: path
-          schema:
-            $ref: "#/components/schemas/offerId"
-          required: true
-
       responses:
         200:
           description: Предложение удалено.
         403:
           description: Доступ запрещен.
+
+  /reviews/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
+    get:
+      tags:
+        - reviews
+      summary: Список комментариев для предложения
+      description: Ресурс для получения списка комментариев для определённого предложения.
+
+      responses:
+        201:
+          description: Комментарии предложения.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/review"
+
+    post:
+      tags:
+        - reviews
+      summary: Добавление комментария
+      description: Ресурс для добавления комментариев к определённому предложению по аренде. Добавлять комментарии могут только авторизованные клиенты.
+
+      requestBody:
+        description: Информация для добавления комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createReview"
+        required: true
+
+      responses:
+        201:
+          description: Rомментарий добавлен. Объект комментария.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/review"
+        403:
+          description: Достур запрещен.
+        409:
+          description: Не корректные данные.
 
 components:
   securitySchemes:
@@ -323,6 +368,14 @@ components:
           type: string
           example: qwewQWEQWEasdasdaASDADzxc
 
+    dateString:
+      type: string
+      example: "2024-07-09T11:24:14.495Z"
+
+    rating:
+      type: number
+      example: 3.5
+
     localion:
       type: object
       properties:
@@ -357,8 +410,7 @@ components:
           type: string
           example: offer title
         publishDate:
-          type: string
-          example: "2024-07-09T11:24:14.495Z"
+          $ref: "#/components/schemas/dateString"
         city:
           type: object
           properties:
@@ -426,8 +478,7 @@ components:
           type: boolean
           example: false
         rating:
-          type: number
-          example: 3.5
+          $ref: "#/components/schemas/review"
         reviewCount:
           type: integer
           example: 5
@@ -439,4 +490,23 @@ components:
         - $ref: "#/components/schemas/baseDetailOffer"
       properties:
         host:
+          $ref: "#/components/schemas/user"
+
+    createReview:
+      type: object
+      properties:
+        comment:
+          type: string
+          example: text text text text
+        date:
+          $ref: "#/components/schemas/dateString"
+        rating:
+          $ref: "#/components/schemas/rating"
+
+    review:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/createReview"
+      properties:
+        user:
           $ref: "#/components/schemas/user"
