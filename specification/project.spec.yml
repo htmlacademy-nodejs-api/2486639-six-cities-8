@@ -18,6 +18,8 @@ tags:
     description: Действия с предложениями.
   - name: reviews
     description: Действия с комментариями.
+  - name: favorites
+    description: Действия с избранными предложениями.
 
 paths:
   /users:
@@ -179,6 +181,10 @@ paths:
           in: query
           schema:
             type: integer
+        - name: premium
+          in: query
+          schema:
+            type: boolean
 
       responses:
         201:
@@ -186,9 +192,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/offer"
+                $ref: "#/components/schemas/offers"
 
   /offers/{offerId}:
     parameters:
@@ -302,6 +306,49 @@ paths:
         409:
           description: Не корректные данные.
 
+  /favorites:
+    get:
+      tags:
+        - favorites
+      summary: Список избранных предложений
+      description: Ресурс для получения предложений, добавленных в избранное. Ресурс доступен только авторизованным клиентам.
+
+      responses:
+        201:
+          description: Комментарии предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offers"
+        403:
+          description: Достур запрещен.
+
+    put:
+      tags:
+        - favorites
+      summary: Добавление и удаление предложения в/из избранного
+      description: для добавления и удаления любого предложения в/из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
+
+      requestBody:
+        description: Информация для добавления/удаления в/из избранного.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offerId:
+                  $ref: "#/components/schemas/offerId"
+                isFavorite:
+                  $ref: "#/components/schemas/isFavorite"
+        required: true
+
+      responses:
+        200:
+          description: Успешно.
+        403:
+          description: Достур запрещен.
+        404:
+          description: Предложение не найдено.
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -375,6 +422,10 @@ components:
     rating:
       type: number
       example: 3.5
+
+    isFavorite:
+      type: boolean
+      example: false
 
     localion:
       type: object
@@ -475,13 +526,17 @@ components:
         - $ref: "#/components/schemas/baseOffer"
       properties:
         isFavorite:
-          type: boolean
-          example: false
+          $ref: "#/components/schemas/isFavorite"
         rating:
           $ref: "#/components/schemas/review"
         reviewCount:
           type: integer
           example: 5
+
+    offers:
+      type: array
+      items:
+        $ref: "#/components/schemas/offer"
 
     detailOffer:
       type: object
