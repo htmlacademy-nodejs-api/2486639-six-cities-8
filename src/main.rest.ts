@@ -88,6 +88,38 @@ bootstrap();
         #  node/file-extension-in-import: warn
         node/file-extension-in-import: off
 
+    ! Рабочий вариант для алиасов
+      \src\cli\commands\generate-command.ts
+        //import { TSVOfferGenerator } from '../../shared/libs/offer-generator/index.js';
+        import { TSVOfferGenerator } from '#shared/libs/offer-generator/index.js';
+        //import { TSVFileWriter } from '../../shared/libs/file-writer/index.js';
+        import { TSVFileWriter } from '#shared/libs/file-writer/index.js';
+        //import { getErrorMessage } from '../../shared/helpers/index.js';
+        import { getErrorMessage } from '#shared/helpers/index.js';
+        //import { MockServerData } from '../../shared/types/index.js';
+        import { MockServerData } from '#shared/types/index.js';
+
+      package.json
+        "imports": {
+          "#*": [
+            "./dist/*"
+          ]
+        }
+      ! так как после компиляции нет src, все в dist и для prod и для dev, ели указанj "rootDir": "./src" в tsconfig.json
+
+      tsconfig.json
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "baseUrl": "./",
+        "paths": {
+          "#*": [
+            "./src/*"
+          ]
+        },
+       ! "paths": { "#*": ["./src/*"]} т.к. под linux VS Code ссылаеться на dist ! перепроверить! но под windows все ок без параметра
+
+       ! Если в обоих поменять # на @, то VS Code начинает подставлять @ после указания в tsconfig.json, но при запуске не работает ни где!
+
 Сделать
   + 1. из TSVFileReader выделить OfferParser
 

@@ -1,0 +1,567 @@
+openapi: 3.0.0
+info:
+  title: API сервер для демо-проекта «Шесть городов».
+  description: Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+servers:
+  - url: http://localhost
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: users
+    description: Действия с пользователем.
+  - name: offers
+    description: Действия с предложениями.
+  - name: reviews
+    description: Действия с комментариями.
+  - name: favorites
+    description: Действия с избранными предложениями.
+
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя
+      description: Создание нового пользователя. Создавать новых пользователей могут только анонимные клиенты. Email создаваемого пользователя уникален. В системе не может быть двух пользователей с одинаковым email.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createUser"
+        required: true
+
+      responses:
+        201:
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        409:
+          description: Не корректные данные или пользователь с таким email уже существует.
+
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
+
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: string
+          example: user-id-user-id
+          required: true
+
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: base64
+      #              format: binary
+      #          "image/jpeg":
+      #            schema:
+      #              type: string
+      #              format: base64
+      #              format: binary
+      #          "image/png":
+      #            schema:
+      #              type: string
+      #              format: base64
+      #              format: binary
+
+      responses:
+        201:
+          description: Аватар загружен. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        409:
+          description: Не корректные данные
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Вход в закрытую часть приложения
+      description: Ресурс для аутентификации и авторизации пользователя
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/authUser"
+        required: true
+
+      responses:
+        201:
+          description: Авторизация пройдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/token"
+        403:
+          description: Не верный логин или пароль или пользователь не существует
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+      responses:
+        201:
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        403:
+          description: Пользователь не авторизован
+
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Выход из закрытой части приложения
+      description: Ресурс для завершения пользовательского сеанса
+
+      responses:
+        200:
+          description: Пользовательский сеанс завершен
+        404:
+          description: Не найдено
+
+  /offers:
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Ресурс для создания новых предложений. Создавать предложения могут только авторизованные клиенты.
+
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createOffer"
+        required: true
+
+      responses:
+        201:
+          description: Предложение добавлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        403:
+          description: Доступ запрещен.
+        409:
+          description: Не корректные данные.
+
+    get:
+      tags:
+        - offers
+      summary: Список предложений
+      description: Ресурс для получения списка предложений.
+
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+        - name: premium
+          in: query
+          schema:
+            type: boolean
+
+      responses:
+        201:
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offers"
+
+  /offers/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения
+      description: Ресурс для редактирования предложения. Клиент может редактировать предложения по аренде, созданные им
+
+      requestBody:
+        description: Информация редактируемого предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createOffer"
+        required: true
+
+      responses:
+        201:
+          description: Предложение обновлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        403:
+          description: Доступ запрещен.
+        409:
+          description: Не корректные данные.
+
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Ресурс для получения детальной информации по одному предложению.
+
+      responses:
+        201:
+          description: Детальный объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        404:
+          description: Предложение не найдено
+
+    delete:
+      tags:
+        - offers
+      summary: Удадение предложения
+      description: Ресурс для удаления предложения. Клиент может редактировать предложения по аренде, созданные им
+
+      responses:
+        200:
+          description: Предложение удалено.
+        403:
+          description: Доступ запрещен.
+
+  /reviews/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
+    get:
+      tags:
+        - reviews
+      summary: Список комментариев для предложения
+      description: Ресурс для получения списка комментариев для определённого предложения.
+
+      responses:
+        201:
+          description: Комментарии предложения.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/review"
+
+    post:
+      tags:
+        - reviews
+      summary: Добавление комментария
+      description: Ресурс для добавления комментариев к определённому предложению по аренде. Добавлять комментарии могут только авторизованные клиенты.
+
+      requestBody:
+        description: Информация для добавления комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createReview"
+        required: true
+
+      responses:
+        201:
+          description: Rомментарий добавлен. Объект комментария.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/review"
+        403:
+          description: Достур запрещен.
+        409:
+          description: Не корректные данные.
+
+  /favorites:
+    get:
+      tags:
+        - favorites
+      summary: Список избранных предложений
+      description: Ресурс для получения предложений, добавленных в избранное. Ресурс доступен только авторизованным клиентам.
+
+      responses:
+        201:
+          description: Комментарии предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offers"
+        403:
+          description: Достур запрещен.
+
+    put:
+      tags:
+        - favorites
+      summary: Добавление и удаление предложения в/из избранного
+      description: для добавления и удаления любого предложения в/из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
+
+      requestBody:
+        description: Информация для добавления/удаления в/из избранного.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offerId:
+                  $ref: "#/components/schemas/offerId"
+                isFavorite:
+                  $ref: "#/components/schemas/isFavorite"
+        required: true
+
+      responses:
+        200:
+          description: Успешно.
+        403:
+          description: Достур запрещен.
+        404:
+          description: Предложение не найдено.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-token
+      in: header
+
+  schemas:
+    userType:
+      type: string
+      enum:
+        - Ordinary
+        - Pro
+      example: Pro
+
+    userName:
+      type: string
+      example: Andrey
+
+    userEmail:
+      type: string
+      example: andrey@test.ru
+
+    userAvatarPath:
+      type: string
+      example: http://test.ru/1.jpg
+
+    userPassword:
+      type: string
+      example: 123456
+
+    user:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/userName"
+        email:
+          $ref: "#/components/schemas/userEmail"
+        avatarPath:
+          $ref: "#/components/schemas/userAvatarPath"
+        type:
+          $ref: "#/components/schemas/userType"
+
+    createUser:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/user"
+      properties:
+        password:
+          $ref: "#/components/schemas/userPassword"
+
+    authUser:
+      type: object
+      properties:
+        email:
+          $ref: "#/components/schemas/userEmail"
+        password:
+          $ref: "#/components/schemas/userPassword"
+
+    token:
+      type: object
+      properties:
+        token:
+          type: string
+          example: qwewQWEQWEasdasdaASDADzxc
+
+    dateString:
+      type: string
+      example: "2024-07-09T11:24:14.495Z"
+
+    rating:
+      type: number
+      example: 3.5
+
+    isFavorite:
+      type: boolean
+      example: false
+
+    localion:
+      type: object
+      properties:
+        latitude:
+          type: number
+          example: 10.5
+        longitude:
+          type: number
+          example: 11.5
+
+    offerId:
+      type: string
+      example: offer-id-offer-id
+
+    offerCityName:
+      type: string
+      example: Paris
+
+    offerType:
+      type: string
+      enum:
+        - apartment
+        - house
+        - room
+        - hotel
+      example: room
+
+    baseOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: offer title
+        publishDate:
+          $ref: "#/components/schemas/dateString"
+        city:
+          type: object
+          properties:
+            name:
+              $ref: "#/components/schemas/offerCityName"
+            location:
+              $ref: "#/components/schemas/localion"
+        previewImage:
+          type: string
+          example: preview-img-4.jpg
+        isPremium:
+          type: boolean
+          example: true
+        type:
+          $ref: "#/components/schemas/offerType"
+        price:
+          type: number
+          example: 99.9
+        location:
+          $ref: "#/components/schemas/localion"
+
+    baseDetailOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseOffer"
+      properties:
+        description:
+          type: string
+          example: offer title
+        images:
+          type: array
+          items:
+            type: string
+          example:
+            - img-16.jpg
+            - img-11.jpg
+        rooms:
+          type: integer
+          example: 2
+        maxAdults:
+          type: integer
+          example: 4
+        goods:
+          type: array
+          items:
+            type: string
+          example:
+            - Washer
+            - Breakfast
+
+    createOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseDetailOffer"
+      properties:
+        city:
+          $ref: "#/components/schemas/offerCityName"
+
+    offer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseOffer"
+      properties:
+        isFavorite:
+          $ref: "#/components/schemas/isFavorite"
+        rating:
+          $ref: "#/components/schemas/review"
+        reviewCount:
+          type: integer
+          example: 5
+
+    offers:
+      type: array
+      items:
+        $ref: "#/components/schemas/offer"
+
+    detailOffer:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/offer"
+        - $ref: "#/components/schemas/baseDetailOffer"
+      properties:
+        host:
+          $ref: "#/components/schemas/user"
+
+    createReview:
+      type: object
+      properties:
+        comment:
+          type: string
+          example: text text text text
+        date:
+          $ref: "#/components/schemas/dateString"
+        rating:
+          $ref: "#/components/schemas/rating"
+
+    review:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/createReview"
+      properties:
+        user:
+          $ref: "#/components/schemas/user"

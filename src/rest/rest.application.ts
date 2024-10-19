@@ -30,7 +30,7 @@ export class RestApplication {
     //! временно?
     this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
     this.logger.info(`Get value from env $DB_HOST: ${this.config.get('DB_HOST')}`);
-    this.logger.info(`Get value from env $PORT: ${this.config.get('SALT')}`);
+    this.logger.info(`Get value from env $SALT: ${this.config.get('SALT')}`);
 
     this.logger.info('Init database...');
     await this.initDadabase();
