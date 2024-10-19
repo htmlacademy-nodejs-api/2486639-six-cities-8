@@ -189,18 +189,18 @@ paths:
                   $ref: "#/components/schemas/offer"
 
   /offers/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
     put:
       tags:
         - offers
       summary: Редактирование предложения
       description: Ресурс для редактирования предложения. Клиент может редактировать предложения по аренде, созданные им
-
-      parameters:
-        - name: offerId
-          in: path
-          schema:
-            $ref: "#/components/schemas/offerId"
-          required: true
 
       requestBody:
         description: Информация редактируемого предложения.
@@ -221,6 +221,22 @@ paths:
           description: Доступ запрещен.
         409:
           description: Не корректные данные.
+
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Ресурс для получения детальной информации по одному предложению.
+
+      responses:
+        201:
+          description: Предложение добавлено. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        404:
+          description: Предложение не найдено
 
     delete:
       tags:
@@ -340,9 +356,6 @@ components:
         title:
           type: string
           example: offer title
-        description:
-          type: string
-          example: offer title
         publishDate:
           type: string
           example: "2024-07-09T11:24:14.495Z"
@@ -361,22 +374,9 @@ components:
           example: true
         type:
           $ref: "#/components/schemas/offerType"
-        rooms:
-          type: integer
-          example: 2
-        maxAdults:
-          type: integer
-          example: 4
         price:
           type: number
           example: 99.9
-        goods:
-          type: array
-          items:
-            type: string
-          example:
-            - Washer
-            - Breakfast
         location:
           $ref: "#/components/schemas/localion"
 
@@ -385,6 +385,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/baseOffer"
       properties:
+        description:
+          type: string
+          example: offer title
         images:
           type: array
           items:
@@ -392,6 +395,19 @@ components:
           example:
             - img-16.jpg
             - img-11.jpg
+        rooms:
+          type: integer
+          example: 2
+        maxAdults:
+          type: integer
+          example: 4
+        goods:
+          type: array
+          items:
+            type: string
+          example:
+            - Washer
+            - Breakfast
 
     createOffer:
       type: object
@@ -419,6 +435,7 @@ components:
     detailOffer:
       type: object
       allOf:
+        - $ref: "#/components/schemas/offer"
         - $ref: "#/components/schemas/baseDetailOffer"
       properties:
         host:
