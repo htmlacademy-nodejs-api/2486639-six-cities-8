@@ -56,6 +56,8 @@ bootstrap();
   13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
       в следующих лекциях глянуть почему
   14. rating в CreateOfferDto и UpdateOfferDto, не вычисляемый? как количество комментариев?
+  15. выборка OfferEntity: hostId -> host и пользователь без пароля
+      может разные таблицы сделать?
 
 
   20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
