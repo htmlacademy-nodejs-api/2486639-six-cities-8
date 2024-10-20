@@ -25,7 +25,6 @@ export class ImportCommand implements Command {
       previewImage,
       images,
       isPremium,
-      isFavorite,
       rating,
       type,
       rooms,
@@ -41,7 +40,9 @@ export class ImportCommand implements Command {
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
 
-    await this.offerService.create({
+    //! временно выключил для проверки сервисов
+    /**/
+    this.logger.info('New offer:', {
       title,
       description,
       publishDate,
@@ -49,7 +50,6 @@ export class ImportCommand implements Command {
       previewImage,
       images,
       isPremium,
-      isFavorite,
       rating,
       type,
       rooms,
@@ -59,6 +59,26 @@ export class ImportCommand implements Command {
       hostId: hostEntity.id,
       location
     });
+    /**/
+    /*
+    await this.offerService.create({
+      title,
+      description,
+      publishDate,
+      cityName,
+      previewImage,
+      images,
+      isPremium,
+      rating,
+      type,
+      rooms,
+      maxAdults,
+      price,
+      goods,
+      hostId: hostEntity.id,
+      location
+    });
+    */
   }
 
   private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {
@@ -69,6 +89,13 @@ export class ImportCommand implements Command {
 
   private async onCompleteImport(count: number) {
     this.logger.info(`${count} rows imported.`);
+
+    //! проверка сервисов
+    const offerId = '67150918f4183f048d697b7b';
+    this.logger.info('Update offer:', offerId);
+    const offer = await this.offerService.findById(offerId);
+    this.logger.info('Find offer:', offer);
+    //await this.userService.
 
     await this.databaseClient.disconnect();
   }
