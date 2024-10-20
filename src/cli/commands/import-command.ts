@@ -2,7 +2,7 @@ import { Command } from './command.interface.js';
 import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
 import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
 import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
-import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
+import { DefaultOfferService, OfferModel, OfferService, UpdateOfferDto } from '../../shared/modules/offer/index.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
@@ -91,11 +91,20 @@ export class ImportCommand implements Command {
     this.logger.info(`${count} rows imported.`);
 
     //! проверка сервисов
-    const offerId = '67150918f4183f048d697b7b';
-    this.logger.info('Update offer:', offerId);
+    const offerId = '67150918f4183f048d697b80';
     const offer = await this.offerService.findById(offerId);
-    this.logger.info('Find offer:', offer);
-    //await this.userService.
+    this.logger.info('Finded offer:', offer);
+
+    const updatedOfferDto = new UpdateOfferDto();
+    updatedOfferDto.title = offer?.title;
+    updatedOfferDto.title += ' update';
+    const updatedOffer = await this.offerService.updateById(offerId, updatedOfferDto);
+    this.logger.info('Updated offer:', updatedOffer);
+
+    const deletedOffer = await this.offerService.deleteById(offerId);
+    this.logger.info('Deleted offer:', deletedOffer);
+    this.logger.info('Finded offer:', await this.offerService.findById(offerId));
+    //!
 
     await this.databaseClient.disconnect();
   }
