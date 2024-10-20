@@ -72,8 +72,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public hostId!: Ref<UserEntity>;
 
-  @prop({ reviewCount: 0 })
-  public commentCount!: number;
+  @prop({ default: 0 })
+  public reviewCount!: number;
 
   @prop()
   public location!: Location;

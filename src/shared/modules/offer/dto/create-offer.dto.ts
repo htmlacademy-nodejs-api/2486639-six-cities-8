@@ -16,6 +16,5 @@ export class CreateOfferDto {
   public price: number;
   public goods: OfferGoods;
   public hostId: string;
-  public commentCount?: number;
   public location: Location;
 }
