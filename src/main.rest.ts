@@ -55,6 +55,8 @@ bootstrap();
     public categories!: Ref<CategoryEntity>[];
   13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
       в следующих лекциях глянуть почему
+  14. rating в CreateOfferDto и UpdateOfferDto, не вычисляемый? как количество комментариев?
+
 
   20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
