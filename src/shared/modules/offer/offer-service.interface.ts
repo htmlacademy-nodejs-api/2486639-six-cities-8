@@ -10,5 +10,5 @@ export interface OfferService {
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(count?: number): Promise<DocumentType<OfferEntity>[]>;
+  findPremium(): Promise<DocumentType<OfferEntity>[]>;
 }
-
