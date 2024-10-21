@@ -209,7 +209,7 @@ paths:
       description: Ресурс для редактирования предложения. Клиент может редактировать предложения по аренде, созданные им
 
       requestBody:
-        description: Информация редактируемого предложения.
+        description: Информация редактируемого предложения. Можно передать часть полей, где изменяются данные.
         content:
           application/json:
             schema:
@@ -553,10 +553,10 @@ components:
         comment:
           type: string
           example: text text text text
-        date:
-          $ref: "#/components/schemas/dateString"
         rating:
           $ref: "#/components/schemas/rating"
+        publishDate:
+          $ref: "#/components/schemas/dateString"
 
     review:
       type: object

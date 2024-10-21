@@ -5,7 +5,6 @@ import {
   prop,
   Ref
 } from '@typegoose/typegoose';
-
 import { CityName, Location, OfferGoods, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 
@@ -45,10 +44,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public isPremium!: boolean;
 
-  @prop({ required: true })
-  public isFavorite!: boolean;
+  public isFavorite?: boolean;
 
-  @prop({ required: true })
+  @prop({ default: 0 })
   public rating!: number;
 
   @prop({ required: true })
@@ -72,8 +70,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public hostId!: Ref<UserEntity>;
 
-  @prop({ reviewCount: 0 })
-  public commentCount!: number;
+  @prop({ default: 0 })
+  public reviewCount!: number;
 
   @prop()
   public location!: Location;

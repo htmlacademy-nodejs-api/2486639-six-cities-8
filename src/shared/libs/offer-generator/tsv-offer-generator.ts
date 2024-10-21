@@ -7,7 +7,9 @@ import {
   getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem,
   round, getRandomItems, getRandomObjectKey
 } from '../../helpers/index.js';
-import { CityLocation, IMAGES_COUNT } from '../../../const.js';
+import { CityLocation } from '../../../const.js';
+
+const IMAGES_COUNT = 6;
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) { }
@@ -28,7 +30,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const previewImage = getRandomItem(mockData.previewImages);
     const images = getRandomItems(mockData.images, IMAGES_COUNT, IMAGES_COUNT).join(';');
     const isPremium = getRandomBoolean();
-    const isFavorite = getRandomBoolean();
     const rating = this.getRandomNumber(mockData.rating);
     const type = getRandomItem([...OFFER_TYPES]);
     const rooms = this.getRandomNumber(mockData.rooms);
@@ -50,7 +51,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       previewImage,
       images,
       isPremium,
-      isFavorite,
       rating,
       type,
       rooms,

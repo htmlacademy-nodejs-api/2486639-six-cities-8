@@ -55,6 +55,13 @@ bootstrap();
     public categories!: Ref<CategoryEntity>[];
   13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
       в следующих лекциях глянуть почему
+  14. rating в CreateOfferDto и UpdateOfferDto, не вычисляемый? как количество комментариев?
+  15. выборка OfferEntity: hostId -> host и пользователь без пароля
+      может разные таблицы сделать?
+  16. isFavorite у предложения в ДБ нет, появляется поле когда учтены избранные конкретного пользователя
+  17. implements Offer и Review у Entity будет позднее?
+  18. последовательность регистрации пользователя, нужна ли updateAvatarPathById
+
 
   20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
