@@ -46,3 +46,4 @@ export const LOG_PATH = 'logs/rest.log';
 export const DEFAULT_USER_PASSWORD = '12345';
 
 export const DEFAULT_OFFER_COUNT = 60;
+export const PREMIUN_OFFER_COUNT = 3;
