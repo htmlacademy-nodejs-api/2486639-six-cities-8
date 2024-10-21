@@ -91,7 +91,7 @@ export class ImportCommand implements Command {
     this.logger.info(`${count} rows imported.`);
 
     //! проверка сервисов
-    const offerId = '67150918f4183f048d697b80';
+    const offerId = '6715d930924dfbd3e73a0fd1';
     const offer = await this.offerService.findById(offerId);
     this.logger.info('Finded offer:', offer);
 
@@ -101,9 +101,21 @@ export class ImportCommand implements Command {
     const updatedOffer = await this.offerService.updateById(offerId, updatedOfferDto);
     this.logger.info('Updated offer:', updatedOffer);
 
-    const deletedOffer = await this.offerService.deleteById(offerId);
-    this.logger.info('Deleted offer:', deletedOffer);
-    this.logger.info('Finded offer:', await this.offerService.findById(offerId));
+    //const deletedOffer = await this.offerService.deleteById(offerId);
+    //this.logger.info('Deleted offer:', deletedOffer);
+    //this.logger.info('Finded offer:', await this.offerService.findById(offerId));
+
+    const offers = await this.offerService.find();
+    this.logger.info('Finded offers count:', offers.length);
+    //this.logger.info('Finded offers:', offers);
+
+    const fiveOffers = await this.offerService.find(5);
+    this.logger.info('Finded offers count:', fiveOffers.length);
+    //this.logger.info('Finded offers:', fiveOffers);
+
+    const premiumOffers = await this.offerService.findPremium();
+    this.logger.info('Finded offers count:', premiumOffers.length);
+    //this.logger.info('Finded offers:', premiumOffers);
     //!
 
     await this.databaseClient.disconnect();
