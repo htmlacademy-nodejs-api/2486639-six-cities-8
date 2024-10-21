@@ -6,6 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { DEFAULT_OFFER_COUNT } from '../../../const.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -36,5 +37,13 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel
       .findById(offerId)
       .populate(['hostId']);
+  }
+
+  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
+    const limit = count ?? DEFAULT_OFFER_COUNT;
+    console.log(limit);
+
+    return this.offerModel
+      .find({}, {}, { limit });
   }
 }
