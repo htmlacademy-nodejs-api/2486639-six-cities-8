@@ -44,3 +44,5 @@ export const IMAGES_COUNT = 6;
 export const LOG_PATH = 'logs/rest.log';
 
 export const DEFAULT_USER_PASSWORD = '12345';
+
+export const DEFAULT_OFFER_COUNT = 60;
