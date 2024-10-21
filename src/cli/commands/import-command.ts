@@ -3,6 +3,7 @@ import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
 import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
 import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
 import { DefaultOfferService, OfferModel, OfferService, UpdateOfferDto } from '../../shared/modules/offer/index.js';
+import { DefaultReviewService, ReviewModel, ReviewService, CreateReviewDto } from '../../shared/modules/review/index.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
@@ -14,7 +15,8 @@ export class ImportCommand implements Command {
   private salt: string;
   private databaseClient: DatabaseClient;
   private userService: UserService;
-  offerService: OfferService;
+  private offerService: OfferService;
+  private reviewService: ReviewService;
 
   private async saveOffer(offer: Offer) {
     const {
@@ -116,6 +118,27 @@ export class ImportCommand implements Command {
     const premiumOffers = await this.offerService.findPremium();
     this.logger.info('Finded offers count:', premiumOffers.length);
     //this.logger.info('Finded offers:', premiumOffers);
+
+    this.logger.info('Inc review count:', await this.offerService.incReviewCount(offerId));
+    this.logger.info('Inc review count:', await this.offerService.findById(offerId));
+
+    const reviews = await this.reviewService.findByOfferId(offerId);
+    if (reviews) {
+      this.logger.info('Finded reviews count:', reviews.length);
+      //this.logger.info('Finded reviews:', reviews);
+    } else {
+      this.logger.info('Finded reviews count: 0');
+    }
+
+    const createdReviewDto = new CreateReviewDto();
+    createdReviewDto.comment = 'comment comment comment comment';
+    createdReviewDto.rating = 4;
+    createdReviewDto.offerId = offerId;
+    createdReviewDto.userId = '6715d930924dfbd3e73a0fcf';
+    createdReviewDto.date = new Date();
+
+    const createdReview = await this.reviewService.create(createdReviewDto);
+    this.logger.info('Created review:', createdReview);
     //!
 
     await this.databaseClient.disconnect();
@@ -129,6 +152,7 @@ export class ImportCommand implements Command {
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.reviewService = new DefaultReviewService(this.logger, ReviewModel);
   }
 
   public getName(): string {
