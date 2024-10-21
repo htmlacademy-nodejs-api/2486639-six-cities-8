@@ -20,7 +20,7 @@ export class DefaultReviewService implements ReviewService {
     return result;
   }
 
-  public async findByofferId(offerId: string): Promise<DocumentType<ReviewEntity>[] | null> {
+  public async findByOfferId(offerId: string): Promise<DocumentType<ReviewEntity>[] | null> {
     return this.reviewModel.find({ offerId });
   }
 }

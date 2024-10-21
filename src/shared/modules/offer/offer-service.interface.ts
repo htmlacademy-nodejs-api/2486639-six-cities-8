@@ -1,5 +1,4 @@
 import { DocumentType } from '@typegoose/typegoose';
-
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { OfferEntity } from './offer.entity.js';
@@ -11,4 +10,5 @@ export interface OfferService {
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(count?: number): Promise<DocumentType<OfferEntity>[]>;
   findPremium(): Promise<DocumentType<OfferEntity>[]>;
+  incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null>
 }

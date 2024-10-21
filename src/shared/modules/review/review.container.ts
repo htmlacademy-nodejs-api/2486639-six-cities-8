@@ -1,6 +1,5 @@
 import { Container } from 'inversify';
 import { types } from '@typegoose/typegoose';
-
 import { ReviewService } from './review-service.interface.js';
 import { Component } from '../../types/index.js';
 import { DefaultReviewService } from './default-review.service.js';

@@ -5,7 +5,6 @@ import {
   prop,
   Ref
 } from '@typegoose/typegoose';
-
 import { OfferEntity } from '../offer/index.js';
 import { UserEntity } from '../user/index.js';
 
@@ -33,17 +32,17 @@ export class ReviewEntity extends defaultClasses.TimeStamps {
   })
   public comment!: string;
 
-  @prop({
-    ref: UserEntity,
-    required: true
-  })
-  public userId!: Ref<UserEntity>;
-
   @prop({ required: true })
   public date!: Date;
 
   @prop({ required: true })
   public rating!: number;
+
+  @prop({
+    ref: UserEntity,
+    required: true
+  })
+  public userId!: Ref<UserEntity>;
 }
 
 export const ReviewModel = getModelForClass(ReviewEntity);

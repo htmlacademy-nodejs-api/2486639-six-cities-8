@@ -52,4 +52,13 @@ export class DefaultOfferService implements OfferService {
       .find({ isPremium: true }, {}, { limit: PREMIUN_OFFER_COUNT })
       .sort({ publishDate: SortType.Down });
   }
+
+  public async incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {
+        '$inc': {
+          reviewCount: 1,
+        }
+      }, { new: true });
+  }
 }

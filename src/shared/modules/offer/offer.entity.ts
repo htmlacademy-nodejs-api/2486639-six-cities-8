@@ -5,7 +5,6 @@ import {
   prop,
   Ref
 } from '@typegoose/typegoose';
-
 import { CityName, Location, OfferGoods, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 
