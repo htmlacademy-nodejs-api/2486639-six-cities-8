@@ -8,7 +8,8 @@ import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
-import { DEFAULT_USER_PASSWORD } from '../../const.js';
+
+const DEFAULT_USER_PASSWORD = '12345';
 
 export class ImportCommand implements Command {
   private logger: Logger;
@@ -125,7 +126,7 @@ export class ImportCommand implements Command {
     const reviews = await this.reviewService.findByOfferId(offerId);
     if (reviews) {
       this.logger.info('Finded reviews count:', reviews.length);
-      //this.logger.info('Finded reviews:', reviews);
+      this.logger.info('Finded reviews:', reviews);
     } else {
       this.logger.info('Finded reviews count: 0');
     }
@@ -135,10 +136,13 @@ export class ImportCommand implements Command {
     createdReviewDto.rating = 4;
     createdReviewDto.offerId = offerId;
     createdReviewDto.userId = '6715d930924dfbd3e73a0fcf';
-    createdReviewDto.date = new Date();
+    createdReviewDto.publishDate = new Date();
 
     const createdReview = await this.reviewService.create(createdReviewDto);
     this.logger.info('Created review:', createdReview);
+
+    this.logger.info('Offer rating reviews:', await this.reviewService.getRatingOfferId(offerId));
+
     //!
 
     await this.databaseClient.disconnect();

@@ -33,10 +33,10 @@ export class ReviewEntity extends defaultClasses.TimeStamps {
   public comment!: string;
 
   @prop({ required: true })
-  public date!: Date;
+  public rating!: number;
 
   @prop({ required: true })
-  public rating!: number;
+  public publishDate!: Date;
 
   @prop({
     ref: UserEntity,

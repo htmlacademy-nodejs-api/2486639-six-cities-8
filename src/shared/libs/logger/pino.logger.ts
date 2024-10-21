@@ -3,7 +3,8 @@ import { Logger as PinoInstance, pino, transport } from 'pino';
 import { injectable } from 'inversify';
 import { Logger } from './logger.interface.js';
 import { getRootDirectoryPath } from '../../helpers/index.js';
-import { LOG_PATH } from '../../../const.js';
+
+const LOG_PATH = 'logs/rest.log';
 
 @injectable()
 export class PinoLogger implements Logger {

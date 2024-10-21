@@ -5,10 +5,11 @@ import { OfferEntity } from './offer.entity.js';
 
 export interface OfferService {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
-  deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  exists(id: string): Promise<boolean>;
+  updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
+  deleteById(id: string): Promise<DocumentType<OfferEntity> | null>;
+  findById(id: string): Promise<DocumentType<OfferEntity> | null>;
   find(count?: number): Promise<DocumentType<OfferEntity>[]>;
   findPremium(): Promise<DocumentType<OfferEntity>[]>;
-  incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null>
+  incReviewCount(id: string): Promise<DocumentType<OfferEntity> | null>
 }

@@ -8,7 +8,6 @@ export class UpdateOfferDto {
   public previewImage?: string;
   public images?: string[];
   public isPremium?: boolean;
-  public rating?: number;
   public type?: OfferType;
   public rooms?: number;
   public maxAdults?: number;

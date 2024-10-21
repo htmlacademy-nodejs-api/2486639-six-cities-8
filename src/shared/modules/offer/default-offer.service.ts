@@ -6,7 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_COUNT, PREMIUN_OFFER_COUNT } from '../../../const.js';
+import { DEFAULT_OFFER_COUNT, PREMIUN_OFFER_COUNT } from './offer.const.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -22,20 +22,25 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+  public async exists(id: string): Promise<boolean> {
+    return (await this.offerModel
+      .exists({ _id: id })) !== null;
+  }
+
+  public async updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findByIdAndUpdate(offerId, dto, { new: true })
+      .findByIdAndUpdate(id, dto, { new: true })
       .populate(['hostId']);
   }
 
-  public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async deleteById(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findByIdAndDelete(offerId);
+      .findByIdAndDelete(id);
   }
 
-  public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findById(offerId)
+      .findById(id)
       .populate(['hostId']);
   }
 
@@ -53,9 +58,9 @@ export class DefaultOfferService implements OfferService {
       .sort({ publishDate: SortType.Down });
   }
 
-  public async incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async incReviewCount(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findByIdAndUpdate(offerId, {
+      .findByIdAndUpdate(id, {
         '$inc': {
           reviewCount: 1,
         }

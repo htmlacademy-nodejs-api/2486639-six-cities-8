@@ -7,7 +7,9 @@ import {
   getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem,
   round, getRandomItems, getRandomObjectKey
 } from '../../helpers/index.js';
-import { CityLocation, IMAGES_COUNT } from '../../../const.js';
+import { CityLocation } from '../../../const.js';
+
+const IMAGES_COUNT = 6;
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) { }

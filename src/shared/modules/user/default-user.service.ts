@@ -23,6 +23,10 @@ export class DefaultUserService implements UserService {
     return result;
   }
 
+  public async updateAvatarPathById(id: string, avatarPath: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel.findByIdAndUpdate(id, { avatarPath }, { new: true });
+  }
+
   public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findById(id);
   }

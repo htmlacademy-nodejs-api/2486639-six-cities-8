@@ -5,8 +5,8 @@ export type Review =
   {
     offerId: OfferId;
     comment: string;
-    date: string;
     rating: number;
+    publishDate: string;
     user: User;
   }
 
