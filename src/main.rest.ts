@@ -67,13 +67,13 @@ bootstrap();
           в лог файл пишет нормально.
 
 
-  20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  21. скрипты запуска js из dist
+  31. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",
