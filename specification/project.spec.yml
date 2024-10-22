@@ -187,7 +187,7 @@ paths:
             type: boolean
 
       responses:
-        201:
+        200:
           description: Список предложений.
           content:
             application/json:
@@ -235,7 +235,7 @@ paths:
       description: Ресурс для получения детальной информации по одному предложению.
 
       responses:
-        201:
+        200:
           description: Детальный объект предложения.
           content:
             application/json:
@@ -271,7 +271,7 @@ paths:
       description: Ресурс для получения списка комментариев для определённого предложения.
 
       responses:
-        201:
+        200:
           description: Комментарии предложения.
           content:
             application/json:
@@ -296,7 +296,7 @@ paths:
 
       responses:
         201:
-          description: Rомментарий добавлен. Объект комментария.
+          description: Комментарий добавлен. Объект комментария.
           content:
             application/json:
               schema:
@@ -314,8 +314,8 @@ paths:
       description: Ресурс для получения предложений, добавленных в избранное. Ресурс доступен только авторизованным клиентам.
 
       responses:
-        201:
-          description: Комментарии предложения.
+        200:
+          description: Избранные предложения.
           content:
             application/json:
               schema:
