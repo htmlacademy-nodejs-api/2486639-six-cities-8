@@ -3,13 +3,15 @@ import { Container } from 'inversify';
 import { Component } from './shared/types/index.js';
 import { createRestApplicationContainer, RestApplication } from './rest/index.js';
 import { createUserContainer } from './shared/modules/user/index.js';
-import { createOfferContainer } from './shared/modules/offer/offer.container.js';
+import { createOfferContainer } from './shared/modules/offer/index.js';
+import { createReviewContainer } from './shared/modules/review/index.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(
     createRestApplicationContainer(),
     createUserContainer(),
-    createOfferContainer()
+    createOfferContainer(),
+    createReviewContainer()
   );
 
   const application = appContainer.get<RestApplication>(Component.RestApplication);
