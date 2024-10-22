@@ -380,22 +380,28 @@ components:
       type: string
       example: 123456
 
-    user:
+    baseUser:
       type: object
       properties:
         name:
           $ref: "#/components/schemas/userName"
         email:
           $ref: "#/components/schemas/userEmail"
-        avatarPath:
-          $ref: "#/components/schemas/userAvatarPath"
         type:
           $ref: "#/components/schemas/userType"
+
+    user:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseUser"
+      properties:
+        avatarPath:
+          $ref: "#/components/schemas/userAvatarPath"
 
     createUser:
       type: object
       allOf:
-        - $ref: "#/components/schemas/user"
+        - $ref: "#/components/schemas/baseUser"
       properties:
         password:
           $ref: "#/components/schemas/userPassword"
