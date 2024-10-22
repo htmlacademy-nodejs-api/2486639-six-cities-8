@@ -21,11 +21,9 @@ export class DefaultReviewService implements ReviewService {
     return result;
   }
 
-  public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<ReviewEntity>[] | null> {
-    const limit = count ?? DEFAULT_REVIEW_COUNT;
-
+  public async findByOfferId(offerId: string, count: number = DEFAULT_REVIEW_COUNT): Promise<DocumentType<ReviewEntity>[] | null> {
     return this.reviewModel
-      .find({ offerId }, {}, { limit })
+      .find({ offerId }, {}, { limit: count })
       .sort({ publishDate: SortType.Down });
   }
 

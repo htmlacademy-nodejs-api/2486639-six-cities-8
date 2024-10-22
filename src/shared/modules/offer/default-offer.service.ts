@@ -44,11 +44,9 @@ export class DefaultOfferService implements OfferService {
       .populate(['hostId']);
   }
 
-  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    const limit = count ?? DEFAULT_OFFER_COUNT;
-
+  public async find(count: number = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({}, {}, { limit })
+      .find({}, {}, { limit: count })
       .sort({ publishDate: SortType.Down });
   }
 
