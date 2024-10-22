@@ -5,6 +5,7 @@ import asyncHandler from 'express-async-handler';
 import { Controller } from './controller.interface.js';
 import { Logger } from '../../logger/index.js';
 import { Route } from '../types/route.interface.js';
+import { HttpError } from '../errors/http-error.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
@@ -15,6 +16,12 @@ export abstract class BaseController implements Controller {
     protected readonly logger: Logger
   ) {
     this.router = Router();
+
+    this.logger.info(`Register routes for ${this.constructor.name}...`);
+  }
+
+  protected throwHttpError(httpStatusCode: number, message: string) {
+    throw new HttpError(httpStatusCode, message, this.constructor.name);
   }
 
   public addRoute(route: Route) {
