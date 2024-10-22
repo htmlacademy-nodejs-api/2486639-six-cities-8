@@ -21,7 +21,7 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController...');
 
-    this.addRoute({ path: '', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
   }
 
@@ -29,7 +29,7 @@ export class UserController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
-      throw new HttpError(StatusCodes.CONFLICT, `User with email «${body.email}» exists.`, 'UserController');
+      throw new HttpError(StatusCodes.CONFLICT, `User with email "${body.email}" exists.`, 'UserController');
     }
 
     const result = await this.userService.create(body, this.configService.get('SALT'));
