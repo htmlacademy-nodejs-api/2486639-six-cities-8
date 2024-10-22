@@ -21,10 +21,22 @@ export class UserController extends BaseController {
     super(logger);
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: '/:userId/avatr', method: HttpMethod.Patch, handler: this.updateAvatr });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
+    const existsUser = await this.userService.findByEmail(body.email);
+
+    if (existsUser) {
+      this.throwHttpError(StatusCodes.CONFLICT, `User with email "${body.email}" exists.`);
+    }
+
+    const result = await this.userService.create(body, this.configService.get('SALT'));
+    this.created(res, fillDTO(UserRdo, result));
+  }
+
+  public async updateAvatr({ body }: CreateUserRequest, res: Response): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {

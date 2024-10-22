@@ -7,7 +7,6 @@ Content-Type: application/json
 {
   "name": "Andrey",
   "email": "andrey@test.ru",
-  "avatarPath": "http://test.ru/1.jpg",
   "type": "Pro",
   "password": "123456"
 }
