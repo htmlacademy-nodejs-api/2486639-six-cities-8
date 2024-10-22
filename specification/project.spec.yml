@@ -81,7 +81,7 @@ paths:
       #              format: binary
 
       responses:
-        201:
+        200:
           description: Аватар загружен. Объект пользователя.
           content:
             application/json:
@@ -106,7 +106,7 @@ paths:
         required: true
 
       responses:
-        201:
+        200:
           description: Авторизация пройдена
           content:
             application/json:
@@ -217,7 +217,7 @@ paths:
         required: true
 
       responses:
-        201:
+        200:
           description: Предложение обновлено. Объект предложения.
           content:
             application/json:
