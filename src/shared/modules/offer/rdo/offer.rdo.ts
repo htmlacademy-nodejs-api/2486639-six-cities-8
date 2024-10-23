@@ -40,6 +40,7 @@ export class OfferRdo {
 
   @Expose()
   public hostId: string;
+  //! host
 
   @Expose()
   public location: Location;

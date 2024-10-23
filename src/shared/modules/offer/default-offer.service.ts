@@ -17,7 +17,7 @@ export class DefaultOfferService implements OfferService {
   ) { }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    const { cityName } = dto;
+    const { city: cityName } = dto;
     const city = {
       name: cityName,
       location: CityLocation[cityName]

@@ -44,7 +44,7 @@ export class ImportCommand implements Command {
       title,
       description,
       publishDate,
-      cityName,
+      city: cityName,
       previewImage,
       images,
       isPremium,

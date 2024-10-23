@@ -22,7 +22,8 @@ export class OfferController extends BaseController {
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
     const result = await this.offerService.create({
       ...body,
-      hostId: '6715d930924dfbd3e73a0fcf' //! временно
+      //hostId: '6715d930924dfbd3e73a0fcf' //! временно
+      hostId: '671797ceed73d6ef04c13d63' //! временно
     });
     this.created(res, fillDTO(OfferRdo, result));
   }

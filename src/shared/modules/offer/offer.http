@@ -7,6 +7,7 @@ Content-Type: application/json
 {
   "title": "offer title",
   "publishDate": "2024-07-09T11:24:14.495Z",
+  "city": "Paris",
   "previewImage": "preview-img-4.jpg",
   "isPremium": true,
   "type": "room",
@@ -25,8 +26,7 @@ Content-Type: application/json
   "goods": [
     "Washer",
     "Breakfast"
-  ],
-  "cityName": "Paris"
+  ]
 }
 
 ###
