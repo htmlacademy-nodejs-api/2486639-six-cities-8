@@ -4,7 +4,7 @@ export class CreateOfferDto {
   public title: string;
   public description: string;
   public publishDate: Date;
-  public cityName: CityName;
+  public city: CityName;
   public previewImage: string;
   public images: string[];
   public isPremium: boolean;

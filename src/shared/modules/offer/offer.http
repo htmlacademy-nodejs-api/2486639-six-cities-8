@@ -1,0 +1,68 @@
+# Предложения
+## Создать предложение
+
+POST http://localhost:4000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "offer title",
+  "publishDate": "2024-07-09T11:24:14.495Z",
+  "city": "Paris",
+  "previewImage": "preview-img-4.jpg",
+  "isPremium": true,
+  "type": "room",
+  "price": 99.9,
+  "location": {
+    "latitude": 10.5,
+    "longitude": 11.5
+  },
+  "description": "offer title",
+  "images": [
+    "img-16.jpg",
+    "img-11.jpg"
+  ],
+  "rooms": 2,
+  "maxAdults": 4,
+  "goods": [
+    "Washer",
+    "Breakfast"
+  ]
+}
+
+###
+
+## Список предложений
+
+GET http://localhost:4000/offers HTTP/1.1
+
+###
+
+## Список предложений
+
+GET http://localhost:4000/offers?count=10 HTTP/1.1
+
+###
+
+## Список премиум предложений
+
+GET http://localhost:4000/offers?premium=true HTTP/1.1
+
+###
+
+## Предложение
+
+GET http://localhost:4000/offers/67189abb70d1c82e25abc7b6- HTTP/1.1
+
+###
+
+## Изменить предложение
+
+PUT http://localhost:4000/offers/67189abb70d1c82e25abc7b6- HTTP/1.1
+
+###
+
+## Удалить предложение
+
+DELETE http://localhost:4000/offers/67189abb70d1c82e25abc7b6- HTTP/1.1
+
+###

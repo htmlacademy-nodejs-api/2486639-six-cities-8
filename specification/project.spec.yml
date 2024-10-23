@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
 servers:
-  - url: http://localhost
+  - url: http://localhost:4000
 security:
   - ApiKeyAuth: []
 
@@ -48,7 +48,7 @@ paths:
           description: Не корректные данные или пользователь с таким email уже существует.
 
   /users/{userId}/avatar:
-    post:
+    patch:
       tags:
         - users
       summary: Загрузить изображение аватара
@@ -81,7 +81,7 @@ paths:
       #              format: binary
 
       responses:
-        201:
+        200:
           description: Аватар загружен. Объект пользователя.
           content:
             application/json:
@@ -106,7 +106,7 @@ paths:
         required: true
 
       responses:
-        201:
+        200:
           description: Авторизация пройдена
           content:
             application/json:
@@ -187,7 +187,7 @@ paths:
             type: boolean
 
       responses:
-        201:
+        200:
           description: Список предложений.
           content:
             application/json:
@@ -217,7 +217,7 @@ paths:
         required: true
 
       responses:
-        201:
+        200:
           description: Предложение обновлено. Объект предложения.
           content:
             application/json:
@@ -235,7 +235,7 @@ paths:
       description: Ресурс для получения детальной информации по одному предложению.
 
       responses:
-        201:
+        200:
           description: Детальный объект предложения.
           content:
             application/json:
@@ -271,7 +271,7 @@ paths:
       description: Ресурс для получения списка комментариев для определённого предложения.
 
       responses:
-        201:
+        200:
           description: Комментарии предложения.
           content:
             application/json:
@@ -296,7 +296,7 @@ paths:
 
       responses:
         201:
-          description: Rомментарий добавлен. Объект комментария.
+          description: Комментарий добавлен. Объект комментария.
           content:
             application/json:
               schema:
@@ -314,8 +314,8 @@ paths:
       description: Ресурс для получения предложений, добавленных в избранное. Ресурс доступен только авторизованным клиентам.
 
       responses:
-        201:
-          description: Комментарии предложения.
+        200:
+          description: Избранные предложения.
           content:
             application/json:
               schema:
@@ -380,22 +380,28 @@ components:
       type: string
       example: 123456
 
-    user:
+    baseUser:
       type: object
       properties:
         name:
           $ref: "#/components/schemas/userName"
         email:
           $ref: "#/components/schemas/userEmail"
-        avatarPath:
-          $ref: "#/components/schemas/userAvatarPath"
         type:
           $ref: "#/components/schemas/userType"
+
+    user:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/baseUser"
+      properties:
+        avatarPath:
+          $ref: "#/components/schemas/userAvatarPath"
 
     createUser:
       type: object
       allOf:
-        - $ref: "#/components/schemas/user"
+        - $ref: "#/components/schemas/baseUser"
       properties:
         password:
           $ref: "#/components/schemas/userPassword"
@@ -528,7 +534,7 @@ components:
         isFavorite:
           $ref: "#/components/schemas/isFavorite"
         rating:
-          $ref: "#/components/schemas/review"
+          $ref: "#/components/schemas/rating"
         reviewCount:
           type: integer
           example: 5

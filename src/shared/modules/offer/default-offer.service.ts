@@ -7,6 +7,7 @@ import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DEFAULT_OFFER_COUNT, PREMIUN_OFFER_COUNT } from './offer.const.js';
+import { CityLocation } from '../../../const.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -15,11 +16,17 @@ export class DefaultOfferService implements OfferService {
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
   ) { }
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
-    this.logger.info(`New offer created: ${dto.title}`);
+  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    const { city: cityName } = dto;
+    const city = {
+      name: cityName,
+      location: CityLocation[cityName]
+    };
 
-    return result;
+    const offer = await this.offerModel.create({ ...dto, city });
+    this.logger.info(`New offer created: ${offer.id} - ${offer.title}`);
+
+    return this.findById(offer.id);
   }
 
   public async exists(id: string): Promise<boolean> {
@@ -44,11 +51,9 @@ export class DefaultOfferService implements OfferService {
       .populate(['hostId']);
   }
 
-  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    const limit = count ?? DEFAULT_OFFER_COUNT;
-
+  public async find(count: number = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({}, {}, { limit })
+      .find({}, {}, { limit: count })
       .sort({ publishDate: SortType.Down });
   }
 

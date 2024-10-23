@@ -1,4 +1,4 @@
-export { round, getErrorMessage } from './common.js';
+export { round, getErrorMessage, fillDTO, createErrorObject } from './common.js';
 export { getMongoURI } from './database.js';
 export { getRootDirectoryPath } from './file-system.js';
 export { createSHA256 } from './hash.js';

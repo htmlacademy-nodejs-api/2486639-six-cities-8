@@ -3,13 +3,15 @@ import { Container } from 'inversify';
 import { Component } from './shared/types/index.js';
 import { createRestApplicationContainer, RestApplication } from './rest/index.js';
 import { createUserContainer } from './shared/modules/user/index.js';
-import { createOfferContainer } from './shared/modules/offer/offer.container.js';
+import { createOfferContainer } from './shared/modules/offer/index.js';
+import { createReviewContainer } from './shared/modules/review/index.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(
     createRestApplicationContainer(),
     createUserContainer(),
-    createOfferContainer()
+    createOfferContainer(),
+    createReviewContainer()
   );
 
   const application = appContainer.get<RestApplication>(Component.RestApplication);
@@ -25,6 +27,7 @@ bootstrap();
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
   3. а как передать параметр для конструктора? если понадобится
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
+    как модель? toConstantValue? userContainer.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
   4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
   5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
   6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
@@ -61,15 +64,30 @@ bootstrap();
   16. isFavorite у предложения в ДБ нет, появляется поле когда учтены избранные конкретного пользователя
   17. implements Offer и Review у Entity будет позднее?
   18. последовательность регистрации пользователя, нужна ли updateAvatarPathById
+  19. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
+          в лог файл пишет нормально.
+  20. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
+  21. предупреждения
+        Setting "Mixed" for property "OfferEntity.images"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+        Setting "Mixed" for property "OfferEntity.goods"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+        Setting "Mixed" for property "OfferEntity.location"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+  22. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
+  23. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
+  24. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
+  25. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
+        но hostId в CreateOfferRequest нету, может нужен отдельный тип?
+      так же CreateReviewDto с userId и offerId
 
-
-  20. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  21. скрипты запуска js из dist
+  31. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",
@@ -113,6 +131,8 @@ bootstrap();
           ]
         }
       ! так как после компиляции нет src, все в dist и для prod и для dev, ели указанj "rootDir": "./src" в tsconfig.json
+      ! при запуске ts возможно есть проблемма импортов не из той папки! т.е. nodemon видит исправления, но после перезапуска берет скрипт из dist!
+      ! при проверке запуска dev необходимо удалять папку dist!!!
 
       tsconfig.json
         "outDir": "./dist",
