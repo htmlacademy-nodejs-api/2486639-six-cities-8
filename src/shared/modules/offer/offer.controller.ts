@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -7,6 +7,7 @@ import { CreateOfferRequest } from './create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
+import { OfferRdo } from './rdo/offer.rdo.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -17,6 +18,7 @@ export class OfferController extends BaseController {
     super(logger);
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
   }
 
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
@@ -32,5 +34,15 @@ export class OfferController extends BaseController {
     console.log(fillDTO(DetailOfferRdo, result));
 
     this.created(res, fillDTO(DetailOfferRdo, result));
+  }
+
+  public async index(req: Request, res: Response): Promise<void> {
+    //! временно
+    console.log('req.query:', req.query);
+    //const { count } = req.params;
+
+    const offers = await this.offerService.find();
+
+    this.created(res, fillDTO(OfferRdo, offers));
   }
 }

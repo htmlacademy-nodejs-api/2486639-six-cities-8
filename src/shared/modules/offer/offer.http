@@ -31,3 +31,14 @@ Content-Type: application/json
 
 ###
 
+## Список предложений
+
+GET http://localhost:4000/offers HTTP/1.1
+
+###
+
+## Список предложений
+
+GET http://localhost:4000/offers?count=10 HTTP/1.1
+
+###
