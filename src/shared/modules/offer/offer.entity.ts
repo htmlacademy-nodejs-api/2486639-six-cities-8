@@ -5,7 +5,7 @@ import {
   prop,
   Ref
 } from '@typegoose/typegoose';
-import { CityName, Location, OfferGoods, OfferType } from '../../types/index.js';
+import { City, CityName, Location, OfferGoods, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -32,8 +32,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public publishDate!: Date;
 
-  @prop({ required: true })
   public cityName!: CityName;
+
+  @prop({ required: true })
+  public city!: City;
 
   @prop({ required: true })
   public previewImage!: string;

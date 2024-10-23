@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
@@ -23,6 +23,7 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/:userId/avatr', method: HttpMethod.Patch, handler: this.updateAvatr });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
+    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -36,15 +37,8 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatr({ body }: CreateUserRequest, res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (existsUser) {
-      this.throwHttpError(StatusCodes.CONFLICT, `User with email "${body.email}" exists.`);
-    }
-
-    const result = await this.userService.create(body, this.configService.get('SALT'));
-    this.created(res, fillDTO(UserRdo, result));
+  public async updateAvatr(_req: Request, _res: Response): Promise<void> {
+    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 
   public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
@@ -54,6 +48,10 @@ export class UserController extends BaseController {
       this.throwHttpError(StatusCodes.UNAUTHORIZED, `User with email ${body.email} not found.`);
     }
 
+    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+  }
+
+  public async logout(_req: Request, _res: Response): Promise<void> {
     this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 }

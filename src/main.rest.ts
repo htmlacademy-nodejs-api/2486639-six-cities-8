@@ -27,6 +27,7 @@ bootstrap();
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
   3. а как передать параметр для конструктора? если понадобится
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
+    как модель? toConstantValue? userContainer.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
   4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
   5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
   6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
@@ -65,6 +66,15 @@ bootstrap();
   18. последовательность регистрации пользователя, нужна ли updateAvatarPathById
   19. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
           в лог файл пишет нормально.
+  20. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
+  21. предупреждения
+        Setting "Mixed" for property "OfferEntity.images"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+        Setting "Mixed" for property "OfferEntity.goods"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+        Setting "Mixed" for property "OfferEntity.location"
+        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
+  22. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
 
 
   30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет

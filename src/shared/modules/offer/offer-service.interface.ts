@@ -4,7 +4,7 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { OfferEntity } from './offer.entity.js';
 
 export interface OfferService {
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
+  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   exists(id: string): Promise<boolean>;
   updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(id: string): Promise<DocumentType<OfferEntity> | null>;
