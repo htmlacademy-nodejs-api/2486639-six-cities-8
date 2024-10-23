@@ -75,6 +75,7 @@ bootstrap();
         Setting "Mixed" for property "OfferEntity.location"
         Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
   22. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
+  23. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
 
 
   30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет

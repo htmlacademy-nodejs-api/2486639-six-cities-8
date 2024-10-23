@@ -25,6 +25,12 @@ export class OfferController extends BaseController {
       //hostId: '6715d930924dfbd3e73a0fcf' //! временно
       hostId: '671797ceed73d6ef04c13d63' //! временно
     });
+
+    //! временно
+    console.log(result);
+    //! hostid, оставляет только _id
+    console.log(fillDTO(OfferRdo, result));
+
     this.created(res, fillDTO(OfferRdo, result));
   }
 }
