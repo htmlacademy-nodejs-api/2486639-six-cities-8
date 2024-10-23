@@ -42,3 +42,15 @@ GET http://localhost:4000/offers HTTP/1.1
 GET http://localhost:4000/offers?count=10 HTTP/1.1
 
 ###
+
+## Список премиум предложений
+
+GET http://localhost:4000/offers?premium=true HTTP/1.1
+
+###
+
+## Предложение
+
+GET http://localhost:4000/offers/67189abb70d1c82e25abc7b6 HTTP/1.1
+
+###

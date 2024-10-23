@@ -21,7 +21,7 @@ export class UserController extends BaseController {
     super(logger);
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:userId/avatr', method: HttpMethod.Patch, handler: this.updateAvatr });
+    this.addRoute({ path: '/:userId/avatar', method: HttpMethod.Patch, handler: this.updateAvatar });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
     this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout });
   }
@@ -37,7 +37,11 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatr(_req: Request, _res: Response): Promise<void> {
+  public async updateAvatar(req: Request, _res: Response): Promise<void> {
+    //!
+    console.log(req.params.userId);
+    // файлы?
+
     this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 

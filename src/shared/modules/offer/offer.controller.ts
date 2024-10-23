@@ -19,6 +19,7 @@ export class OfferController extends BaseController {
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.find });
   }
 
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
@@ -39,10 +40,18 @@ export class OfferController extends BaseController {
   public async index(req: Request, res: Response): Promise<void> {
     //! временно
     console.log('req.query:', req.query);
-    //const { count } = req.params;
+    //const { count, premium: isPremium } = req.query;
 
     const offers = await this.offerService.find();
+    //! premium
+    //const offers = await this.offerService.findPremium();
 
-    this.created(res, fillDTO(OfferRdo, offers));
+    this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async find(req: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(req.params.offerId);
+
+    this.ok(res, fillDTO(DetailOfferRdo, offer));
   }
 }
