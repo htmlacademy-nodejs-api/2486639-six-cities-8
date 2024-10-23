@@ -79,7 +79,7 @@ bootstrap();
   24. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
   25. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
         но hostId в CreateOfferRequest нету, может нужен отдельный тип?
-
+      так же CreateReviewDto с userId и offerId
 
   30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129

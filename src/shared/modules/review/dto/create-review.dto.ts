@@ -3,5 +3,5 @@ export class CreateReviewDto {
   public comment: string;
   public rating: number;
   public publishDate: Date;
-  public userId: string;
+  public userId: string; //! UserEntity?
 }
