@@ -48,7 +48,7 @@ paths:
           description: Не корректные данные или пользователь с таким email уже существует.
 
   /users/{userId}/avatar:
-    post:
+    patch:
       tags:
         - users
       summary: Загрузить изображение аватара
@@ -468,13 +468,6 @@ components:
           example: offer title
         publishDate:
           $ref: "#/components/schemas/dateString"
-        city:
-          type: object
-          properties:
-            name:
-              $ref: "#/components/schemas/offerCityName"
-            location:
-              $ref: "#/components/schemas/localion"
         previewImage:
           type: string
           example: preview-img-4.jpg
@@ -523,7 +516,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/baseDetailOffer"
       properties:
-        city:
+        cityName:
           $ref: "#/components/schemas/offerCityName"
 
     offer:
@@ -531,6 +524,13 @@ components:
       allOf:
         - $ref: "#/components/schemas/baseOffer"
       properties:
+        city:
+          type: object
+          properties:
+            name:
+              $ref: "#/components/schemas/offerCityName"
+            location:
+              $ref: "#/components/schemas/localion"
         isFavorite:
           $ref: "#/components/schemas/isFavorite"
         rating:
