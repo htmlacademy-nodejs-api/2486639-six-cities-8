@@ -534,7 +534,7 @@ components:
         isFavorite:
           $ref: "#/components/schemas/isFavorite"
         rating:
-          $ref: "#/components/schemas/review"
+          $ref: "#/components/schemas/rating"
         reviewCount:
           type: integer
           example: 5

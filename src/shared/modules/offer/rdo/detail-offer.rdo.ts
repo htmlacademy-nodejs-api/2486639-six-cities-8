@@ -1,8 +1,8 @@
 import { Expose } from 'class-transformer';
-import { City, Location, OfferGoods, OfferType } from '../../../../shared/types/index.js';
+import { City, Location, OfferGoods, OfferType } from '../../../types/index.js';
 import { UserEntity } from '../../user/user.entity.js';
 
-export class OfferRdo {
+export class DetailOfferRdo {
   @Expose()
   public title: string;
 

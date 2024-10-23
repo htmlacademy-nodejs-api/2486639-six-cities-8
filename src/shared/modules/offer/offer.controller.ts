@@ -6,7 +6,7 @@ import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
-import { OfferRdo } from './rdo/offer.rdo.js';
+import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -29,8 +29,8 @@ export class OfferController extends BaseController {
     //! временно
     console.log(result);
     //! hostid, оставляет только _id
-    console.log(fillDTO(OfferRdo, result));
+    console.log(fillDTO(DetailOfferRdo, result));
 
-    this.created(res, fillDTO(OfferRdo, result));
+    this.created(res, fillDTO(DetailOfferRdo, result));
   }
 }
