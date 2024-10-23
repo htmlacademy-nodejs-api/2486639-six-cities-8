@@ -77,6 +77,8 @@ bootstrap();
   22. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
   23. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
   24. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
+  25. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
+        но hostId в CreateOfferRequest нету, может нужен отдельный тип?
 
 
   30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
