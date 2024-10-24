@@ -64,10 +64,23 @@ paths:
 
       requestBody:
         content:
-          application/octet-stream:
+          multipart/form-data:
             schema:
-              type: string
-              format: base64
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  #format: base64
+                  #nullable: true
+            encoding:
+              avatar:
+                style: form
+
+      #    application/octet-stream:
+      #      schema:
+      #        type: string
+      #        format: base64
       #              format: binary
       #          "image/jpeg":
       #            schema:
@@ -202,7 +215,7 @@ paths:
           $ref: "#/components/schemas/offerId"
         required: true
 
-    put:
+    patch:
       tags:
         - offers
       summary: Редактирование предложения
