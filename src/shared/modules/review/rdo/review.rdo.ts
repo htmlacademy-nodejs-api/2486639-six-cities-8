@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UserRdo } from '../../user/index.js';
 
 export class ReviewRdo {
   @Expose()
@@ -10,7 +11,7 @@ export class ReviewRdo {
   @Expose()
   public publishDate: Date;
 
-  @Expose()
-  public userId: string;
-  //! user
+  @Expose({ name: 'userId' })
+  @Type(() => UserRdo)
+  public user: UserRdo;
 }

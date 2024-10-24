@@ -27,21 +27,20 @@ export class ReviewController extends BaseController {
 
   public async create({ body/*, params*/ }: CreateReviewRequest, res: Response): Promise<void> {
     //!const { offerId } = params;
-    body.offerId = '67189b09acca7ba105c496da'; //! offerId;
-    body.userId = '67189b09acca7ba105c496da';
+    body.offerId = '6715d930924dfbd3e73a0fd1'; //! offerId;
+    body.userId = '6715d930924dfbd3e73a0fcf';
     const result = await this.reviewService.create(body);
 
     this.created(res, fillDTO(ReviewRdo, result));
   }
 
   public async index(req: Request, res: Response): Promise<void> {
-    //!const { offerId } = params;
-    const offerId = '67189b09acca7ba105c496da';
+    const { offerId } = req.params;
     //const { count } = req.query;
     //! временно
-    console.log('req.query:', req.query);
+    //console.log('req.query:', req.query);
 
-    const offers = await this.reviewService.findByOfferId(offerId);
+    const offers = await this.reviewService.findByOfferId(offerId, /*+count*/);
 
     this.ok(res, fillDTO(ReviewRdo, offers));
   }

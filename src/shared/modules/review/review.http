@@ -14,6 +14,6 @@ Content-Type: application/json
 
 ## Список предложений
 
-GET http://localhost:4000/reviews/67189b09acca7ba105c496da HTTP/1.1
+GET http://localhost:4000/reviews/6715d930924dfbd3e73a0fd1 HTTP/1.1
 
 ###

@@ -18,12 +18,13 @@ export class DefaultReviewService implements ReviewService {
     const result = await this.reviewModel.create(dto);
     this.logger.info(`New review created: ${dto.comment}`);
 
-    return result;
+    return result.populate('userId');
   }
 
   public async findByOfferId(offerId: string, count: number = DEFAULT_REVIEW_COUNT): Promise<DocumentType<ReviewEntity>[] | null> {
     return this.reviewModel
       .find({ offerId }, {}, { limit: count })
+      .populate('userId')
       .sort({ publishDate: SortType.Down });
   }
 
