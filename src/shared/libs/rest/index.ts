@@ -4,6 +4,7 @@ export { HttpError } from './errors/http-error.js';
 export { AppExceptionFilter } from './exception-filter/app-exception-filter.js';
 export { ExceptionFilter } from './exception-filter/exception-filter.interface.js';
 export { Middleware } from './middleware/middleware.interface.js';
+export { ValidateObjectIdMiddleware } from './middleware/validate-objectid.middleware.js';
 export { HttpMethod } from './types/http-method.enum.js';
 export { RequestBody } from './types/request-body.type.js';
 export { RequestParams } from './types/request.params.type.js';
