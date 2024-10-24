@@ -194,7 +194,7 @@ paths:
           in: query
           schema:
             type: integer
-        - name: premium
+        - name: isPremium
           in: query
           schema:
             type: boolean
