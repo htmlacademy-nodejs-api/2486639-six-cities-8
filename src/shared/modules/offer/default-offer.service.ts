@@ -6,7 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_COUNT, PREMIUN_OFFER_COUNT } from './offer.const.js';
+import { OfferCount } from './offer.const.js';
 import { CityLocation } from '../../../const.js';
 
 @injectable()
@@ -51,7 +51,7 @@ export class DefaultOfferService implements OfferService {
       .populate(['hostId']);
   }
 
-  public async find(count: number = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
+  public async find(count: number = OfferCount.Default): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({}, {}, { limit: count })
       .sort({ publishDate: SortType.Down });
@@ -59,7 +59,7 @@ export class DefaultOfferService implements OfferService {
 
   public async findPremium(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({ isPremium: true }, {}, { limit: PREMIUN_OFFER_COUNT })
+      .find({ isPremium: true }, {}, { limit: OfferCount.Premium })
       .sort({ publishDate: SortType.Down });
   }
 
