@@ -1,12 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateReviewRequest } from './create-review-request.type.js';
 import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
+import { OFFER_ID, OfferRoute } from '../offer/index.js';
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -16,8 +17,12 @@ export class ReviewController extends BaseController {
   ) {
     super(logger);
 
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.index });
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OFFER_ID);
+    const middlewares = [validateObjectIdMiddleware];
+
+    //! может свой Route? а там выйти на те константы...
+    this.addRoute({ path: OfferRoute.OfferId, method: HttpMethod.Post, handler: this.create, middlewares });
+    this.addRoute({ path: OfferRoute.OfferId, method: HttpMethod.Get, handler: this.index, middlewares });
   }
 
   public async create({ body/*, params*/ }: CreateReviewRequest, res: Response): Promise<void> {
