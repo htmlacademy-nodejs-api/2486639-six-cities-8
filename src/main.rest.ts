@@ -80,14 +80,22 @@ bootstrap();
   25. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
         но hostId в CreateOfferRequest нету, может нужен отдельный тип?
       так же CreateReviewDto с userId и offerId
+  26. в константы
+        '/users'
+        '/offers'
+        '/reviews'
+        :offerId
+        :userId
+        ....
+        остальные маршруты
 
-  30. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
+  50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
       triggerUncaughtException(
     Error: Cannot find package '@shared/types' imported from src\shared\libs\offer-generator\tsv-offer-generator.ts
     пути сделал в коментариях...
 
-  31. скрипты запуска js из dist
+  51. скрипты запуска js из dist
     package.json
       start:cli
         добавил --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm ./dist/src/main.cli.js",
