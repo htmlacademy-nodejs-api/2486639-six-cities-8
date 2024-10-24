@@ -1,15 +1,16 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, RequestQuery, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
-import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
-import { ParamOfferId } from './type/param-offerid.type.js';
+import { ParamOfferId } from './type/param-offer-id.type.js';
+import { IndexOffersRequest } from './type/index-offers-request.type.js';
+import { UpdateOfferRequest } from './type/update-offer-request.type.js';
 import { OFFER_ID, OfferRoute } from './offer.const.js';
 
 @injectable()
@@ -46,7 +47,7 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(DetailOfferRdo, result));
   }
 
-  public async index({ query }: Request<unknown, unknown, unknown, RequestQuery>, res: Response): Promise<void> {
+  public async index({ query }: IndexOffersRequest, res: Response): Promise<void> {
     console.log(query);
 
     const offers = (query.isPremium)
@@ -56,7 +57,7 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
+  public async update({ body, params }: UpdateOfferRequest, res: Response): Promise<void> {
     const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...

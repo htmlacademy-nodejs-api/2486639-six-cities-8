@@ -1,5 +1,6 @@
 export { CreateReviewDto } from './dto/create-review.dto.js';
 export { ReviewRdo } from './rdo/review.rdo.js';
+export { IndexReviewsRequest } from './type/index-reviews-request.type.js';
 export { CreateReviewRequest } from './create-review-request.type.js';
 export { DefaultReviewService } from './default-review.service.js';
 export { ReviewService } from './review-service.interface.js';

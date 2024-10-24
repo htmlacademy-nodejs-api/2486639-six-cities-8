@@ -1,9 +1,10 @@
 export { CreateUserDto } from './dto/create-user.dto.js';
 export { LoginUserDto } from './dto/login-user.dto.js';
 export { UserRdo } from './rdo/user.rdo.js';
-export { CreateUserRequest } from './create-user-request.type.js';
+export { CreateUserRequest } from './type/create-user-request.type.js';
+export { ParamUserId } from './type/param-user-id.type.js';
+export { LoginUserRequest } from './type/login-user-request.type.js';
 export { DefaultUserService } from './default-user.service.js';
-export { LoginUserRequest } from './login-user-request.type.js';
 export { UserService } from './user-service.interface.js';
 export { DEFAULT_AVATAR_PATH, USER_ID, USER_ID_PARAMETR, UserRoute } from './user.const.js';
 export { createUserContainer } from './user.container.js';
