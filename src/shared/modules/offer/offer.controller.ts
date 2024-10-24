@@ -20,9 +20,9 @@ export class OfferController extends BaseController {
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.update });
-    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.find });
-    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.delete });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.Patch, handler: this.update });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete });
   }
 
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
@@ -68,7 +68,7 @@ export class OfferController extends BaseController {
     this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 
-  public async find(req: Request, res: Response): Promise<void> {
+  public async show(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...
