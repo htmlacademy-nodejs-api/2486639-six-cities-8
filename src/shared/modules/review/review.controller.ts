@@ -7,7 +7,7 @@ import { CreateReviewRequest } from './create-review-request.type.js';
 import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
-import { OFFER_ID, OfferRoute } from '../offer/index.js';
+import { OFFER_ID, OfferRoute, ParamOfferId } from '../offer/index.js';
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -34,8 +34,8 @@ export class ReviewController extends BaseController {
     this.created(res, fillDTO(ReviewRdo, result));
   }
 
-  public async index(req: Request, res: Response): Promise<void> {
-    const { offerId } = req.params;
+  public async index({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
     //const { count } = req.query;
     //! временно
     //console.log('req.query:', req.query);
