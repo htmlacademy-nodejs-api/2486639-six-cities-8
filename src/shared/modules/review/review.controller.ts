@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
-import { CreateReviewRequest } from './create-review-request.type.js';
+import { CreateReviewRequest } from './type/create-review-request.type.js';
 import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
