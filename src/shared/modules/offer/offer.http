@@ -45,7 +45,7 @@ GET http://localhost:4000/offers?count=10 HTTP/1.1
 
 ## Список премиум предложений
 
-GET http://localhost:4000/offers?premium=true HTTP/1.1
+GET http://localhost:4000/offers?isPremium=true HTTP/1.1
 
 ###
 

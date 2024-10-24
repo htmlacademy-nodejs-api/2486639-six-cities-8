@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, RequestQuery, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
@@ -46,14 +46,12 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(DetailOfferRdo, result));
   }
 
-  public async index(req: Request, res: Response): Promise<void> {
-    //! временно
-    console.log('req.query:', req.query);
-    //const { count, premium: isPremium } = req.query;
+  public async index({ query }: Request<unknown, unknown, unknown, RequestQuery>, res: Response): Promise<void> {
+    console.log(query);
 
-    const offers = await this.offerService.find();
-    //! premium
-    //const offers = await this.offerService.findPremium();
+    const offers = (query.isPremium)
+      ? await this.offerService.findPremium()
+      : await this.offerService.find(query.count);
 
     this.ok(res, fillDTO(OfferRdo, offers));
   }
