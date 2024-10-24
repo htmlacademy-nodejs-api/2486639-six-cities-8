@@ -8,5 +8,6 @@ export { ValidateDtoMiddleware } from './middleware/validate-dto.middleware.js';
 export { ValidateObjectIdMiddleware } from './middleware/validate-objectid.middleware.js';
 export { HttpMethod } from './types/http-method.enum.js';
 export { RequestBody } from './types/request-body.type.js';
+export { RequestQuery } from './types/request-query.type.js';
 export { RequestParams } from './types/request.params.type.js';
 export { Route } from './types/route.interface.js';
