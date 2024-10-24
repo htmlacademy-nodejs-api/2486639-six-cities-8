@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './create-user-request.type.js';
@@ -10,6 +10,7 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoginUserRequest } from './login-user-request.type.js';
+import { USER_ID, UserRoute } from './user.const.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -20,10 +21,13 @@ export class UserController extends BaseController {
   ) {
     super(logger);
 
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:userId/avatar', method: HttpMethod.Patch, handler: this.updateAvatar });
-    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
-    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout });
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(USER_ID);
+    const middlewares = [validateObjectIdMiddleware];
+
+    this.addRoute({ path: UserRoute.Root, method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: UserRoute.UserAvatar, method: HttpMethod.Patch, handler: this.updateAvatar, middlewares });
+    this.addRoute({ path: UserRoute.Login, method: HttpMethod.Post, handler: this.login });
+    this.addRoute({ path: UserRoute.Logout, method: HttpMethod.Delete, handler: this.logout });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
