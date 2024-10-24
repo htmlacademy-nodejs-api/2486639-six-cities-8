@@ -1,4 +1,4 @@
-import { CityName, OFFER_GOODS, OFFER_TYPES } from 'src/shared/types/index.js';
+import { CityName, OFFER_GOODS, OFFER_TYPES } from '../../types/index.js';
 
 export enum OfferCount {
   Default = 60,
@@ -89,5 +89,11 @@ export const OfferValidationMessage = {
   goods: {
     invalidFormat: 'goods must by array',
     invalidFormatItem: `item goods must by one of  ${OFFER_GOODS.join(', ')}`
+  },
+  hostId: {
+    invalidId: 'hostId must be a valid id'
+  },
+  location: {
+    invalidFormat: 'location must be object {latitude: number, longitude: number}'
   }
 } as const;
