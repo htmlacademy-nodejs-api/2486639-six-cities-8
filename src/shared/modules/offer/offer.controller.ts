@@ -1,14 +1,15 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
-import { CreateOfferRequest } from './create-offer-request.type.js';
+import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
+import { ParamOfferId } from './type/param-offerid.type.js';
 import { OFFER_ID, OfferRoute } from './offer.const.js';
 
 @injectable()
@@ -57,24 +58,21 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async update(_req: Request/*{ params, body }: CreateOfferRequest*/, _res: Response): Promise<void> {
-    //const id = params.id.toString();
+  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
+    const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...
-    //const offer = await this.offerService.findById(id);
+    const offer = await this.offerService.updateById(offerId, body);
 
-    /*
     if (offer) {
       this.ok(res, fillDTO(DetailOfferRdo, offer));
     } else {
-      this.notFound(res, { id });
+      this.notFound(res, { offerId });
     }
-    */
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 
-  public async show(req: Request, res: Response): Promise<void> {
-    const { offerId } = req.params;
+  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...
     const offer = await this.offerService.findById(offerId);
@@ -86,16 +84,16 @@ export class OfferController extends BaseController {
     }
   }
 
-  public async delete(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...
-    const offer = await this.offerService.deleteById(id);
+    const offer = await this.offerService.deleteById(offerId);
 
     if (offer) {
       this.noContent(res);
     } else {
-      this.notFound(res, { id });
+      this.notFound(res, { offerId });
     }
   }
 }
