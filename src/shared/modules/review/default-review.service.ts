@@ -6,6 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { ReviewEntity } from './review.entity.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 import { DEFAULT_REVIEW_COUNT } from './review.const.js';
+import { USER_ID } from '../user/index.js';
 
 @injectable()
 export class DefaultReviewService implements ReviewService {
@@ -14,17 +15,17 @@ export class DefaultReviewService implements ReviewService {
     @inject(Component.ReviewModel) private readonly reviewModel: types.ModelType<ReviewEntity>
   ) { }
 
-  public async create(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
-    const result = await this.reviewModel.create(dto);
+  public async create(dto: CreateReviewDto, offerId: string): Promise<DocumentType<ReviewEntity>> {
+    const result = await this.reviewModel.create({ ...dto, offerId });
     this.logger.info(`New review created: ${dto.comment}`);
 
-    return result.populate('userId');
+    return result.populate(USER_ID);
   }
 
   public async findByOfferId(offerId: string, count: number = DEFAULT_REVIEW_COUNT): Promise<DocumentType<ReviewEntity>[] | null> {
     return this.reviewModel
       .find({ offerId }, {}, { limit: count })
-      .populate('userId')
+      .populate(USER_ID)
       .sort({ publishDate: SortType.Down });
   }
 
@@ -35,7 +36,6 @@ export class DefaultReviewService implements ReviewService {
 
     return totalRating / ratingReviews.length;
   }
-
 
   public async deleteByOfferId(offerId: string): Promise<number> {
     const result = await this.reviewModel

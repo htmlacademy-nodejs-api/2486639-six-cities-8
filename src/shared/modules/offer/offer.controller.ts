@@ -33,7 +33,11 @@ export class OfferController extends BaseController {
       handler: this.create,
       middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
     });
-    this.addRoute({ path: OfferRoute.Root, method: HttpMethod.Get, handler: this.index });
+    this.addRoute({
+      path: OfferRoute.Root,
+      method: HttpMethod.Get,
+      handler: this.index
+    });
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Patch,

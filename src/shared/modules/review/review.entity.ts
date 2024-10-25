@@ -35,9 +35,6 @@ export class ReviewEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public rating!: number;
 
-  @prop({ required: true })
-  public publishDate!: Date;
-
   @prop({
     ref: UserEntity,
     required: true

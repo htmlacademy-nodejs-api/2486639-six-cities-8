@@ -1,13 +1,15 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { ParamUserId } from './type/param-user-id.type.js';
@@ -22,13 +24,29 @@ export class UserController extends BaseController {
   ) {
     super(logger);
 
-    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(USER_ID);
-    const middlewares = [validateObjectIdMiddleware];
-
-    this.addRoute({ path: UserRoute.Root, method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: UserRoute.UserAvatar, method: HttpMethod.Patch, handler: this.updateAvatar, middlewares });
-    this.addRoute({ path: UserRoute.Login, method: HttpMethod.Post, handler: this.login });
-    this.addRoute({ path: UserRoute.Logout, method: HttpMethod.Delete, handler: this.logout });
+    this.addRoute({
+      path: UserRoute.Root,
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
+    this.addRoute({
+      path: UserRoute.UserAvatar,
+      method: HttpMethod.Patch,
+      handler: this.updateAvatar,
+      middlewares: [new ValidateObjectIdMiddleware(USER_ID)]
+    });
+    this.addRoute({
+      path: UserRoute.Login,
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({
+      path: UserRoute.Logout,
+      method: HttpMethod.Delete,
+      handler: this.logout
+    });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {

@@ -6,8 +6,8 @@ Content-Type: application/json
 
 {
   "comment": "text text text text",
-  "rating": 3.5,
-  "publishDate": "2024-07-09T11:24:14.495Z"
+  "rating": 4,
+  "userId": "671afff0230123b82bee01cd"
 }
 
 ###

@@ -8,8 +8,9 @@ export class ReviewRdo {
   @Expose()
   public rating: number;
 
-  @Expose()
-  public publishDate: Date;
+  @Expose({ name: 'createdAt' })
+  public publishDate: string;
+  //? сработает
 
   @Expose({ name: 'userId' })
   @Type(() => UserRdo)
