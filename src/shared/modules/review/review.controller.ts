@@ -1,12 +1,15 @@
 import { inject, injectable } from 'inversify';
-import { Request, Response } from 'express';
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { Response } from 'express';
+import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
-import { CreateReviewRequest } from './create-review-request.type.js';
+import { CreateReviewRequest } from './type/create-review-request.type.js';
 import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
+import { CreateReviewDto } from './dto/create-review.dto.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
+import { OFFER_ID, OfferRoute } from '../offer/index.js';
+import { IndexReviewsRequest } from './type/index-reviews-request.type.js';
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -16,28 +19,34 @@ export class ReviewController extends BaseController {
   ) {
     super(logger);
 
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.index });
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OFFER_ID);
+
+    this.addRoute({
+      path: OfferRoute.OfferId,
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [
+        validateObjectIdMiddleware,
+        new ValidateDtoMiddleware(CreateReviewDto)
+      ]
+    });
+    this.addRoute({
+      path: OfferRoute.OfferId,
+      method: HttpMethod.Get,
+      handler: this.index,
+      middlewares: [validateObjectIdMiddleware]
+    });
   }
 
-  public async create({ body/*, params*/ }: CreateReviewRequest, res: Response): Promise<void> {
-    //!const { offerId } = params;
-    body.offerId = '67189b09acca7ba105c496da'; //! offerId;
-    body.userId = '67189b09acca7ba105c496da';
-    const result = await this.reviewService.create(body);
+  public async create({ body, params }: CreateReviewRequest, res: Response): Promise<void> {
+    const result = await this.reviewService.create(body, params.offerId);
 
     this.created(res, fillDTO(ReviewRdo, result));
   }
 
-  public async index(req: Request, res: Response): Promise<void> {
-    //!const { offerId } = params;
-    const offerId = '67189b09acca7ba105c496da';
-    //const { count } = req.query;
-    //! временно
-    console.log('req.query:', req.query);
+  public async index({ params, query }: IndexReviewsRequest, res: Response): Promise<void> {
+    const reviews = await this.reviewService.findByOfferId(params.offerId, query.count);
 
-    const offers = await this.reviewService.findByOfferId(offerId);
-
-    this.ok(res, fillDTO(ReviewRdo, offers));
+    this.ok(res, fillDTO(ReviewRdo, reviews));
   }
 }

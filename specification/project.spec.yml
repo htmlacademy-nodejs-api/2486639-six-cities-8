@@ -64,10 +64,23 @@ paths:
 
       requestBody:
         content:
-          application/octet-stream:
+          multipart/form-data:
             schema:
-              type: string
-              format: base64
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  #format: base64
+                  #nullable: true
+            encoding:
+              avatar:
+                style: form
+
+      #    application/octet-stream:
+      #      schema:
+      #        type: string
+      #        format: base64
       #              format: binary
       #          "image/jpeg":
       #            schema:
@@ -181,7 +194,7 @@ paths:
           in: query
           schema:
             type: integer
-        - name: premium
+        - name: isPremium
           in: query
           schema:
             type: boolean
@@ -202,7 +215,7 @@ paths:
           $ref: "#/components/schemas/offerId"
         required: true
 
-    put:
+    patch:
       tags:
         - offers
       summary: Редактирование предложения
@@ -485,7 +498,7 @@ components:
           $ref: "#/components/schemas/offerType"
         price:
           type: number
-          example: 99.9
+          example: 101
         location:
           $ref: "#/components/schemas/localion"
 
@@ -496,14 +509,18 @@ components:
       properties:
         description:
           type: string
-          example: offer title
+          example: offer description offer description
         images:
           type: array
           items:
             type: string
           example:
-            - img-16.jpg
             - img-11.jpg
+            - img-12.jpg
+            - img-13.jpg
+            - img-14.jpg
+            - img-15.jpg
+            - img-16.jpg
         rooms:
           type: integer
           example: 2
@@ -561,13 +578,13 @@ components:
           example: text text text text
         rating:
           $ref: "#/components/schemas/rating"
-        publishDate:
-          $ref: "#/components/schemas/dateString"
 
     review:
       type: object
       allOf:
         - $ref: "#/components/schemas/createReview"
       properties:
+        publishDate:
+          $ref: "#/components/schemas/dateString"
         user:
           $ref: "#/components/schemas/user"

@@ -1,6 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { City, Location, OfferGoods, OfferType } from '../../../types/index.js';
-import { UserEntity } from '../../user/user.entity.js';
+import { UserRdo } from '../../user/index.js';
 
 export class DetailOfferRdo {
   @Expose()
@@ -39,9 +39,9 @@ export class DetailOfferRdo {
   @Expose()
   public goods: OfferGoods;
 
-  @Expose()
-  public hostId: UserEntity;
-  //! host
+  @Expose({ name: 'hostId' })
+  @Type(() => UserRdo)
+  public host: UserRdo;
 
   @Expose()
   public location: Location;

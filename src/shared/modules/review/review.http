@@ -6,14 +6,14 @@ Content-Type: application/json
 
 {
   "comment": "text text text text",
-  "rating": 3.5,
-  "publishDate": "2024-07-09T11:24:14.495Z"
+  "rating": 4,
+  "userId": "671afff0230123b82bee01cd"
 }
 
 ###
 
 ## Список предложений
 
-GET http://localhost:4000/reviews/67189b09acca7ba105c496da HTTP/1.1
+GET http://localhost:4000/reviews/6715d930924dfbd3e73a0fd1 HTTP/1.1
 
 ###

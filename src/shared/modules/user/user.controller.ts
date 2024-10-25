@@ -1,15 +1,19 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
-import { CreateUserRequest } from './create-user-request.type.js';
+import { CreateUserRequest } from './type/create-user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
-import { LoginUserRequest } from './login-user-request.type.js';
+import { LoginUserRequest } from './type/login-user-request.type.js';
+import { ParamUserId } from './type/param-user-id.type.js';
+import { USER_ID, UserRoute } from './user.const.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -20,10 +24,29 @@ export class UserController extends BaseController {
   ) {
     super(logger);
 
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:userId/avatar', method: HttpMethod.Patch, handler: this.updateAvatar });
-    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
-    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout });
+    this.addRoute({
+      path: UserRoute.Root,
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
+    this.addRoute({
+      path: UserRoute.UserAvatar,
+      method: HttpMethod.Patch,
+      handler: this.updateAvatar,
+      middlewares: [new ValidateObjectIdMiddleware(USER_ID)]
+    });
+    this.addRoute({
+      path: UserRoute.Login,
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({
+      path: UserRoute.Logout,
+      method: HttpMethod.Delete,
+      handler: this.logout
+    });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -37,10 +60,9 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatar(req: Request, _res: Response): Promise<void> {
-    //!
-    console.log(req.params.userId);
-    // файлы?
+  public async updateAvatar({ params }: Request<ParamUserId>, _res: Response): Promise<void> {
+    //! временно
+    console.log(params.userId);
 
     this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
