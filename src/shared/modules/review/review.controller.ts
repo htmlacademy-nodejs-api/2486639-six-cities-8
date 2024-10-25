@@ -8,7 +8,7 @@ import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
-import { OFFER_ID, OfferRoute } from '../offer/index.js';
+import { OfferName, OfferRoute } from '../offer/index.js';
 import { IndexReviewsRequest } from './type/index-reviews-request.type.js';
 
 @injectable()
@@ -19,7 +19,7 @@ export class ReviewController extends BaseController {
   ) {
     super(logger);
 
-    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OFFER_ID);
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OfferName.Id);
 
     this.addRoute({
       path: OfferRoute.OfferId,

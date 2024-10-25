@@ -6,7 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { HOST_ID, OfferCount } from './offer.const.js';
+import { OfferName, OfferCount } from './offer.const.js';
 import { CityLocation } from '../../../const.js';
 
 @injectable()
@@ -41,7 +41,7 @@ export class DefaultOfferService implements OfferService {
 
     return this.offerModel
       .findByIdAndUpdate(id, { ...dto, city }, { new: true })
-      .populate([HOST_ID]);
+      .populate([OfferName.HostId]);
   }
 
   public async deleteById(id: string): Promise<DocumentType<OfferEntity> | null> {
@@ -52,7 +52,7 @@ export class DefaultOfferService implements OfferService {
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(id)
-      .populate([HOST_ID]);
+      .populate([OfferName.HostId]);
   }
 
   public async find(count: number = OfferCount.Default): Promise<DocumentType<OfferEntity>[]> {
