@@ -578,13 +578,13 @@ components:
           example: text text text text
         rating:
           $ref: "#/components/schemas/rating"
-        publishDate:
-          $ref: "#/components/schemas/dateString"
 
     review:
       type: object
       allOf:
         - $ref: "#/components/schemas/createReview"
       properties:
+        publishDate:
+          $ref: "#/components/schemas/dateString"
         user:
           $ref: "#/components/schemas/user"
