@@ -56,7 +56,7 @@ GET http://localhost:4000/offers?isPremium=true HTTP/1.1
 
 ## Предложение
 
-GET http://localhost:4000/offers/671887c5ff02732bb0fb5b63 HTTP/1.1
+GET http://localhost:4000/offers/671b04f7ce79e9c18a7d0d93 HTTP/1.1
 
 ###
 

@@ -7,6 +7,7 @@ export enum OfferCount {
 
 export const OFFER_ID = 'offerId';
 export const OFFER_ID_PARAMETR = `:${OFFER_ID}`;
+export const HOST_ID = 'hostId';
 
 export enum OfferRoute {
   Root = '/',
