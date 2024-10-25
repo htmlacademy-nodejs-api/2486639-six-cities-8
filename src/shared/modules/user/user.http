@@ -20,7 +20,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="avatar"; filename="avatar-max.jpg"
-Content-Type: image/jpg
+Content-Type: image/jpeg
 
 < ../../../../markup/img/avatar-max.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--

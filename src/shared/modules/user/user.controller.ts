@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
@@ -12,8 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
-import { ParamUserId } from './type/param-user-id.type.js';
-import { USER_ID, UserRoute } from './user.const.js';
+import { UserName, UserRoute } from './user.const.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -34,7 +33,10 @@ export class UserController extends BaseController {
       path: UserRoute.UserAvatar,
       method: HttpMethod.Patch,
       handler: this.updateAvatar,
-      middlewares: [new ValidateObjectIdMiddleware(USER_ID)]
+      middlewares: [
+        new ValidateObjectIdMiddleware(UserName.Id),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
+      ]
     });
     this.addRoute({
       path: UserRoute.Login,
@@ -60,11 +62,13 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatar({ params }: Request<ParamUserId>, _res: Response): Promise<void> {
+  public async updateAvatar(req: Request/*{ params }: Request<ParamUserId>*/, res: Response): Promise<void> {
     //! временно
-    console.log(params.userId);
+    //console.log(params.userId);
 
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+    this.created(res, {
+      filepath: req.file?.path
+    });
   }
 
   public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {

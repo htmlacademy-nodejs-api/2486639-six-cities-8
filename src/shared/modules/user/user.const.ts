@@ -1,11 +1,15 @@
 import { UserType } from '../../types/index.js';
 
 export const DEFAULT_AVATAR_PATH = 'default-avatar-path.png';
-export const USER_ID = 'userId';
+
+export enum UserName {
+  Id = 'userId',
+  Avatar = 'avatar'
+}
 
 export enum UserRoute {
   Root = '/',
-  UserAvatar = `/:${USER_ID}/avatar`,
+  UserAvatar = `/:${UserName.Id}/avatar`,
   Login = '/login',
   Logout = '/logout'
 }
