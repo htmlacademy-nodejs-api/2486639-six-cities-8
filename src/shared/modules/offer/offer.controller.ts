@@ -1,17 +1,19 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
-import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
+import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
 import { ParamOfferId } from './type/param-offer-id.type.js';
 import { IndexOffersRequest } from './type/index-offers-request.type.js';
 import { UpdateOfferRequest } from './type/update-offer-request.type.js';
 import { OFFER_ID, OfferRoute } from './offer.const.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -25,31 +27,45 @@ export class OfferController extends BaseController {
     const middlewares = [validateObjectIdMiddleware];
     //new DocumentExistsMiddleware(this.offerService, 'Offer'??, 'OFFER_ID');
 
-    this.addRoute({ path: OfferRoute.Root, method: HttpMethod.Post, handler: this.create });
+    this.addRoute({
+      path: OfferRoute.Root,
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+    });
     this.addRoute({ path: OfferRoute.Root, method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: OfferRoute.OfferId, method: HttpMethod.Patch, handler: this.update, middlewares });
-    this.addRoute({ path: OfferRoute.OfferId, method: HttpMethod.Get, handler: this.show, middlewares });
-    this.addRoute({ path: OfferRoute.OfferId, method: HttpMethod.Delete, handler: this.delete, middlewares });
+    this.addRoute({
+      path: OfferRoute.OfferId,
+      method: HttpMethod.Patch,
+      handler: this.update,
+      middlewares: [
+        validateObjectIdMiddleware,
+        new ValidateDtoMiddleware(UpdateOfferDto)
+      ]
+    });
+    this.addRoute({
+      path: OfferRoute.OfferId,
+      method: HttpMethod.Get,
+      handler: this.show,
+      middlewares
+    });
+    this.addRoute({
+      path: OfferRoute.OfferId,
+      method: HttpMethod.Delete,
+      handler: this.delete, middlewares
+    });
   }
 
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
     const result = await this.offerService.create({
       ...body,
       //hostId: '6715d930924dfbd3e73a0fcf' //! временно
-      hostId: '671797ceed73d6ef04c13d63' //! временно
     });
-
-    //! временно
-    console.log(result);
-    //! hostid, оставляет только _id
-    console.log(fillDTO(DetailOfferRdo, result));
 
     this.created(res, fillDTO(DetailOfferRdo, result));
   }
 
   public async index({ query }: IndexOffersRequest, res: Response): Promise<void> {
-    console.log(query);
-
     const offers = (query.isPremium)
       ? await this.offerService.findPremium()
       : await this.offerService.find(query.count);

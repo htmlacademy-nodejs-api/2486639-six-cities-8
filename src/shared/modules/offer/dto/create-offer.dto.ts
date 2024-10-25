@@ -53,6 +53,7 @@ export class CreateOfferDto {
 
   @IsMongoId({ message: OfferValidationMessage.hostId.invalidId })
   public hostId: string;
+  //! временно
 
   @IsObject({ message: OfferValidationMessage.location.invalidFormat })
   public location: Location;
