@@ -24,8 +24,8 @@ export class OfferController extends BaseController {
     super(logger);
 
     const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OfferName.Id);
-    const documentExistsMiddleware = new DocumentExistsMiddleware(this.offerService, OfferName.Entity, OfferName.Id);
-    const middlewares = [validateObjectIdMiddleware, documentExistsMiddleware];
+    const offerExistsMiddleware = new DocumentExistsMiddleware(this.offerService, OfferName.Entity, OfferName.Id);
+    const middlewares = [validateObjectIdMiddleware, offerExistsMiddleware];
 
     this.addRoute({
       path: OfferRoute.Root,
@@ -45,7 +45,7 @@ export class OfferController extends BaseController {
       middlewares: [
         validateObjectIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto),
-        documentExistsMiddleware
+        offerExistsMiddleware
       ]
     });
     this.addRoute({
