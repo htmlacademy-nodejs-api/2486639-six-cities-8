@@ -1,6 +1,7 @@
 export { CityName } from './city-name.enum.js';
 export { City } from './city.type.js';
 export { Component } from './component.enum.js';
+export { DocumentExists } from './document-exists.interface.js';
 export { Location } from './location.type.js';
 export { randomNumberOption, MockServerData } from './mock-server-data.type.js';
 export { OFFER_TYPES, OfferType } from './offer-type.type.js';
