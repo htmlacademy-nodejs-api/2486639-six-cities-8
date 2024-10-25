@@ -498,7 +498,7 @@ components:
           $ref: "#/components/schemas/offerType"
         price:
           type: number
-          example: 99.9
+          example: 101
         location:
           $ref: "#/components/schemas/localion"
 
@@ -509,14 +509,18 @@ components:
       properties:
         description:
           type: string
-          example: offer title
+          example: offer description offer description
         images:
           type: array
           items:
             type: string
           example:
-            - img-16.jpg
             - img-11.jpg
+            - img-12.jpg
+            - img-13.jpg
+            - img-14.jpg
+            - img-15.jpg
+            - img-16.jpg
         rooms:
           type: integer
           example: 2
