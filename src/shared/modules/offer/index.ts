@@ -8,7 +8,7 @@ export { ParamOfferId } from './type/param-offer-id.type.js';
 export { UpdateOfferRequest } from './type/update-offer-request.type.js';
 export { DefaultOfferService } from './default-offer.service.js';
 export { OfferService } from './offer-service.interface.js';
-export { OfferCount, OFFER_ID, OFFER_ID_PARAMETR, HOST_ID, OfferRoute, OfferValidation, OfferValidationMessage } from './offer.const.js';
+export { OfferCount, OfferName, OfferRoute, OfferValidation, OfferValidationMessage } from './offer.const.js';
 export { createOfferContainer } from './offer.container.js';
 export { OfferController } from './offer.controller.js';
 export { OfferEntity, OfferModel } from './offer.entity.js';

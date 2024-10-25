@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
@@ -12,7 +12,7 @@ import { DetailOfferRdo } from './rdo/detail-offer.rdo.js';
 import { ParamOfferId } from './type/param-offer-id.type.js';
 import { IndexOffersRequest } from './type/index-offers-request.type.js';
 import { UpdateOfferRequest } from './type/update-offer-request.type.js';
-import { OFFER_ID, OfferRoute } from './offer.const.js';
+import { OfferName, OfferRoute } from './offer.const.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 
 @injectable()
@@ -23,9 +23,9 @@ export class OfferController extends BaseController {
   ) {
     super(logger);
 
-    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OFFER_ID);
-    const middlewares = [validateObjectIdMiddleware];
-    //new DocumentExistsMiddleware(this.offerService, 'Offer'??, 'OFFER_ID');
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OfferName.Id);
+    const offerExistsMiddleware = new DocumentExistsMiddleware(this.offerService, OfferName.Entity, OfferName.Id);
+    const middlewares = [validateObjectIdMiddleware, offerExistsMiddleware];
 
     this.addRoute({
       path: OfferRoute.Root,
@@ -44,7 +44,8 @@ export class OfferController extends BaseController {
       handler: this.update,
       middlewares: [
         validateObjectIdMiddleware,
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        offerExistsMiddleware
       ]
     });
     this.addRoute({
@@ -56,7 +57,8 @@ export class OfferController extends BaseController {
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Delete,
-      handler: this.delete, middlewares
+      handler: this.delete,
+      middlewares
     });
   }
 

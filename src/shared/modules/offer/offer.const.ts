@@ -5,13 +5,15 @@ export enum OfferCount {
   Premium = 3
 }
 
-export const OFFER_ID = 'offerId';
-export const OFFER_ID_PARAMETR = `:${OFFER_ID}`;
-export const HOST_ID = 'hostId';
+export enum OfferName {
+  Entity = 'Offer',
+  Id = 'offerId',
+  HostId = 'hostId'
+}
 
 export enum OfferRoute {
   Root = '/',
-  OfferId = `/${OFFER_ID_PARAMETR}`
+  OfferId = `/:${OfferName.Id}`
 }
 
 export const OfferValidation = {

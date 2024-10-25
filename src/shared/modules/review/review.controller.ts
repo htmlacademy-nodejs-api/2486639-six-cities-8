@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Response } from 'express';
-import { BaseController, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateReviewRequest } from './type/create-review-request.type.js';
@@ -8,18 +8,20 @@ import { ReviewService } from './review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 import { ReviewRdo } from './rdo/review.rdo.js';
-import { OFFER_ID, OfferRoute } from '../offer/index.js';
+import { OfferName, OfferRoute, OfferService } from '../offer/index.js';
 import { IndexReviewsRequest } from './type/index-reviews-request.type.js';
 
 @injectable()
 export class ReviewController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.ReviewService) private readonly reviewService: ReviewService
+    @inject(Component.ReviewService) private readonly reviewService: ReviewService,
+    @inject(Component.OfferService) private readonly offerService: OfferService
   ) {
     super(logger);
 
-    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OFFER_ID);
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OfferName.Id);
+    const offerExistsMiddleware = new DocumentExistsMiddleware(this.offerService, OfferName.Entity, OfferName.Id);
 
     this.addRoute({
       path: OfferRoute.OfferId,
@@ -27,14 +29,17 @@ export class ReviewController extends BaseController {
       handler: this.create,
       middlewares: [
         validateObjectIdMiddleware,
-        new ValidateDtoMiddleware(CreateReviewDto)
+        new ValidateDtoMiddleware(CreateReviewDto),
+        offerExistsMiddleware
       ]
     });
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Get,
       handler: this.index,
-      middlewares: [validateObjectIdMiddleware]
+      middlewares: [
+        validateObjectIdMiddleware,
+        offerExistsMiddleware]
     });
   }
 
