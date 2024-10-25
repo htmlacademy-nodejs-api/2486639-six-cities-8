@@ -90,6 +90,8 @@ bootstrap();
         остальные маршруты
   27. перепроверить все запросы, особенно коментарии
   28. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
+  29. class-validator не сработало
+        @IsObject location, @IsUrl images и previewImage
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
