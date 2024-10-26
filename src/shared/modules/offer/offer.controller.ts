@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
@@ -23,6 +23,7 @@ export class OfferController extends BaseController {
   ) {
     super(logger);
 
+    const privateRouteMiddleware = new PrivateRouteMiddleware();
     const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(OfferName.Id);
     const offerExistsMiddleware = new DocumentExistsMiddleware(this.offerService, OfferName.Entity, OfferName.Id);
     const middlewares = [validateObjectIdMiddleware, offerExistsMiddleware];
@@ -31,7 +32,10 @@ export class OfferController extends BaseController {
       path: OfferRoute.Root,
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+      middlewares: [
+        privateRouteMiddleware,
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
     });
     this.addRoute({
       path: OfferRoute.Root,
@@ -43,6 +47,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        privateRouteMiddleware,
         validateObjectIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto),
         offerExistsMiddleware
@@ -58,15 +63,16 @@ export class OfferController extends BaseController {
       path: OfferRoute.OfferId,
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares
+      middlewares: [
+        privateRouteMiddleware,
+        validateObjectIdMiddleware,
+        offerExistsMiddleware
+      ]
     });
   }
 
-  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
-    const result = await this.offerService.create({
-      ...body,
-      //hostId: '6715d930924dfbd3e73a0fcf' //! временно
-    });
+  public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
+    const result = await this.offerService.create(body, tokenPayload.id);
 
     this.created(res, fillDTO(DetailOfferRdo, result));
   }
@@ -80,6 +86,7 @@ export class OfferController extends BaseController {
   }
 
   public async update({ body, params }: UpdateOfferRequest, res: Response): Promise<void> {
+    //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...
@@ -106,6 +113,7 @@ export class OfferController extends BaseController {
   }
 
   public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
     //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
     // null не возвращает...

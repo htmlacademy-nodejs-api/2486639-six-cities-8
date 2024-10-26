@@ -1,13 +1,13 @@
 # Предложения
 ## Создать отзыв
 
-POST http://localhost:4000/reviews/671b04f7ce79e9c18a7d0d93 HTTP/1.1
+POST http://localhost:4000/reviews/671cc48dd441ac613268c691 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhbmRyZXkxQHRlc3QucnUiLCJpZCI6IjY3MWNhNDgxMzU0MGYwZWIxOTZkOTg4YiIsImlhdCI6MTcyOTkzNzU0NiwiZXhwIjoxNzMwMTEwMzQ2fQ.78TyI7aubhSKqNTLhuJ-EbvoKcWv6r96uEYHPqmX9Mw
 
 {
   "comment": "text text text text",
-  "rating": 4,
-  "userId": "671afff0230123b82bee01cd"
+  "rating": 4
 }
 
 ###

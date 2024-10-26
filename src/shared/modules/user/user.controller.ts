@@ -1,11 +1,12 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
 import { UserService } from './user-service.interface.js';
+import { AuthService } from '../auth/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -13,12 +14,14 @@ import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { UserName, UserRoute } from './user.const.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.AuthService) private readonly authService: AuthService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>
   ) {
     super(logger);
@@ -34,6 +37,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.updateAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(UserName.Id),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
       ]
@@ -45,13 +49,22 @@ export class UserController extends BaseController {
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
     this.addRoute({
+      path: UserRoute.Login,
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate
+    });
+    this.addRoute({
       path: UserRoute.Logout,
       method: HttpMethod.Delete,
       handler: this.logout
     });
   }
 
-  public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
+  public async create({ body, tokenPayload }: CreateUserRequest, res: Response): Promise<void> {
+    if (tokenPayload) {
+      this.throwHttpError(StatusCodes.CONFLICT, 'Only unauthorized users can register!');
+    }
+
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
@@ -71,17 +84,28 @@ export class UserController extends BaseController {
     });
   }
 
-  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const { email } = user;
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, { email, token });
 
-    if (!existsUser) {
-      this.throwHttpError(StatusCodes.UNAUTHORIZED, `User with email ${body.email} not found.`);
-    }
-
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+    this.ok(res, responseData);
   }
 
-  public async logout(_req: Request, _res: Response): Promise<void> {
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+  public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
+    const findedUser = await this.userService.findById(tokenPayload.id);
+
+    //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
+    if (!findedUser) {
+      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    this.ok(res, fillDTO(UserRdo, findedUser));
+  }
+
+  public async logout(_req: Request, res: Response): Promise<void> {
+    //! временно или так и оставить, т.к. удалить нужно для сессий, а токен нужно забить на клиентской стороне
+    this.noContent(res);
   }
 }

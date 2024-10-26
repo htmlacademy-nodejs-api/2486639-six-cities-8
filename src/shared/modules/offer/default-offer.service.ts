@@ -23,8 +23,8 @@ export class DefaultOfferService implements OfferService {
     };
   }
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    const offer = await this.offerModel.create({ ...dto, city: this.getCity(dto.city) });
+  public async create(dto: CreateOfferDto, hostId: string): Promise<DocumentType<OfferEntity> | null> {
+    const offer = await this.offerModel.create({ ...dto, hostId, city: this.getCity(dto.city) });
 
     this.logger.info(`New offer created: ${offer.id} - ${offer.title}`);
 

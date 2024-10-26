@@ -1,5 +1,6 @@
 export { CreateUserDto } from './dto/create-user.dto.js';
 export { LoginUserDto } from './dto/login-user.dto.js';
+export { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 export { UserRdo } from './rdo/user.rdo.js';
 export { CreateUserRequest } from './type/create-user-request.type.js';
 export { ParamUserId } from './type/param-user-id.type.js';

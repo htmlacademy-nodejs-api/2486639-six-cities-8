@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { Component } from './shared/types/index.js';
 import { createRestApplicationContainer, RestApplication } from './rest/index.js';
+import { createAuthContainer } from './shared/modules/auth/index.js';
 import { createUserContainer } from './shared/modules/user/index.js';
 import { createOfferContainer } from './shared/modules/offer/index.js';
 import { createReviewContainer } from './shared/modules/review/index.js';
@@ -9,6 +10,7 @@ import { createReviewContainer } from './shared/modules/review/index.js';
 async function bootstrap() {
   const appContainer = Container.merge(
     createRestApplicationContainer(),
+    createAuthContainer(),
     createUserContainer(),
     createOfferContainer(),
     createReviewContainer()
@@ -92,6 +94,14 @@ bootstrap();
   28. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
   29. class-validator не сработало
         @IsObject location, @IsUrl images и previewImage
+  30. ParseTokenMiddleware
+         подключено на все запросы. то необходимо ошибку отдать next(err) ?
+  31. city: this.getCity(dto.city)
+        возможно другим способом заполнить данные или как будут приходить с клиента
+  32. обязательно ли в ДТО все поля для передачи сервису БД, можно чать передать параметрами?
+    CreateOfferDto, CreateReviewDto
+  33. Еще не сделана обработка маршрутов для избранного и вывод!
+
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
