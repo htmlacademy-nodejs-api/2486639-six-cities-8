@@ -92,6 +92,7 @@ export class UserController extends BaseController {
 
   public async getLoginInfo(_req: Request, res: Response): Promise<void> {
     //! временно
+    // await this.userService.findByEmail(pyaload.email)
     this.ok(res, 'userObject');
   }
 

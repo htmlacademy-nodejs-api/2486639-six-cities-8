@@ -6,4 +6,5 @@ export class LoggedUserRdo {
 
   @Expose()
   public email: string;
+  //! в ТЗ только токен, глянуть как реализовано на клиенте
 }
