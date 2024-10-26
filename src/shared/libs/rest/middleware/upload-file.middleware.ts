@@ -14,8 +14,6 @@ export class UploadFileMiddleware implements Middleware {
     const storage = diskStorage({
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
-        console.log(file);
-
         const fileExtention = extension(file.mimetype);
         const filename = crypto.randomUUID();
         callback(null, `${filename}.${fileExtention}`);
