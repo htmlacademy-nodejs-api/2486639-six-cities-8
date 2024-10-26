@@ -51,7 +51,7 @@ export class UserController extends BaseController {
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Get,
-      handler: this.getLoginInfo
+      handler: this.checkAuthenticate
     });
     this.addRoute({
       path: UserRoute.Logout,
@@ -93,11 +93,15 @@ export class UserController extends BaseController {
     this.ok(res, responseData);
   }
 
-  //! название check или ....
-  public async getLoginInfo({ tokenPayload }: Request, res: Response): Promise<void> {
-    const user = await this.userService.findById(tokenPayload.id);
+  public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
+    const findedUser = await this.userService.findById(tokenPayload.id);
 
-    this.ok(res, fillDTO(UserRdo, user));
+    //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
+    if (!findedUser) {
+      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    this.ok(res, fillDTO(UserRdo, findedUser));
   }
 
   public async logout(_req: Request, _res: Response): Promise<void> {
