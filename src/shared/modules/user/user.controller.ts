@@ -48,6 +48,12 @@ export class UserController extends BaseController {
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
     this.addRoute({
+      path: UserRoute.Login,
+      method: HttpMethod.Get,
+      handler: this.getLoginInfo,
+      //! middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({
       path: UserRoute.Logout,
       method: HttpMethod.Delete,
       handler: this.logout
@@ -81,6 +87,12 @@ export class UserController extends BaseController {
     const responseData = fillDTO(LoggedUserRdo, { email, token });
 
     this.ok(res, responseData);
+  }
+
+
+  public async getLoginInfo(_req: Request, res: Response): Promise<void> {
+    //! временно
+    this.ok(res, 'userObject');
   }
 
   public async logout(_req: Request, _res: Response): Promise<void> {

@@ -94,6 +94,9 @@ bootstrap();
   28. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
   29. class-validator не сработало
         @IsObject location, @IsUrl images и previewImage
+  30. ParseTokenMiddleware
+         подключено на все запросы. то необходимо ошибку отдать next(err) ?
+
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129
