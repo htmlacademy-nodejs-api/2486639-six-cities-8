@@ -91,7 +91,7 @@ export const OfferValidationMessage = {
   },
   goods: {
     invalidFormat: 'goods must by array',
-    invalidFormatItem: `item goods must by one of  ${OFFER_GOODS.join(', ')}`
+    invalidFormatItem: `item goods must by one of ${OFFER_GOODS.join(', ')}`
   },
   hostId: {
     invalidId: 'hostId must be a valid id'
