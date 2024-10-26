@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Response } from 'express';
-import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateReviewRequest } from './type/create-review-request.type.js';
@@ -28,6 +28,7 @@ export class ReviewController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         validateObjectIdMiddleware,
         new ValidateDtoMiddleware(CreateReviewDto),
         offerExistsMiddleware

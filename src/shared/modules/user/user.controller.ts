@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
@@ -37,6 +37,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.updateAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(UserName.Id),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
       ]
@@ -50,8 +51,7 @@ export class UserController extends BaseController {
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Get,
-      handler: this.getLoginInfo,
-      //! middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+      handler: this.getLoginInfo
     });
     this.addRoute({
       path: UserRoute.Logout,
@@ -60,7 +60,11 @@ export class UserController extends BaseController {
     });
   }
 
-  public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
+  public async create({ body, tokenPayload }: CreateUserRequest, res: Response): Promise<void> {
+    if (tokenPayload) {
+      this.throwHttpError(StatusCodes.CONFLICT, 'Only unauthorized users can register!');
+    }
+
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
@@ -89,7 +93,7 @@ export class UserController extends BaseController {
     this.ok(res, responseData);
   }
 
-
+  //! название check или ....
   public async getLoginInfo({ tokenPayload }: Request, res: Response): Promise<void> {
     const user = await this.userService.findById(tokenPayload.id);
 
