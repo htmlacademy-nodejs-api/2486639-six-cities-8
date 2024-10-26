@@ -6,7 +6,7 @@ import { OfferEntity } from './offer.entity.js';
 
 export interface OfferService extends DocumentExists {
   exists(id: string): Promise<boolean>;
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null>;
+  create(dto: CreateOfferDto, hostId: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(id: string): Promise<DocumentType<OfferEntity> | null>;
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;

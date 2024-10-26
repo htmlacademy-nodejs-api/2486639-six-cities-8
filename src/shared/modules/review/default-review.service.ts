@@ -15,8 +15,8 @@ export class DefaultReviewService implements ReviewService {
     @inject(Component.ReviewModel) private readonly reviewModel: types.ModelType<ReviewEntity>
   ) { }
 
-  public async create(dto: CreateReviewDto, offerId: string): Promise<DocumentType<ReviewEntity>> {
-    const result = await this.reviewModel.create({ ...dto, offerId });
+  public async create(dto: CreateReviewDto, offerId: string, userId: string): Promise<DocumentType<ReviewEntity>> {
+    const result = await this.reviewModel.create({ ...dto, offerId, userId });
     this.logger.info(`New review created: ${dto.comment}`);
 
     return result.populate(UserName.Id);

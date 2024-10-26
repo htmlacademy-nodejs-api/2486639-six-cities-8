@@ -1,4 +1,4 @@
-import { IsMongoId, IsNumber, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsNumber, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { ReviewValidation, ReviewValidationMessage } from '../review.const.js';
 
 export class CreateReviewDto {
@@ -10,7 +10,4 @@ export class CreateReviewDto {
   @Min(ReviewValidation.rating.min, { message: ReviewValidationMessage.rating.min })
   @Max(ReviewValidation.rating.max, { message: ReviewValidationMessage.rating.max })
   public rating: number;
-
-  @IsMongoId({ message: ReviewValidationMessage.userId.invalidId })
-  public userId: string;
 }

@@ -96,7 +96,10 @@ bootstrap();
         @IsObject location, @IsUrl images и previewImage
   30. ParseTokenMiddleware
          подключено на все запросы. то необходимо ошибку отдать next(err) ?
-
+  31. city: this.getCity(dto.city)
+        возможно другим способом заполнить данные или как будут приходить с клиента
+  32. обязательно ли в ДТО все поля для передачи сервису БД, можно чать передать параметрами?
+    CreateOfferDto, CreateReviewDto
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
     node:internal/modules/run_main:129

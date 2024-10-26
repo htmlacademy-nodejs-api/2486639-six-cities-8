@@ -1,4 +1,4 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsMongoId, IsNumber, IsObject, IsUrl, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsNumber, IsObject, IsUrl, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { CityName, Location, OFFER_GOODS, OFFER_TYPES, OfferGoods, OfferType } from '../../../types/index.js';
 import { OfferValidation, OfferValidationMessage } from '../offer.const.js';
 
@@ -50,10 +50,6 @@ export class CreateOfferDto {
   @IsArray({ message: OfferValidationMessage.goods.invalidFormat })
   @IsEnum(OFFER_GOODS, { each: true, message: OfferValidationMessage.goods.invalidFormatItem })
   public goods: OfferGoods;
-
-  @IsMongoId({ message: OfferValidationMessage.hostId.invalidId })
-  public hostId: string;
-  //! временно
 
   @IsObject({ message: OfferValidationMessage.location.invalidFormat })
   public location: Location;

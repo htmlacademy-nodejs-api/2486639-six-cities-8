@@ -90,10 +90,10 @@ export class UserController extends BaseController {
   }
 
 
-  public async getLoginInfo(_req: Request, res: Response): Promise<void> {
-    //! временно
-    // await this.userService.findByEmail(pyaload.email)
-    this.ok(res, 'userObject');
+  public async getLoginInfo({ tokenPayload }: Request, res: Response): Promise<void> {
+    const user = await this.userService.findById(tokenPayload.id);
+
+    this.ok(res, fillDTO(UserRdo, user));
   }
 
   public async logout(_req: Request, _res: Response): Promise<void> {

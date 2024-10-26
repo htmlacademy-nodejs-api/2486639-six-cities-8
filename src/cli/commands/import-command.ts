@@ -53,9 +53,8 @@ export class ImportCommand implements Command {
       maxAdults,
       price,
       goods,
-      hostId: hostEntity.id,
       location
-    });
+    }, hostEntity.id);
   }
 
   private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {
