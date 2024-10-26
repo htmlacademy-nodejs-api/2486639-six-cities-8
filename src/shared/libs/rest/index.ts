@@ -3,6 +3,7 @@ export { Controller } from './controller/controller.interface.js';
 export { HttpError } from './errors/http-error.js';
 export { AppExceptionFilter } from './exception-filter/app-exception-filter.js';
 export { ExceptionFilter } from './exception-filter/exception-filter.interface.js';
+export { BaseMiddleware } from './middleware/base-middleware.abstract.js';
 export { DocumentExistsMiddleware } from './middleware/document-exists.middleware.js';
 export { Middleware } from './middleware/middleware.interface.js';
 export { UploadFileMiddleware } from './middleware/upload-file.middleware.js';
