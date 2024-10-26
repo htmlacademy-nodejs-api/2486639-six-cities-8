@@ -6,6 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
 import { UserService } from './user-service.interface.js';
+import { AuthService } from '../auth/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -13,12 +14,14 @@ import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { UserName, UserRoute } from './user.const.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.AuthService) private readonly authService: AuthService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>
   ) {
     super(logger);
@@ -71,14 +74,13 @@ export class UserController extends BaseController {
     });
   }
 
-  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const { email } = user;
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, { email, token });
 
-    if (!existsUser) {
-      this.throwHttpError(StatusCodes.UNAUTHORIZED, `User with email ${body.email} not found.`);
-    }
-
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+    this.ok(res, responseData);
   }
 
   public async logout(_req: Request, _res: Response): Promise<void> {
