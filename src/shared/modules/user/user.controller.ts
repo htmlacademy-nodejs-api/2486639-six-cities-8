@@ -104,7 +104,8 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(UserRdo, findedUser));
   }
 
-  public async logout(_req: Request, _res: Response): Promise<void> {
-    this.throwHttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+  public async logout(_req: Request, res: Response): Promise<void> {
+    //! временно или так и оставить, т.к. удалить нужно для сессий, а токен нужно забить на клиентской стороне
+    this.noContent(res);
   }
 }
