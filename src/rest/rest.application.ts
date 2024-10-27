@@ -8,7 +8,7 @@ import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getFullServerPath, getMongoURI } from '../shared/helpers/index.js';
 import { Controller, ExceptionFilter } from '../shared/libs/rest/index.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/index.js';
-import { Route } from '../const.js';
+import { Route } from './rest.const.js';
 
 @injectable()
 export class RestApplication {

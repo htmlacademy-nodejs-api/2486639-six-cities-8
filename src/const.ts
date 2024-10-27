@@ -26,11 +26,3 @@ export const CityLocation = {
     longitude: 6.776314
   }
 } as const;
-
-export enum Route {
-  Users = '/users',
-  Offers = '/offers',
-  Reviews = '/reviews',
-  Upload = '/upload',
-  Static = '/static'
-}
