@@ -4,6 +4,7 @@ export { HttpError } from './errors/http-error.js';
 export { ValidationError } from './errors/validation-error.js';
 export { AppExceptionFilter } from './exception-filter/app.exception-filter.js';
 export { ExceptionFilter } from './exception-filter/exception-filter.interface.js';
+export { HttpErrorExceptionFilter } from './exception-filter/http-error.exception-filter.js';
 export { ValidationExceptionFilter } from './exception-filter/validation.exception-filter.js';
 export { DocumentExistsMiddleware } from './middleware/document-exists.middleware.js';
 export { Middleware } from './middleware/middleware.interface.js';
