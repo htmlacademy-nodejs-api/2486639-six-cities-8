@@ -30,3 +30,7 @@ export function reduceValidationErrors(errors: ValidationError[]): ValidationErr
 export function getFullServerPath(host: string, port: number, protocol: string = 'http') {
   return `${protocol}://${host}:${port}`;
 }
+
+export function isObject(value: unknown): value is Record<string, object> {
+  return typeof value === 'object' && value !== null;
+}
