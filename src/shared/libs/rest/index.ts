@@ -2,8 +2,9 @@ export { BaseController } from './controller/base-controller.abstract.js';
 export { Controller } from './controller/controller.interface.js';
 export { HttpError } from './errors/http-error.js';
 export { ValidationError } from './errors/validation-error.js';
-export { AppExceptionFilter } from './exception-filter/app-exception-filter.js';
+export { AppExceptionFilter } from './exception-filter/app.exception-filter.js';
 export { ExceptionFilter } from './exception-filter/exception-filter.interface.js';
+export { ValidationExceptionFilter } from './exception-filter/validation.exception-filter.js';
 export { DocumentExistsMiddleware } from './middleware/document-exists.middleware.js';
 export { Middleware } from './middleware/middleware.interface.js';
 export { ParseTokenMiddleware } from './middleware/parse-token.middleware.js';
@@ -11,6 +12,7 @@ export { PrivateRouteMiddleware } from './middleware/private-route.middleware.js
 export { UploadFileMiddleware } from './middleware/upload-file.middleware.js';
 export { ValidateDtoMiddleware } from './middleware/validate-dto.middleware.js';
 export { ValidateObjectIdMiddleware } from './middleware/validate-objectid.middleware.js';
+export { ApplicationError } from './types/application-error.enum.js';
 export { HttpMethod } from './types/http-method.enum.js';
 export { RequestBody } from './types/request-body.type.js';
 export { RequestQuery } from './types/request-query.type.js';

@@ -1,6 +1,6 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { ValidationError } from 'class-validator';
-import { ValidationErrorField } from '../libs/rest/index.js';
+import { ApplicationError, ValidationErrorField } from '../libs/rest/index.js';
 
 export function round(value: number, decimals: number = 0) {
   //http://www.jacklmoore.com/notes/rounding-in-javascript/
@@ -15,8 +15,8 @@ export function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
   return plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
 }
 
-export function createErrorObject(message: string) {
-  return { error: message };
+export function createErrorObject(errorType: ApplicationError, error: string, details: ValidationErrorField[] = []) {
+  return { errorType, error, details };
 }
 
 export function reduceValidationErrors(errors: ValidationError[]): ValidationErrorField[] {
