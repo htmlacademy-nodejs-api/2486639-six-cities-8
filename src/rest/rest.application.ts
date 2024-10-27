@@ -43,6 +43,7 @@ export class RestApplication {
 
   private async initServer() {
     const port = this.config.get('PORT');
+
     this.server.listen(port);
   }
 
@@ -57,6 +58,7 @@ export class RestApplication {
 
     this.server.use(express.json());
     this.server.use(Route.Upload, express.static(this.config.get('UPLOAD_DIRECTORY')));
+    this.server.use(Route.Static, express.static(this.config.get('STATIC_DIRECTORY_PATH')));
     this.server.use(parseTokenMiddleware.execute.bind(parseTokenMiddleware));
     this.server.use(cors());
   }
