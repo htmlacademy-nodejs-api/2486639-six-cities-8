@@ -1,10 +1,4 @@
-import {
-  defaultClasses,
-  getModelForClass,
-  modelOptions,
-  prop,
-  Ref
-} from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { City, Location, OfferGoods, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 

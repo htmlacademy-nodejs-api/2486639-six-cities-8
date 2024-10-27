@@ -98,7 +98,7 @@ export class UserController extends BaseController {
       this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
-    const findedUser = await this.userService.findById(tokenPayload.id);
+    const findedUser = await this.userService.findById(tokenPayload.user.id);
 
     //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
     if (!findedUser) {
