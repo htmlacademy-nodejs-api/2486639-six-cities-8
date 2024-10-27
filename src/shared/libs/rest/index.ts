@@ -15,3 +15,4 @@ export { RequestBody } from './types/request-body.type.js';
 export { RequestQuery } from './types/request-query.type.js';
 export { RequestParams } from './types/request.params.type.js';
 export { Route } from './types/route.interface.js';
+export { ValidationErrorField } from './types/validation-error-field.type.js';
