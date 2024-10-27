@@ -15,13 +15,12 @@ export class DefaultUserService implements UserService {
   ) { }
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity({
-      ...dto,
-      avatarPath: DEFAULT_AVATAR_PATH
-    });
+    const user = new UserEntity({ ...dto, avatarPath: DEFAULT_AVATAR_PATH });
+
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
+
     this.logger.info(`New user created: ${user.email}`);
 
     return result;
@@ -40,12 +39,12 @@ export class DefaultUserService implements UserService {
   }
 
   public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const existedUser = await this.findByEmail(dto.email);
+    const findedUser = await this.findByEmail(dto.email);
 
-    if (existedUser) {
+    if (findedUser) {
       this.logger.info(`User finded by email: ${dto.email}`);
 
-      return existedUser;
+      return findedUser;
     }
 
     return this.create(dto, salt);

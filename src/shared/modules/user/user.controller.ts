@@ -32,6 +32,7 @@ export class UserController extends BaseController {
       handler: this.create,
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
+
     this.addRoute({
       path: UserRoute.UserAvatar,
       method: HttpMethod.Patch,
@@ -42,17 +43,20 @@ export class UserController extends BaseController {
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
       ]
     });
+
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
+
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Get,
       handler: this.checkAuthenticate
     });
+
     this.addRoute({
       path: UserRoute.Logout,
       method: HttpMethod.Delete,

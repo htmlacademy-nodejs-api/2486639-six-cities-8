@@ -34,6 +34,7 @@ export class ReviewController extends BaseController {
         offerExistsMiddleware
       ]
     });
+
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Get,

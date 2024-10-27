@@ -16,6 +16,4 @@ export class CreateUserDto {
   @MinLength(UserValidation.password.minLength, { message: UserValidationMessage.password.minLength })
   @MaxLength(UserValidation.password.maxLength, { message: UserValidationMessage.password.maxLength })
   public password: string;
-
-  //! нужен ли сразу avatarPath?
 }
