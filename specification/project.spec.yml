@@ -44,8 +44,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
+        400:
+          description: Не корректные данные или пользователь авторизован.
         409:
-          description: Не корректные данные или пользователь с таким email уже существует.
+          description: Пользователь с таким email уже существует.
 
   /users/{userId}/avatar:
     patch:
@@ -125,7 +127,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/token"
-        403:
+        401:
           description: Не верный логин или пароль или пользователь не существует
 
     get:
@@ -153,8 +155,6 @@ paths:
       responses:
         200:
           description: Пользовательский сеанс завершен
-        404:
-          description: Не найдено
 
   /offers:
     post:
@@ -180,7 +180,7 @@ paths:
                 $ref: "#/components/schemas/detailOffer"
         403:
           description: Доступ запрещен.
-        409:
+        400:
           description: Не корректные данные.
 
     get:
@@ -238,7 +238,7 @@ paths:
                 $ref: "#/components/schemas/detailOffer"
         403:
           description: Доступ запрещен.
-        409:
+        400:
           description: Не корректные данные.
 
     get:
@@ -316,7 +316,7 @@ paths:
                 $ref: "#/components/schemas/review"
         403:
           description: Достур запрещен.
-        409:
+        400:
           description: Не корректные данные.
 
   /favorites:

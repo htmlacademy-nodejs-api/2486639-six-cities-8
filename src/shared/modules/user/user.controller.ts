@@ -62,7 +62,7 @@ export class UserController extends BaseController {
 
   public async create({ body, tokenPayload }: CreateUserRequest, res: Response): Promise<void> {
     if (tokenPayload) {
-      this.throwHttpError(StatusCodes.CONFLICT, 'Only unauthorized users can register!');
+      this.throwHttpError(StatusCodes.BAD_REQUEST, 'Only unauthorized users can register!');
     }
 
     const existsUser = await this.userService.findByEmail(body.email);
@@ -94,6 +94,10 @@ export class UserController extends BaseController {
   }
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
+    if (!tokenPayload) {
+      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
     const findedUser = await this.userService.findById(tokenPayload.id);
 
     //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
