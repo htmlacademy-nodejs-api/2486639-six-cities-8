@@ -107,7 +107,7 @@ export class UserController extends BaseController {
 
     const findedUser = await this.userService.findById(tokenPayload.user.id);
 
-    //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
+    // странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
     if (!findedUser) {
       this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -116,7 +116,7 @@ export class UserController extends BaseController {
   }
 
   public async logout(_req: Request, res: Response): Promise<void> {
-    //! временно или так и оставить, т.к. удалить нужно для сессий, а токен нужно забить на клиентской стороне
+    //ничего не выполняем, т.к. токен нужно забыть на клиентской стороне
     this.noContent(res);
   }
 }
