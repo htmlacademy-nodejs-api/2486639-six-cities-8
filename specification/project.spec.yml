@@ -373,9 +373,9 @@ components:
     userType:
       type: string
       enum:
-        - Ordinary
-        - Pro
-      example: Pro
+        - regular
+        - pro
+      example: pro
 
     userName:
       type: string
