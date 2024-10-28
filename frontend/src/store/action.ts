@@ -167,7 +167,7 @@ export const registerUser = createAsyncThunk<void, UserRegister, { extra: Extra 
     if (avatar) {
       const payload = new FormData();
       payload.append('avatar', avatar);
-      await api.post(`/${data.id}${ApiRoute.Avatar}`, payload, {
+      await api.post(`${ApiRoute.Avatar.replace(':id', data.id)}`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     }
