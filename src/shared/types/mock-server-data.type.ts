@@ -20,7 +20,6 @@ export type MockServerData = {
     names: string[];
     emails: string[];
     avatarPaths: string[];
-    passwords: string[];
   };
   deltaCityLocation: {
     latitude: randomNumberOption;
