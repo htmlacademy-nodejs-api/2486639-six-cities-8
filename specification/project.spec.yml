@@ -490,7 +490,7 @@ components:
               $ref: "#/components/schemas/localion"
         previewImage:
           type: string
-          example: preview-img-4.jpg
+          example: apartment-01.jpg
         isPremium:
           type: boolean
           example: true
@@ -515,12 +515,12 @@ components:
           items:
             type: string
           example:
-            - img-11.jpg
-            - img-12.jpg
-            - img-13.jpg
-            - img-14.jpg
-            - img-15.jpg
-            - img-16.jpg
+            - apartment-02.jpg
+            - apartment-03.jpg
+            - room-01.jpg
+            - studio-01.jpg
+            - apartment-02.jpg
+            - apartment-03.jpg
         rooms:
           type: integer
           example: 2
