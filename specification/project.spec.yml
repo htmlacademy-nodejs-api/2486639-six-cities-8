@@ -39,18 +39,21 @@ paths:
 
       responses:
         201:
-          description: Пользователь зарегистрирован. Объект пользователя.
+          description: Пользователь зарегистрирован. Id пользователя.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/user"
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/userId"
         400:
           description: Не корректные данные или пользователь авторизован.
         409:
           description: Пользователь с таким email уже существует.
 
   /users/{userId}/avatar:
-    patch:
+    post:
       tags:
         - users
       summary: Загрузить изображение аватара
@@ -60,8 +63,7 @@ paths:
         - name: userId
           in: path
           schema:
-            type: string
-          example: user-id-user-id
+            $ref: "#/components/schemas/userId"
           required: true
 
       requestBody:
@@ -73,36 +75,18 @@ paths:
                 avatar:
                   type: string
                   format: binary
-                  #format: base64
-                  #nullable: true
             encoding:
               avatar:
                 style: form
 
-      #    application/octet-stream:
-      #      schema:
-      #        type: string
-      #        format: base64
-      #              format: binary
-      #          "image/jpeg":
-      #            schema:
-      #              type: string
-      #              format: base64
-      #              format: binary
-      #          "image/png":
-      #            schema:
-      #              type: string
-      #              format: base64
-      #              format: binary
-
       responses:
         200:
-          description: Аватар загружен. Объект пользователя.
+          description: Аватар загружен. Путь к аватарке.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
-        409:
+        400:
           description: Не корректные данные
 
   /users/login:
@@ -122,11 +106,11 @@ paths:
 
       responses:
         200:
-          description: Авторизация пройдена
+          description: Авторизация пройдена. Токен и объект пользователя.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/token"
+                $ref: "#/components/schemas/loggedUser"
         401:
           description: Не верный логин или пароль или пользователь не существует
 
@@ -136,7 +120,7 @@ paths:
       summary: Проверка состояния пользователя
       description: Возвращает информацию по авторизованному пользователю
       responses:
-        201:
+        200:
           description: Пользователь зарегистрирован. Объект пользователя.
           content:
             application/json:
@@ -370,6 +354,10 @@ components:
       bearerFormat: JWT
 
   schemas:
+    userId:
+      type: string
+      example: user-id-user-id
+
     userType:
       type: string
       enum:
@@ -392,6 +380,10 @@ components:
     userPassword:
       type: string
       example: 123456
+
+    token:
+      type: string
+      example: qwewQWEQWEasdasdaASDADzxc
 
     baseUser:
       type: object
@@ -427,12 +419,13 @@ components:
         password:
           $ref: "#/components/schemas/userPassword"
 
-    token:
+    loggedUser:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/user"
       properties:
         token:
-          type: string
-          example: qwewQWEQWEasdasdaASDADzxc
+          $ref: "#/components/schemas/token"
 
     dateString:
       type: string
