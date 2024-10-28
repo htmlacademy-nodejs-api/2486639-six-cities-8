@@ -579,6 +579,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/createReview"
       properties:
+        id:
+          type: string
+          example: review-id-review-id
         publishDate:
           $ref: "#/components/schemas/dateString"
         user:
