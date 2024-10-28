@@ -70,7 +70,7 @@ bootstrap();
   19. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
   20. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
   21. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
-  22. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
+  22. GET http://localhost:5000/offers?count=absd если не число, то ошибка или count === undefined ?
   23. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
         но hostId в CreateOfferRequest нету, может нужен отдельный тип?
       так же CreateReviewDto с userId и offerId
