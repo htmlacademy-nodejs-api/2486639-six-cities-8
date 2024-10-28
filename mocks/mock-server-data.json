@@ -97,7 +97,8 @@
         "https://16.design.htmlacademy.pro/static/avatar/9.jpg",
         "https://16.design.htmlacademy.pro/static/avatar/10.jpg",
         "avatar-angelina.jpg",
-        "avatar-max.jpg"
+        "avatar-max.jpg",
+        "default-avatar.svg"
       ],
       "passwords": [
         "password1",
