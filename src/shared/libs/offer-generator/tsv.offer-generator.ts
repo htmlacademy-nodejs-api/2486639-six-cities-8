@@ -27,7 +27,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const title = getRandomItem(mockData.titles);
     const description = getRandomItem(mockData.descriptions);
     const publishDate = getRandomDate(mockData.publishDate.min, mockData.publishDate.max).toISOString();
-    const previewImage = getRandomItem(mockData.previewImages);
+    const previewImage = getRandomItem(mockData.images);
     const images = getRandomItems(mockData.images, IMAGES_COUNT, IMAGES_COUNT).join(';');
     const isPremium = getRandomBoolean();
     const rating = this.getRandomNumber(mockData.rating);
