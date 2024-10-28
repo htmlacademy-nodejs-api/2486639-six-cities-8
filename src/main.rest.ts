@@ -97,6 +97,7 @@ bootstrap();
   34. Перепроверить описание ответов об ошибках 400 401 403... поменять описание, проверить использование ".notAllow" .notFound .noContent\
   35. PathTransformer проверить обработку массива строк Offer.images
   36. Проверить создание папки upload при первой загрузке изображения!
+  37. что еще придумать! getRandomStringEnumValue и убрать "as UserType" и "as CityName" хотябы в tsv.offer-generator.ts
 
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
