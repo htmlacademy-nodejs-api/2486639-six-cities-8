@@ -11,7 +11,6 @@ export type MockServerData = {
     min: string;
     max: string;
   };
-  previewImages: string[];
   images: string[];
   rating: randomNumberOption;
   rooms: randomNumberOption;
