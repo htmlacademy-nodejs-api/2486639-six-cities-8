@@ -100,7 +100,9 @@ export class UserController extends BaseController {
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
     if (!tokenPayload) {
-      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+      this.send(res, StatusCodes.UNAUTHORIZED, 'Not loginned');
+
+      return;
     }
 
     const findedUser = await this.userService.findById(tokenPayload.user.id);
