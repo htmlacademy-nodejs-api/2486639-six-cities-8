@@ -25,6 +25,9 @@ export class DetailOfferRdo {
   public isPremium: boolean;
 
   @Expose()
+  public isFavorite: boolean;
+
+  @Expose()
   public type: OfferType;
 
   @Expose()
