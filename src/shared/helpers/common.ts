@@ -31,6 +31,14 @@ export function getFullServerPath(host: string, port: number, protocol: string =
   return `${protocol}://${host}:${port}`;
 }
 
+export function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+export function isStringArray(items: unknown): items is Array<string> {
+  return Array.isArray(items) && items.every(isString);
+}
+
 export function isObject(value: unknown): value is Record<string, object> {
   return typeof value === 'object' && value !== null;
 }
