@@ -13,3 +13,5 @@ coverage
 .env
 
 /upload/
+
+/frontend/node_modules/
