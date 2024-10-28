@@ -24,33 +24,32 @@ bootstrap();
 
 /*
 Вопросы
-  +1. краткий вызов getRandomItems(...) работает зачем дополнтильно указывать тип string?  getRandomItems<string>(...)
-  2. а почему OFFER_TYPES не string[] и приходиться [...OFFER_TYPES]
+  1. а почему OFFER_TYPES не string[] и приходиться [...OFFER_TYPES]
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
-  3. а как передать параметр для конструктора? если понадобится
+  2. а как передать параметр для конструктора? если понадобится
     container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
     как модель? toConstantValue? userContainer.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
-  4. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
-  5. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
-  6. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
+  3. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
+  4. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
+  5. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
       this.onImportedOffer = this.onImportedOffer.bind(this);
       this.onCompleteImport = this.onCompleteImport.bind(this);
-  7. обязательно ли .exec()? для .findById(id).exec() и .findOne({...}).exec()
-  8. Для описания пропа "type: UserType" обязательно ли указывать все? без указания все отрабоатывает
+  6. обязательно ли .exec()? для .findById(id).exec() и .findOne({...}).exec()
+  7. Для описания пропа "type: UserType" обязательно ли указывать все? без указания все отрабоатывает
     @prop({
       required: true,
       type: () => String,
       enum: UserType
     })
     public type: UserType;
-  9. а можно проще при запуске события EventEmitter.emit ?
+  8. а можно проще при запуске события EventEmitter.emit ?
       await new Promise((resolve) => {
         this.emit('line', parsedOffer, resolve);
       });
-  10. всем полям UserEntity добавить трим?
-  11. Координаты городов буду в константах, а в типе только название города. можно и БД закинуть.
+  9. всем полям UserEntity добавить трим?
+  10. Координаты городов буду в константах, а в типе только название города. можно и БД закинуть.
       CityLocation[name]; // если появится 7й и т.д. город, то тут будет ошибка компиляции, т.к. необходимо заполнить координаты нового города
-  12. Можно сделать для массива избранных у пользователя
+  11. Можно сделать для массива избранных у пользователя
       @prop({
         ref: CategoryEntity,
         required: true,
@@ -58,60 +57,46 @@ bootstrap();
         _id: false
       })
     public categories!: Ref<CategoryEntity>[];
-  13. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
+  12. без "implements Offer" у "export class OfferEntity extends defaultClasses.TimeStamps {"
       в следующих лекциях глянуть почему
-  14. rating в CreateOfferDto и UpdateOfferDto, не вычисляемый? как количество комментариев?
-  15. выборка OfferEntity: hostId -> host и пользователь без пароля
+  13. rating в CreateOfferDto и UpdateOfferDto, не вычисляемый? как количество комментариев?
+  14. выборка OfferEntity: hostId -> host и пользователь без пароля
       может разные таблицы сделать?
-  16. isFavorite у предложения в ДБ нет, появляется поле когда учтены избранные конкретного пользователя
-  17. implements Offer и Review у Entity будет позднее?
-  18. последовательность регистрации пользователя, нужна ли updateAvatarPathById
-  19. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
+  15. isFavorite у предложения в ДБ нет, появляется поле когда учтены избранные конкретного пользователя
+  16. implements Offer и Review у Entity будет позднее?
+  17. последовательность регистрации пользователя, нужна ли updateAvatarPathById
+  18. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
           в лог файл пишет нормально.
-  20. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
-  21. предупреждения
-        Setting "Mixed" for property "OfferEntity.images"
-        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
-        Setting "Mixed" for property "OfferEntity.goods"
-        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
-        Setting "Mixed" for property "OfferEntity.location"
-        Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed
-  22. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
-  23. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
-  24. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
-  25. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
+  19. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
+  20. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
+  21. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
+  22. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
+  23. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
         но hostId в CreateOfferRequest нету, может нужен отдельный тип?
       так же CreateReviewDto с userId и offerId
-  26. в константы
-        '/users'
-        '/offers'
-        '/reviews'
-        :offerId
-        :userId
-        ....
-        остальные маршруты
-  27. перепроверить все запросы, особенно коментарии
-  28. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
-  29. class-validator не сработало
+  24. перепроверить все запросы, особенно коментарии
+  25. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
+  26. class-validator не сработало
         @IsObject location, @IsUrl images и previewImage
-  30. ParseTokenMiddleware
+  27. ParseTokenMiddleware
          подключено на все запросы. то необходимо ошибку отдать next(err) ?
-  31. city: this.getCity(dto.city)
+  28. city: this.getCity(dto.city)
         возможно другим способом заполнить данные или как будут приходить с клиента
-  32. обязательно ли в ДТО все поля для передачи сервису БД, можно чать передать параметрами?
+  29. обязательно ли в ДТО все поля для передачи сервису БД, можно чать передать параметрами?
     CreateOfferDto, CreateReviewDto
-  33. Еще не сделана обработка маршрутов для избранного и вывод!
-  34. При удалении предложения, удалить из избранных и удалить коментарии
-  35. Поставить ограничения на свое
-  36. Загрузка аватара, убрать приватный, т.к. нет авторизации...
+  30. Еще не сделана обработка маршрутов для избранного и вывод!
+  31. При удалении предложения, удалить из избранных и удалить коментарии
+  32. Поставить ограничения на свое
+  33. Загрузка аватара, убрать приватный, т.к. нет авторизации...
         может добавить, что пользователь недавно создан,
         если на фронте нет редактора профиля, но там будет авторизация и можно проверить что пользователь меняет свой аватар
         возможно сразу оба правила
         или param.userId === payload.id, но это снова авторизация...
         а откуда клиент знает id пользователя, если еще не авторизован...
         глянуть какие на клиенте будут запросы...
-  37. Перепроверить описание ответов об ошибках 400 401 403... поменять описание, проверить использование ".notAllow" .notFound .noContent\
-  38. PathTransformer проверить обработку массива строк Offer.images
+  34. Перепроверить описание ответов об ошибках 400 401 403... поменять описание, проверить использование ".notAllow" .notFound .noContent\
+  35. PathTransformer проверить обработку массива строк Offer.images
+  36. Проверить создание папки upload при первой загрузке изображения!
 
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
@@ -181,6 +166,5 @@ bootstrap();
        ! Если в обоих поменять # на @, то VS Code начинает подставлять @ после указания в tsconfig.json, но при запуске не работает ни где!
 
 Сделать
-  + 1. из TSVFileReader выделить OfferParser
 
 */
