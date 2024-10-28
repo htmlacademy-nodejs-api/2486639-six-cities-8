@@ -469,6 +469,8 @@ components:
     baseOffer:
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/offerId"
         title:
           type: string
           example: offer title

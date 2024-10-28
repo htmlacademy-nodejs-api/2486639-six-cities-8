@@ -3,6 +3,9 @@ import { City, Location, OfferType } from '../../../types/index.js';
 
 export class OfferRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public title: string;
 
   @Expose()
