@@ -28,6 +28,9 @@ export class DetailOfferRdo {
   public isFavorite: boolean;
 
   @Expose()
+  public rating: number;
+
+  @Expose()
   public type: OfferType;
 
   @Expose()
