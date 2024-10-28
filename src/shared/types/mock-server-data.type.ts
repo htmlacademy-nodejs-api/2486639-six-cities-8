@@ -11,7 +11,6 @@ export type MockServerData = {
     min: string;
     max: string;
   };
-  previewImages: string[];
   images: string[];
   rating: randomNumberOption;
   rooms: randomNumberOption;
@@ -21,7 +20,6 @@ export type MockServerData = {
     names: string[];
     emails: string[];
     avatarPaths: string[];
-    passwords: string[];
   };
   deltaCityLocation: {
     latitude: randomNumberOption;

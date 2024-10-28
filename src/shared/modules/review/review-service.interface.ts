@@ -8,4 +8,3 @@ export interface ReviewService {
   getRatingOfferId(offerId: string): Promise<number>;
   deleteByOfferId(offerId: string): Promise<number | null>;
 }
-

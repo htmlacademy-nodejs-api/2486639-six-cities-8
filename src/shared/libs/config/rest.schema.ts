@@ -4,6 +4,7 @@ import validator from 'convict-format-with-validator';
 convict.addFormats(validator);
 
 export type RestSchema = {
+  HOST: string;
   PORT: number;
   SALT: string;
   DB_HOST: string;
@@ -11,11 +12,18 @@ export type RestSchema = {
   DB_USER: string;
   DB_PASSWORD: string;
   DB_NAME: string;
+  STATIC_DIRECTORY_PATH: string;
   UPLOAD_DIRECTORY: string;
   JWT_SECRET: string;
 }
 
 export const configRestSchema = convict<RestSchema>({
+  HOST: {
+    doc: 'Host where started service',
+    format: String,
+    env: 'HOST',
+    default: 'localhost'
+  },
   PORT: {
     doc: 'Port for incoming connections',
     format: 'port',
@@ -57,6 +65,12 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'DB_NAME',
     default: 'six-cities'
+  },
+  STATIC_DIRECTORY_PATH: {
+    doc: 'Path to directory with static resources',
+    format: String,
+    env: 'STATIC_DIRECTORY_PATH',
+    default: 'static'
   },
   UPLOAD_DIRECTORY: {
     doc: 'Directory for upload files',

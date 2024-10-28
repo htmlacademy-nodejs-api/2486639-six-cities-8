@@ -6,7 +6,7 @@ export { CreateOfferRequest } from './type/create-offer-request.type.js';
 export { IndexOffersRequest } from './type/index-offers-request.type.js';
 export { ParamOfferId } from './type/param-offer-id.type.js';
 export { UpdateOfferRequest } from './type/update-offer-request.type.js';
-export { DefaultOfferService } from './default-offer.service.js';
+export { DefaultOfferService } from './default.offer-service.js';
 export { OfferService } from './offer-service.interface.js';
 export { OfferCount, OfferName, OfferRoute, OfferValidation, OfferValidationMessage } from './offer.const.js';
 export { createOfferContainer } from './offer.container.js';

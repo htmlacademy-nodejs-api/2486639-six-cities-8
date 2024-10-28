@@ -6,7 +6,7 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { LoginUserDto, UserEntity, UserService } from '../user/index.js';
 import { AuthService } from './auth-service.interface.js';
-import { TokenPayload } from './types/TokenPayload.js';
+import { TokenPayload } from './type/token-payload.type.js';
 import { UserNotFoundException, UserPasswordIncorrectException } from './errors/index.js';
 import { JWT_ALGORITHM, JWT_EXPIRED } from './auth.constant.js';
 
@@ -22,12 +22,15 @@ export class DefaultAuthService implements AuthService {
     const jwtSecret = this.config.get('JWT_SECRET');
     const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
     const tokenPayload: TokenPayload = {
-      name: user.name,
-      email: user.email,
-      id: user.id,
+      user: {
+        name: user.name,
+        email: user.email,
+        id: user.id
+      }
     };
 
     this.logger.info(`Create token for ${user.email}`);
+
     return new SignJWT(tokenPayload)
       .setProtectedHeader({ alg: JWT_ALGORITHM })
       .setIssuedAt()

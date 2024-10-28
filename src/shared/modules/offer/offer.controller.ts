@@ -37,11 +37,13 @@ export class OfferController extends BaseController {
         new ValidateDtoMiddleware(CreateOfferDto)
       ]
     });
+
     this.addRoute({
       path: OfferRoute.Root,
       method: HttpMethod.Get,
       handler: this.index
     });
+
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Patch,
@@ -53,12 +55,14 @@ export class OfferController extends BaseController {
         offerExistsMiddleware
       ]
     });
+
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Get,
       handler: this.show,
       middlewares
     });
+
     this.addRoute({
       path: OfferRoute.OfferId,
       method: HttpMethod.Delete,
@@ -72,7 +76,7 @@ export class OfferController extends BaseController {
   }
 
   public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
-    const result = await this.offerService.create(body, tokenPayload.id);
+    const result = await this.offerService.create(body, tokenPayload.user.id);
 
     this.created(res, fillDTO(DetailOfferRdo, result));
   }

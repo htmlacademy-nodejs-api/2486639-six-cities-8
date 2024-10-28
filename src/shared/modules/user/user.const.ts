@@ -1,6 +1,6 @@
 import { UserType } from '../../types/index.js';
 
-export const DEFAULT_AVATAR_PATH = 'default-avatar-path.png';
+export const DEFAULT_AVATAR_PATH = 'default-avatar.svg';
 
 export enum UserName {
   Id = 'userId',

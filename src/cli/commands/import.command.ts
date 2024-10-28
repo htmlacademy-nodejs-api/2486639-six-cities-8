@@ -8,7 +8,7 @@ import { getMongoURI } from '../../shared/helpers/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { CommandType } from './const.js';
 
-const DEFAULT_USER_PASSWORD = '12345';
+const DEFAULT_USER_PASSWORD = '123456';
 
 export class ImportCommand implements Command {
   private logger: Logger;
@@ -39,7 +39,10 @@ export class ImportCommand implements Command {
       ...host,
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
+    const { id: hostId } = hostEntity;
+    const { avatarPath } = host;
 
+    await this.userService.updateById(hostId, { avatarPath });
     await this.offerService.create({
       title,
       description,
@@ -54,7 +57,7 @@ export class ImportCommand implements Command {
       price,
       goods,
       location
-    }, hostEntity.id);
+    }, hostId);
   }
 
   private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {

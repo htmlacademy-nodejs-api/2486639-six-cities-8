@@ -9,7 +9,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhb
   "title": "offer title",
   "publishDate": "2024-07-09T11:24:14.495Z",
   "city": "Paris",
-  "previewImage": "preview-img-4.jpg",
+  "previewImage": "apartment-01.jpg",
   "isPremium": true,
   "type": "room",
   "price": 101,
@@ -19,12 +19,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhb
   },
   "description": "offer description offer description",
   "images": [
-    "img-11.jpg",
-    "img-12.jpg",
-    "img-13.jpg",
-    "img-14.jpg",
-    "img-15.jpg",
-    "img-16.jpg"
+    "apartment-02.jpg",
+    "apartment-03.jpg",
+    "room-01.jpg",
+    "studio-01.jpg",
+    "apartment-02.jpg",
+    "apartment-03.jpg"
   ],
   "rooms": 2,
   "maxAdults": 4,

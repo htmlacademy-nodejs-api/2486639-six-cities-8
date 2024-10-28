@@ -12,9 +12,10 @@ import { fillDTO } from '../../helpers/index.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { UserName, UserRoute } from './user.const.js';
-import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -32,6 +33,7 @@ export class UserController extends BaseController {
       handler: this.create,
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
+
     this.addRoute({
       path: UserRoute.UserAvatar,
       method: HttpMethod.Patch,
@@ -42,17 +44,20 @@ export class UserController extends BaseController {
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
       ]
     });
+
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
+
     this.addRoute({
       path: UserRoute.Login,
       method: HttpMethod.Get,
       handler: this.checkAuthenticate
     });
+
     this.addRoute({
       path: UserRoute.Logout,
       method: HttpMethod.Delete,
@@ -62,7 +67,7 @@ export class UserController extends BaseController {
 
   public async create({ body, tokenPayload }: CreateUserRequest, res: Response): Promise<void> {
     if (tokenPayload) {
-      this.throwHttpError(StatusCodes.CONFLICT, 'Only unauthorized users can register!');
+      this.throwHttpError(StatusCodes.BAD_REQUEST, 'Only unauthorized users can register!');
     }
 
     const existsUser = await this.userService.findByEmail(body.email);
@@ -75,13 +80,13 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatar(req: Request/*{ params }: Request<ParamUserId>*/, res: Response): Promise<void> {
-    //! временно
-    //console.log(params.userId);
+  public async updateAvatar({ params, file }: Request, res: Response): Promise<void> {
+    const { userId } = params;
+    const uploadFile = { avatarPath: file?.filename };
 
-    this.created(res, {
-      filepath: req.file?.path
-    });
+    await this.userService.updateById(userId, uploadFile);
+
+    this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadFile.avatarPath }));
   }
 
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
@@ -94,7 +99,11 @@ export class UserController extends BaseController {
   }
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
-    const findedUser = await this.userService.findById(tokenPayload.id);
+    if (!tokenPayload) {
+      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    const findedUser = await this.userService.findById(tokenPayload.user.id);
 
     //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
     if (!findedUser) {
