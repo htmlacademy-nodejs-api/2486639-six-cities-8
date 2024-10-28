@@ -43,13 +43,13 @@ export enum AppRoute {
 
 export enum ApiRoute {
   Offers = '/offers',
-  Login = '/login',
-  Logout = '/logout',
-  Register = '/register',
-  Avatar = '/avatar',
-  Comments = '/comments',
+  Login = '/users/login',
+  Logout = '/users/logout',
+  Register = '/users/register',
+  Avatar = '/users/:userId/avatar',
+  Comments = '/reviews',
   Favorite = '/favorites',
-  Premium = '/premium',
+  Premium = '/offers?isPremium=true',
 }
 
 export enum AuthorizationStatus {
