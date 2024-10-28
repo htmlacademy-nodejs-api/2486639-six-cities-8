@@ -40,9 +40,9 @@ export class ImportCommand implements Command {
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
     const { id: hostId } = hostEntity;
+    const { avatarPath } = host;
 
-    await this.userService.updateAvatarPathById(hostId, host.avatarPath);
-
+    await this.userService.updateById(hostId, { avatarPath });
     await this.offerService.create({
       title,
       description,
