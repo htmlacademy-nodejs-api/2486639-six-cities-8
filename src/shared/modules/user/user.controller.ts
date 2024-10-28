@@ -91,11 +91,10 @@ export class UserController extends BaseController {
 
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
-    const { email } = user;
+    const { name, email, avatarPath, type } = user;
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, { email, token });
 
-    this.ok(res, responseData);
+    this.ok(res, fillDTO(LoggedUserRdo, { name, email, avatarPath, type, token }));
   }
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
