@@ -23,7 +23,7 @@ async function bootstrap() {
 bootstrap();
 
 /*
-Вопросы
+Вопросы:
   1. а почему OFFER_TYPES не string[] и приходиться [...OFFER_TYPES]
     т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
   2. а как передать параметр для конструктора? если понадобится
@@ -165,6 +165,6 @@ bootstrap();
 
        ! Если в обоих поменять # на @, то VS Code начинает подставлять @ после указания в tsconfig.json, но при запуске не работает ни где!
 
-Сделать
+Сделать:
 
 */
