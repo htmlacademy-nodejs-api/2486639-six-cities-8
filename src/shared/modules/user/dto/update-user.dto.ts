@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, MaxLength, MinLength } from 'class-validator';
-import { UserType } from 'src/shared/types/user-type.enum.js';
+import { UserType } from '../../../types/index.js';
 import { UserValidation, UserValidationMessage } from '../user.const.js';
 
 export class UpdateUserDto {
