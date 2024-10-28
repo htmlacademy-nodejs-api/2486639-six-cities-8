@@ -1,6 +1,7 @@
-import { User, Offer } from '../../types/types';
+import { User, Offer, Comment } from '../../types/types';
 import { DetailOfferDto } from '../../dto/offer/detail-offer.dto';
 import { UserDto } from '../../dto/user/user.dto';
+import { ReviewDto } from '../../dto/reviews/review.dto';
 
 export const adaptUserToClient = (user: UserDto): User => {
   const {
@@ -58,3 +59,23 @@ export const adaptDetailOfferToClient = (offer: DetailOfferDto): Offer => {
   };
 };
 
+export const adaptReviewToClient = (review: ReviewDto): Comment => {
+  const {
+    id,
+    comment,
+    rating,
+    publishDate,
+    user,
+  } = review;
+
+  return {
+    id,
+    comment,
+    date: publishDate,
+    rating,
+    user: adaptUserToClient(user)
+  };
+};
+
+export const adaptReviewsToClient = (reviews: ReviewDto[]): Comment[] =>
+  reviews.map((review) => adaptReviewToClient(review));

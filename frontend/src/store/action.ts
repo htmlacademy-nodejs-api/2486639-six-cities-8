@@ -4,8 +4,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { UserAuth, User, Offer, Comment, CommentAuth, FavoriteAuth, UserRegister, NewOffer } from '../types/types';
 import { ApiRoute, AppRoute, HttpCode } from '../const';
 import { Token } from '../utils';
-import { adaptDetailOfferToClient } from '../utils/adapters/adaptersToClient';
+import { adaptDetailOfferToClient, adaptReviewsToClient } from '../utils/adapters/adaptersToClient';
 import { DetailOfferDto } from '../dto/offer/detail-offer.dto';
+import { ReviewDto } from '../dto/reviews/review.dto';
 
 type Extra = {
   api: AxiosInstance;
@@ -109,9 +110,9 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
   Action.FETCH_COMMENTS,
   async (id, { extra }) => {
     const { api } = extra;
-    const { data } = await api.get<Comment[]>(`${ApiRoute.Comments}/${id}`);
+    const { data } = await api.get<ReviewDto[]>(`${ApiRoute.Comments}/${id}`);
 
-    return data;
+    return adaptReviewsToClient(data);
   });
 
 export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { extra: Extra }>(
