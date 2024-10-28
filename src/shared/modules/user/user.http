@@ -1,7 +1,7 @@
 # Пользователи
 ## Создать нового пользователя
 
-POST http://localhost:4000/users HTTP/1.1
+POST http://localhost:5000/users HTTP/1.1
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 
 ## Обновить аватар пользователя
 
-PATCH http://localhost:4000/users/671797ceed73d6ef04c13d63/avatar HTTP/1.1
+POST http://localhost:5000/users/671f53b4428ccf2cdbba54a5/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -29,7 +29,7 @@ Content-Type: image/jpeg
 
 ## Авторизовать пользователя
 
-POST http://localhost:4000/users/login HTTP/1.1
+POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
@@ -41,18 +41,18 @@ Content-Type: application/json
 
 ## Проверка состояния пользователя
 
-GET http://localhost:4000/users/login HTTP/1.1
+GET http://localhost:5000/users/login HTTP/1.1
 Authorization: Bearer badToken
 
 ###
 
-GET http://localhost:4000/users/login HTTP/1.1
+GET http://localhost:5000/users/login HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhbmRyZXkxQHRlc3QucnUiLCJpZCI6IjY3MWNhNDgxMzU0MGYwZWIxOTZkOTg4YiIsImlhdCI6MTcyOTkzNzU0NiwiZXhwIjoxNzMwMTEwMzQ2fQ.78TyI7aubhSKqNTLhuJ-EbvoKcWv6r96uEYHPqmX9Mw
 
 ###
 
 ## Завершить сеанс пользователя
 
-DELETE http://localhost:4000/users/logout HTTP/1.1
+DELETE http://localhost:5000/users/logout HTTP/1.1
 
 ###
