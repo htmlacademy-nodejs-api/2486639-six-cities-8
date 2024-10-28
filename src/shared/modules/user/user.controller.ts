@@ -12,9 +12,10 @@ import { fillDTO } from '../../helpers/index.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { UserRdo } from './rdo/user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { UserName, UserRoute } from './user.const.js';
-import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -79,13 +80,13 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async updateAvatar(req: Request/*{ params }: Request<ParamUserId>*/, res: Response): Promise<void> {
-    //! временно
-    //console.log(params.userId);
+  public async updateAvatar({ params, file }: Request, res: Response): Promise<void> {
+    const { userId } = params;
+    const uploadFile = { avatarPath: file?.filename };
 
-    this.created(res, {
-      filepath: req.file?.path
-    });
+    await this.userService.updateById(userId, uploadFile);
+
+    this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadFile.avatarPath }));
   }
 
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {

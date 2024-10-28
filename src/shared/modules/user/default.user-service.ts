@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { UserService } from './user-service.interface.js';
 import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { DEFAULT_AVATAR_PATH } from './user.const.js';
@@ -26,8 +27,9 @@ export class DefaultUserService implements UserService {
     return result;
   }
 
-  public async updateAvatarPathById(id: string, avatarPath: string): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel.findByIdAndUpdate(id, { avatarPath }, { new: true });
+  public async updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, dto, { new: true });
   }
 
   public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
