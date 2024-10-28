@@ -23,7 +23,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const { deltaCityLocation } = mockData;
     const cityName = getRandomObjectKey(CityName);
     const location = CityLocation[cityName];
-
     const title = getRandomItem(mockData.titles);
     const description = getRandomItem(mockData.descriptions);
     const publishDate = getRandomDate(mockData.publishDate.min, mockData.publishDate.max).toISOString();
