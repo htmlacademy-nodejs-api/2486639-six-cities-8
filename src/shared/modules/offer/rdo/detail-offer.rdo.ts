@@ -4,6 +4,9 @@ import { UserRdo } from '../../user/index.js';
 
 export class DetailOfferRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public title: string;
 
   @Expose()
