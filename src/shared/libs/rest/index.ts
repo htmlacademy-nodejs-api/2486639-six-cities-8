@@ -13,7 +13,7 @@ export { PrivateRouteMiddleware } from './middleware/private-route.middleware.js
 export { UploadFileMiddleware } from './middleware/upload-file.middleware.js';
 export { ValidateDtoMiddleware } from './middleware/validate-dto.middleware.js';
 export { ValidateObjectIdMiddleware } from './middleware/validate-objectid.middleware.js';
-export { DEFAULT_STATIC_IMAGES, STATIC_RESOURCE_FIELDS } from './transform/path-transformer.constant.js';
+export { DEFAULT_STATIC_IMAGES, STATIC_RESOURCE_FIELDS, EXTERNAL_LINK_STARTS } from './transform/path-transformer.constant.js';
 export { PathTransformer } from './transform/path-transformer.js';
 export { ApplicationError } from './types/application-error.enum.js';
 export { HttpMethod } from './types/http-method.enum.js';

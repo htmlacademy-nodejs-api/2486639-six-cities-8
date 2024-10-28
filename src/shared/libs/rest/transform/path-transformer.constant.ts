@@ -14,3 +14,8 @@ export const STATIC_RESOURCE_FIELDS = [
   'previewImage',
   'images'
 ];
+
+export const EXTERNAL_LINK_STARTS = [
+  'http://',
+  'https://'
+];
