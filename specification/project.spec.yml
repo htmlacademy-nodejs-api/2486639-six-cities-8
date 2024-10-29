@@ -321,18 +321,18 @@ paths:
           description: Доступ запрещен.
 
   /favorites/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
     post:
       tags:
         - favorites
-      summary: Добавление и удаление предложения в/из избранного
-      description: для добавления и удаления любого предложения в/из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
-
-      parameters:
-        - name: offerId
-          in: path
-          schema:
-            $ref: "#/components/schemas/offerId"
-          required: true
+      summary: Добавление предложения в избранное
+      description: для добавления любого предложения в список избранных предложений. Ресурс доступен только авторизованным клиентам.
 
       responses:
         200:
@@ -341,6 +341,21 @@ paths:
           description: Достур запрещен.
         404:
           description: Предложение не найдено.
+
+    delete:
+      tags:
+        - favorites
+      summary: Удаление предложения из избранного
+      description: для удаления любого предложения из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
+
+      responses:
+        200:
+          description: Успешно.
+        401:
+          description: Достур запрещен.
+        404:
+          description: Предложение не найдено.
+
 components:
   securitySchemes:
     bearerAuth:
