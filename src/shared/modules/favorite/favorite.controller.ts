@@ -29,7 +29,7 @@ export class FavoriteController extends BaseController {
     });
 
     this.addRoute({
-      path: FavoriteRoute.Root,
+      path: FavoriteRoute.OfferId,
       method: HttpMethod.Post,
       handler: this.change,
       middlewares: [
@@ -41,8 +41,8 @@ export class FavoriteController extends BaseController {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.favoriteService.findByUserId('asdasdsadasd');
-    this.ok(res, []);
+    const favorites = await this.favoriteService.findByUserId('asdasdsadasd');
+    this.ok(res, favorites);
   }
 
   public async change({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
