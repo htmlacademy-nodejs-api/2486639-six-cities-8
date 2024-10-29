@@ -90,7 +90,8 @@ export class OfferController extends BaseController {
     const favorites = await this.favoriteService.findByUserId(tokenPayload?.user.id);
     if (favorites) {
       offers.forEach((offer) => {
-        offer.isFavorite = !!favorites.find((favorite) => (favorite.offerId.id === offer.id));
+        //! favorite.offerId?.id т.к. могут остаться в избранных
+        offer.isFavorite = !!favorites.find((favorite) => (favorite.offerId?.id === offer.id));
       });
     }
 
