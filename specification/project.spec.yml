@@ -336,7 +336,11 @@ paths:
 
       responses:
         200:
-          description: Успешно.
+          description: Добавлено в избранные.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
         401:
           description: Достур запрещен.
         404:
@@ -350,7 +354,11 @@ paths:
 
       responses:
         200:
-          description: Успешно.
+          description: удалено из избранных.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
         401:
           description: Достур запрещен.
         404:
