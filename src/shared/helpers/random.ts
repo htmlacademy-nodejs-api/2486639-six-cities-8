@@ -8,10 +8,10 @@ export function getRandomItem<T>(items: T[]): T {
   return items[getRandomNumber(0, items.length - 1)];
 }
 
-export function getRandomObjectKey<T extends object>(obj: T): keyof T {
-  const objKeys = Object.keys(obj) as Array<keyof T>;
+export function getRandomStringEnumValue<T extends object>(value: T): string {
+  const objValues = Object.values(value) as Array<string>;
 
-  return getRandomItem(objKeys);
+  return getRandomItem(objValues);
 }
 
 export function createIdGenerator(minNumber: number = 0, maxNumber: number = 0) {

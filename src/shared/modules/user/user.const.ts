@@ -3,6 +3,7 @@ import { UserType } from '../../types/index.js';
 export const DEFAULT_AVATAR_PATH = 'default-avatar.svg';
 
 export enum UserName {
+  Collection = 'users',
   Id = 'userId',
   Avatar = 'avatar'
 }

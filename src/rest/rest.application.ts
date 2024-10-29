@@ -24,7 +24,8 @@ export class RestApplication {
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.OfferController) private readonly offerController: Controller,
-    @inject(Component.ReviewController) private readonly reviewController: Controller
+    @inject(Component.ReviewController) private readonly reviewController: Controller,
+    @inject(Component.FavoriteController) private readonly favoriteController: Controller
   ) {
     this.server = express();
   }
@@ -51,6 +52,7 @@ export class RestApplication {
     this.server.use(Route.Users, this.userController.router);
     this.server.use(Route.Offers, this.offerController.router);
     this.server.use(Route.Reviews, this.reviewController.router);
+    this.server.use(Route.Favorites, this.favoriteController.router);
   }
 
   private async initMiddleware() {

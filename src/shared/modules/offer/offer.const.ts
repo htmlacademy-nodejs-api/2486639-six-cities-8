@@ -6,6 +6,7 @@ export enum OfferCount {
 }
 
 export enum OfferName {
+  Collection = 'offers',
   Entity = 'Offer',
   Id = 'offerId',
   HostId = 'hostId'
@@ -92,9 +93,6 @@ export const OfferValidationMessage = {
   goods: {
     invalidFormat: 'goods must by array',
     invalidFormatItem: `item goods must by one of ${OFFER_GOODS.join(', ')}`
-  },
-  hostId: {
-    invalidId: 'hostId must be a valid id'
   },
   location: {
     invalidFormat: 'location must be object {latitude: number, longitude: number}'

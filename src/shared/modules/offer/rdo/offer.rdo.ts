@@ -3,6 +3,9 @@ import { City, Location, OfferType } from '../../../types/index.js';
 
 export class OfferRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public title: string;
 
   @Expose()
@@ -16,6 +19,12 @@ export class OfferRdo {
 
   @Expose()
   public isPremium: boolean;
+
+  @Expose()
+  public isFavorite: boolean;
+
+  @Expose()
+  public rating: number;
 
   @Expose()
   public type: OfferType;

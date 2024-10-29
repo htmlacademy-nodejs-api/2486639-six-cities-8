@@ -26,6 +26,7 @@ export class ImportCommand implements Command {
       previewImage,
       images,
       isPremium,
+      rating,
       type,
       rooms,
       maxAdults,
@@ -57,7 +58,7 @@ export class ImportCommand implements Command {
       price,
       goods,
       location
-    }, hostId);
+    }, hostId, rating);
   }
 
   private async onImportedOffer(offer: Offer, resolve: () => void): Promise<void> {

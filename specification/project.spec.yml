@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
 servers:
-  - url: http://localhost:4000
+  - url: http://localhost:5000
 security:
   - bearerAuth: []
 
@@ -39,18 +39,21 @@ paths:
 
       responses:
         201:
-          description: Пользователь зарегистрирован. Объект пользователя.
+          description: Пользователь зарегистрирован. Id пользователя.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/user"
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/userId"
         400:
           description: Не корректные данные или пользователь авторизован.
         409:
           description: Пользователь с таким email уже существует.
 
   /users/{userId}/avatar:
-    patch:
+    post:
       tags:
         - users
       summary: Загрузить изображение аватара
@@ -60,8 +63,7 @@ paths:
         - name: userId
           in: path
           schema:
-            type: string
-          example: user-id-user-id
+            $ref: "#/components/schemas/userId"
           required: true
 
       requestBody:
@@ -73,36 +75,18 @@ paths:
                 avatar:
                   type: string
                   format: binary
-                  #format: base64
-                  #nullable: true
             encoding:
               avatar:
                 style: form
 
-      #    application/octet-stream:
-      #      schema:
-      #        type: string
-      #        format: base64
-      #              format: binary
-      #          "image/jpeg":
-      #            schema:
-      #              type: string
-      #              format: base64
-      #              format: binary
-      #          "image/png":
-      #            schema:
-      #              type: string
-      #              format: base64
-      #              format: binary
-
       responses:
         200:
-          description: Аватар загружен. Объект пользователя.
+          description: Аватар загружен. Путь к аватарке.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
-        409:
+        400:
           description: Не корректные данные
 
   /users/login:
@@ -122,11 +106,11 @@ paths:
 
       responses:
         200:
-          description: Авторизация пройдена
+          description: Авторизация пройдена. Токен и объект пользователя.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/token"
+                $ref: "#/components/schemas/loggedUser"
         401:
           description: Не верный логин или пароль или пользователь не существует
 
@@ -136,13 +120,13 @@ paths:
       summary: Проверка состояния пользователя
       description: Возвращает информацию по авторизованному пользователю
       responses:
-        201:
+        200:
           description: Пользователь зарегистрирован. Объект пользователя.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
-        403:
+        401:
           description: Пользователь не авторизован
 
   /users/logout:
@@ -333,35 +317,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/offers"
-        403:
-          description: Достур запрещен.
+        401:
+          description: Доступ запрещен.
 
-    put:
+  /favorites/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        schema:
+          $ref: "#/components/schemas/offerId"
+        required: true
+
+    post:
       tags:
         - favorites
-      summary: Добавление и удаление предложения в/из избранного
-      description: для добавления и удаления любого предложения в/из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
-
-      requestBody:
-        description: Информация для добавления/удаления в/из избранного.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                offerId:
-                  $ref: "#/components/schemas/offerId"
-                isFavorite:
-                  $ref: "#/components/schemas/isFavorite"
-        required: true
+      summary: Добавление предложения в избранное
+      description: для добавления любого предложения в список избранных предложений. Ресурс доступен только авторизованным клиентам.
 
       responses:
         200:
-          description: Успешно.
-        403:
+          description: Добавлено в избранные.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        401:
           description: Достур запрещен.
         404:
           description: Предложение не найдено.
+
+    delete:
+      tags:
+        - favorites
+      summary: Удаление предложения из избранного
+      description: для удаления любого предложения из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
+
+      responses:
+        200:
+          description: удалено из избранных.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/detailOffer"
+        401:
+          description: Достур запрещен.
+        404:
+          description: Предложение не найдено.
+
 components:
   securitySchemes:
     bearerAuth:
@@ -370,12 +372,16 @@ components:
       bearerFormat: JWT
 
   schemas:
+    userId:
+      type: string
+      example: user-id-user-id
+
     userType:
       type: string
       enum:
-        - Ordinary
-        - Pro
-      example: Pro
+        - regular
+        - pro
+      example: pro
 
     userName:
       type: string
@@ -392,6 +398,10 @@ components:
     userPassword:
       type: string
       example: 123456
+
+    token:
+      type: string
+      example: qwewQWEQWEasdasdaASDADzxc
 
     baseUser:
       type: object
@@ -427,12 +437,13 @@ components:
         password:
           $ref: "#/components/schemas/userPassword"
 
-    token:
+    loggedUser:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/user"
       properties:
         token:
-          type: string
-          example: qwewQWEQWEasdasdaASDADzxc
+          $ref: "#/components/schemas/token"
 
     dateString:
       type: string
@@ -441,10 +452,6 @@ components:
     rating:
       type: number
       example: 3.5
-
-    isFavorite:
-      type: boolean
-      example: false
 
     localion:
       type: object
@@ -476,6 +483,8 @@ components:
     baseOffer:
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/offerId"
         title:
           type: string
           example: offer title
@@ -549,7 +558,8 @@ components:
         - $ref: "#/components/schemas/baseOffer"
       properties:
         isFavorite:
-          $ref: "#/components/schemas/isFavorite"
+          type: boolean
+          example: false
         rating:
           $ref: "#/components/schemas/rating"
         reviewCount:
@@ -584,6 +594,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/createReview"
       properties:
+        id:
+          type: string
+          example: review-id-review-id
         publishDate:
           $ref: "#/components/schemas/dateString"
         user:

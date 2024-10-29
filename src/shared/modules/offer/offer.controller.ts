@@ -5,6 +5,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
+import { FavoriteService } from '../favorite/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
@@ -19,7 +20,8 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.OfferService) private readonly offerService: OfferService
+    @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.FavoriteService) private readonly favoriteService: FavoriteService
   ) {
     super(logger);
 
@@ -81,35 +83,39 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(DetailOfferRdo, result));
   }
 
-  public async index({ query }: IndexOffersRequest, res: Response): Promise<void> {
+  public async index({ query, tokenPayload }: IndexOffersRequest, res: Response): Promise<void> {
     const offers = (query.isPremium)
       ? await this.offerService.findPremium()
       : await this.offerService.find(query.count);
+    const favorites = await this.favoriteService.findByUserId(tokenPayload?.user.id);
+    if (favorites) {
+      offers.forEach((offer) => {
+        offer.isFavorite = !!favorites.find((favorite) => (favorite.offerId.id === offer.id));
+      });
+    }
 
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async update({ body, params }: UpdateOfferRequest, res: Response): Promise<void> {
+  public async update({ body, params, tokenPayload }: UpdateOfferRequest, res: Response): Promise<void> {
     //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
-    //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
-    // null не возвращает...
     const offer = await this.offerService.updateById(offerId, body);
 
     if (offer) {
+      offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
       this.ok(res, fillDTO(DetailOfferRdo, offer));
     } else {
       this.notFound(res, { offerId });
     }
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
-    //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
-    // null не возвращает...
     const offer = await this.offerService.findById(offerId);
 
     if (offer) {
+      offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
       this.ok(res, fillDTO(DetailOfferRdo, offer));
     } else {
       this.notFound(res, { offerId });
@@ -119,8 +125,6 @@ export class OfferController extends BaseController {
   public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
     //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
-    //! throw - "Cast to ObjectId failed for value \"67189abb70d1c82e25abc7b6-\" (type string) at path \"_id\" for model \"OfferEntity\""
-    // null не возвращает...
     const offer = await this.offerService.deleteById(offerId);
 
     if (offer) {

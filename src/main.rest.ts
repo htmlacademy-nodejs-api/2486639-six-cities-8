@@ -6,6 +6,7 @@ import { createAuthContainer } from './shared/modules/auth/index.js';
 import { createUserContainer } from './shared/modules/user/index.js';
 import { createOfferContainer } from './shared/modules/offer/index.js';
 import { createReviewContainer } from './shared/modules/review/index.js';
+import { createFavoriteContainer } from './shared/modules/favorite/index.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(
@@ -13,7 +14,8 @@ async function bootstrap() {
     createAuthContainer(),
     createUserContainer(),
     createOfferContainer(),
-    createReviewContainer()
+    createReviewContainer(),
+    createFavoriteContainer()
   );
 
   const application = appContainer.get<RestApplication>(Component.RestApplication);
@@ -70,7 +72,7 @@ bootstrap();
   19. возможно стоит пароли у пользователя вынести в отдельную коллекцию, что бо контроллер не видел эти данные при выборке данных, или RDO делать на стороне сервиса...
   20. глянуть ТЗ, как передаеться город с клиента объектом с координатами или строкой?
   21. fillDTO(OfferRdo, result) от UserEntity оставляет только _id почему?
-  22. GET http://localhost:4000/offers?count=absd если не число, то ошибка или count === undefined ?
+  22. GET http://localhost:5000/offers?count=absd если не число, то ошибка или count === undefined ?
   23. CreateOfferDto используеться для создания элемента в БД, но и как CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>
         но hostId в CreateOfferRequest нету, может нужен отдельный тип?
       так же CreateReviewDto с userId и offerId
@@ -97,6 +99,9 @@ bootstrap();
   34. Перепроверить описание ответов об ошибках 400 401 403... поменять описание, проверить использование ".notAllow" .notFound .noContent\
   35. PathTransformer проверить обработку массива строк Offer.images
   36. Проверить создание папки upload при первой загрузке изображения!
+  37. что еще придумать! getRandomStringEnumValue и убрать "as UserType" и "as CityName" хотябы в tsv.offer-generator.ts
+  38. await где async нужен?
+  39. проверить пересчет рейтинга от коментариев
 
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет

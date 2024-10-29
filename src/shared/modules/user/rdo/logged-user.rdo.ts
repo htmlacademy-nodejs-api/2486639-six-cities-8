@@ -1,10 +1,19 @@
 import { Expose } from 'class-transformer';
+import { UserType } from '../../../types/index.js';
 
 export class LoggedUserRdo {
   @Expose()
-  public token: string;
+  public name: string;
 
   @Expose()
   public email: string;
-  //! в ТЗ только токен, глянуть как реализовано на клиенте
+
+  @Expose()
+  public avatarPath: string;
+
+  @Expose()
+  public type: UserType;
+
+  @Expose()
+  public token: string;
 }

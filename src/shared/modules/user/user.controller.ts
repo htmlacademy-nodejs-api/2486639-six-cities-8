@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './type/create-user-request.type.js';
@@ -11,9 +11,10 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
+import { CreatedUserRdo } from './rdo/created-user.rdo.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
-import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { LoginUserRequest } from './type/login-user-request.type.js';
 import { UserName, UserRoute } from './user.const.js';
 
@@ -36,10 +37,9 @@ export class UserController extends BaseController {
 
     this.addRoute({
       path: UserRoute.UserAvatar,
-      method: HttpMethod.Patch,
+      method: HttpMethod.Post,
       handler: this.updateAvatar,
       middlewares: [
-        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(UserName.Id),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), UserName.Avatar)
       ]
@@ -77,7 +77,7 @@ export class UserController extends BaseController {
     }
 
     const result = await this.userService.create(body, this.configService.get('SALT'));
-    this.created(res, fillDTO(UserRdo, result));
+    this.created(res, fillDTO(CreatedUserRdo, result));
   }
 
   public async updateAvatar({ params, file }: Request, res: Response): Promise<void> {
@@ -91,21 +91,22 @@ export class UserController extends BaseController {
 
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
-    const { email } = user;
+    const { name, email, avatarPath, type } = user;
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, { email, token });
 
-    this.ok(res, responseData);
+    this.ok(res, fillDTO(LoggedUserRdo, { name, email, avatarPath, type, token }));
   }
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response): Promise<void> {
     if (!tokenPayload) {
-      this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+      this.send(res, StatusCodes.UNAUTHORIZED, 'Not logged');
+
+      return;
     }
 
     const findedUser = await this.userService.findById(tokenPayload.user.id);
 
-    //! странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
+    // странный случай... токен валидный, а пользователя в БД нет... может другой ответ написать...
     if (!findedUser) {
       this.throwHttpError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -114,7 +115,7 @@ export class UserController extends BaseController {
   }
 
   public async logout(_req: Request, res: Response): Promise<void> {
-    //! временно или так и оставить, т.к. удалить нужно для сессий, а токен нужно забить на клиентской стороне
+    //ничего не выполняем, т.к. токен нужно забыть на клиентской стороне
     this.noContent(res);
   }
 }

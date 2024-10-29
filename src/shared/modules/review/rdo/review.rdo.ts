@@ -3,6 +3,9 @@ import { UserRdo } from '../../user/index.js';
 
 export class ReviewRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public comment: string;
 
   @Expose()

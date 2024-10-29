@@ -5,13 +5,15 @@ import { createSecretKey } from 'node:crypto';
 import { HttpError } from '../errors/http-error.js';
 import { TokenPayload } from '../../../modules/auth/index.js';
 import { Middleware } from './middleware.interface.js';
+import { isString } from '../../../helpers/index.js';
 
 function isTokenPayload(payload: unknown): payload is TokenPayload {
   return (
-    (typeof payload === 'object' && payload !== null) &&
-    ('name' in payload && typeof payload.name === 'string') &&
-    ('email' in payload && typeof payload.email === 'string') &&
-    ('id' in payload && typeof payload.id === 'string')
+    (typeof payload === 'object') && (payload !== null) && ('user' in payload) &&
+    (typeof payload.user === 'object') && (payload.user !== null) &&
+    ('name' in payload.user) && isString(payload.user.name) &&
+    ('email' in payload.user) && isString(payload.user.email) &&
+    ('id' in payload.user) && isString(payload.user.id)
   );
 }
 

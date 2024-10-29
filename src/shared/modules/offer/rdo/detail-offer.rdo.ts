@@ -4,6 +4,9 @@ import { UserRdo } from '../../user/index.js';
 
 export class DetailOfferRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public title: string;
 
   @Expose()
@@ -23,6 +26,12 @@ export class DetailOfferRdo {
 
   @Expose()
   public isPremium: boolean;
+
+  @Expose()
+  public isFavorite: boolean;
+
+  @Expose()
+  public rating: number;
 
   @Expose()
   public type: OfferType;

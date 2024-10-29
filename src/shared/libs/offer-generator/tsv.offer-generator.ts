@@ -5,7 +5,7 @@ import {
 } from '../../types/index.js';
 import {
   getRandomNumber, getRandomBoolean, getRandomDate, getRandomItem,
-  round, getRandomItems, getRandomObjectKey
+  round, getRandomItems, getRandomStringEnumValue
 } from '../../helpers/index.js';
 import { CityLocation } from '../../../const.js';
 
@@ -21,7 +21,7 @@ export class TSVOfferGenerator implements OfferGenerator {
   public generate(): string {
     const { mockData } = this;
     const { deltaCityLocation } = mockData;
-    const cityName = getRandomObjectKey(CityName);
+    const cityName = getRandomStringEnumValue(CityName) as CityName;
     const location = CityLocation[cityName];
     const title = getRandomItem(mockData.titles);
     const description = getRandomItem(mockData.descriptions);
@@ -38,7 +38,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const name = getRandomItem(mockData.user.names);
     const email = getRandomItem(mockData.user.emails);
     const avatarPath = getRandomItem(mockData.user.avatarPaths);
-    const userType = getRandomObjectKey(UserType);
+    const userType = getRandomStringEnumValue(UserType) as UserType;
     const latitude = round(location.latitude + this.getRandomNumber(deltaCityLocation.latitude), deltaCityLocation.latitude.numAfterDigit);
     const longitude = round(location.longitude + this.getRandomNumber(deltaCityLocation.longitude), deltaCityLocation.latitude.numAfterDigit);
 
