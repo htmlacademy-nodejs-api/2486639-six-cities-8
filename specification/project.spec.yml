@@ -317,32 +317,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/offers"
-        403:
-          description: Достур запрещен.
+        401:
+          description: Доступ запрещен.
 
-    put:
+    post:
       tags:
         - favorites
       summary: Добавление и удаление предложения в/из избранного
       description: для добавления и удаления любого предложения в/из списка избранных предложений. Ресурс доступен только авторизованным клиентам.
 
-      requestBody:
-        description: Информация для добавления/удаления в/из избранного.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                offerId:
-                  $ref: "#/components/schemas/offerId"
-                isFavorite:
-                  $ref: "#/components/schemas/isFavorite"
-        required: true
+      parameters:
+        - name: offerId
+          in: path
+          schema:
+            $ref: "#/components/schemas/offerId"
+          required: true
 
       responses:
         200:
           description: Успешно.
-        403:
+        401:
           description: Достур запрещен.
         404:
           description: Предложение не найдено.
@@ -434,10 +428,6 @@ components:
     rating:
       type: number
       example: 3.5
-
-    isFavorite:
-      type: boolean
-      example: false
 
     localion:
       type: object
@@ -544,7 +534,8 @@ components:
         - $ref: "#/components/schemas/baseOffer"
       properties:
         isFavorite:
-          $ref: "#/components/schemas/isFavorite"
+          type: boolean
+          example: false
         rating:
           $ref: "#/components/schemas/rating"
         reviewCount:
