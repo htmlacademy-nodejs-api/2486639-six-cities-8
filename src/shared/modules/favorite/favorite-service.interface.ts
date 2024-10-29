@@ -2,7 +2,8 @@ import { DocumentType } from '@typegoose/typegoose';
 import { FavoriteEntity } from './favorite.entity.js';
 
 export interface FavoriteService {
-  findByUserId(userId: string): Promise<DocumentType<FavoriteEntity[]> | null>;
-  add(favorite: FavoriteEntity): Promise<DocumentType<FavoriteEntity> | null>;
-  delete(favorite: FavoriteEntity): Promise<DocumentType<FavoriteEntity> | null>;
+  find(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null>;
+  findByUserId(userId: string): Promise<DocumentType<FavoriteEntity>[]>;
+  add(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null>;
+  deleteById(id: string): Promise<DocumentType<FavoriteEntity> | null>;
 }

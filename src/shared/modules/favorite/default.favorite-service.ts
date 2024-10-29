@@ -12,22 +12,32 @@ export class DefaultFavoriteService implements FavoriteService {
     @inject(Component.FavoriteModel) private readonly favoriteModel: types.ModelType<FavoriteEntity>
   ) { }
 
-  public async findByUserId(_userId: string): Promise<DocumentType<FavoriteEntity[]> | null> {
+  public find(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null> {
+    return this.favoriteModel.findOne({ offerId, userId });
+  }
+
+  public async findByUserId(_userId: string): Promise<DocumentType<FavoriteEntity>[]> {
     this.logger.info('DefaultFavoriteService.findByUserId');
     this.logger.info(this.favoriteModel.collection.name);
 
-    return null;
+    return [];
   }
 
-  public async add(_favorite: FavoriteEntity): Promise<DocumentType<FavoriteEntity> | null> {
-    this.logger.info('DefaultFavoriteService.add');
+  public async add(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null> {
+    const result = await this.favoriteModel.create({ offerId, userId });
 
-    return null;
+    this.logger.info(`New favorite created: offerId:${offerId} userId:${userId}`);
+
+    return result;
   }
 
-  public async delete(_favorite: FavoriteEntity): Promise<DocumentType<FavoriteEntity> | null> {
-    this.logger.info('DefaultFavoriteService.delete');
+  public async deleteById(id: string): Promise<DocumentType<FavoriteEntity> | null> {
+    const result = await this.favoriteModel.findByIdAndDelete(id);
 
-    return null;
+    if (result) {
+      this.logger.info(`Favorite deleted: offerId:${result.offerId} userId:${result.userId}`);
+    }
+
+    return result;
   }
 }

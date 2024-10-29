@@ -26,9 +26,6 @@ export class FavoriteEntity extends defaultClasses.TimeStamps {
     required: true
   })
   public offerId!: Ref<OfferEntity>;
-
-  @prop({ required: true })
-  public isFavorite!: boolean;
 }
 
 export const FavoriteModel = getModelForClass(FavoriteEntity);
