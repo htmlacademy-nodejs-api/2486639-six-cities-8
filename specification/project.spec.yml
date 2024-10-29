@@ -320,6 +320,7 @@ paths:
         401:
           description: Доступ запрещен.
 
+  /favorites/{offerId}:
     post:
       tags:
         - favorites
