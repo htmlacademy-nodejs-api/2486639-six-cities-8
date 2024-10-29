@@ -22,7 +22,7 @@ export class DefaultFavoriteService implements FavoriteService {
       return false;
     }
 
-    const favorite = this.find(offerId, userId);
+    const favorite = await this.find(offerId, userId);
 
     return !!favorite;
   }
