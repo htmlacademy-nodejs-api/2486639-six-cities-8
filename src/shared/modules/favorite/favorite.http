@@ -1,0 +1,16 @@
+# Избранное
+
+## Список избранный предложений
+
+GET http://localhost:5000/favorites HTTP/1.1
+
+###
+
+## Добавить/удалить в/из избранного
+
+POST http://localhost:5000/favorites/671cb25892232b9f591fa8c4 HTTP/1.1
+Content-Type: application/json
+
+{
+  "isFavorite": true
+}
