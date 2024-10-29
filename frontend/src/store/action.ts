@@ -7,6 +7,7 @@ import { Token } from '../utils';
 import { adaptDetailOfferToClient, adaptReviewsToClient } from '../utils/adapters/adaptersToClient';
 import { DetailOfferDto } from '../dto/offer/detail-offer.dto';
 import { ReviewDto } from '../dto/reviews/review.dto';
+import { adaptCreateOfferToServer } from '../utils/adapters/adaptersToServer';
 
 type Extra = {
   api: AxiosInstance;
@@ -73,7 +74,7 @@ export const postOffer = createAsyncThunk<Offer, NewOffer, { extra: Extra }>(
   Action.POST_OFFER,
   async (newOffer, { extra }) => {
     const { api, history } = extra;
-    const { data } = await api.post<Offer>(ApiRoute.Offers, newOffer);
+    const { data } = await api.post<Offer>(ApiRoute.Offers, adaptCreateOfferToServer(newOffer));
     history.push(`${AppRoute.Property}/${data.id}`);
 
     return data;
