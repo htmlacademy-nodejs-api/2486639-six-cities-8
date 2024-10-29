@@ -4,9 +4,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { UserAuth, User, Offer, Comment, CommentAuth, FavoriteAuth, UserRegister, NewOffer } from '../types/types';
 import { ApiRoute, AppRoute, HttpCode } from '../const';
 import { Token } from '../utils';
-import { adaptDetailOfferToClient, adaptReviewsToClient } from '../utils/adapters/adaptersToClient';
 import { DetailOfferDto } from '../dto/offer/detail-offer.dto';
 import { ReviewDto } from '../dto/reviews/review.dto';
+import { adaptDetailOfferToClient, adaptReviewsToClient, adaptReviewToClient } from '../utils/adapters/adaptersToClient';
 import { adaptCreateOfferToServer } from '../utils/adapters/adaptersToServer';
 
 type Extra = {
@@ -84,7 +84,7 @@ export const editOffer = createAsyncThunk<Offer, Offer, { extra: Extra }>(
   Action.EDIT_OFFER,
   async (offer, { extra }) => {
     const { api, history } = extra;
-    const { data } = await api.patch<Offer>(`${ApiRoute.Offers}/${offer.id}`, offer);
+    const { data } = await api.patch<Offer>(`${ApiRoute.Offers}/${offer.id}`, adaptCreateOfferToServer(offer));
     history.push(`${AppRoute.Property}/${data.id}`);
 
     return data;
@@ -183,9 +183,9 @@ export const postComment = createAsyncThunk<Comment, CommentAuth, { extra: Extra
   Action.POST_COMMENT,
   async ({ id, comment, rating }, { extra }) => {
     const { api } = extra;
-    const { data } = await api.post<Comment>(`${ApiRoute.Offers}/${id}${ApiRoute.Comments}`, { comment, rating });
+    const { data } = await api.post<ReviewDto>(`${ApiRoute.Comments}/${id}`, { comment, rating });
 
-    return data;
+    return adaptReviewToClient(data);
   });
 
 export const postFavorite = createAsyncThunk<
