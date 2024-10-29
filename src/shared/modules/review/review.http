@@ -1,5 +1,6 @@
-# Предложения
-## Создать отзыв
+# Отзывы
+
+## Добавить отзыв
 
 POST http://localhost:5000/reviews/671cc48dd441ac613268c691 HTTP/1.1
 Content-Type: application/json
@@ -12,8 +13,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhb
 
 ###
 
-## Список отзывов предложения
+## Список отзывов для предложения
 
 GET http://localhost:5000/reviews/671b04f7ce79e9c18a7d0d93 HTTP/1.1
-
-###

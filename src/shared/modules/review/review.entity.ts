@@ -1,19 +1,14 @@
-import {
-  defaultClasses,
-  getModelForClass,
-  modelOptions,
-  prop,
-  Ref
-} from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { OfferEntity } from '../offer/index.js';
 import { UserEntity } from '../user/index.js';
+import { REVIEWS_COLLECTION } from './review.const.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface ReviewEntity extends defaultClasses.Base { }
 
 @modelOptions({
   schemaOptions: {
-    collection: 'reviews',
+    collection: REVIEWS_COLLECTION,
     timestamps: true
   }
 })

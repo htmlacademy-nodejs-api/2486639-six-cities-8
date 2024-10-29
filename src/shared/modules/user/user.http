@@ -54,5 +54,3 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiQW5kcmV5IiwiZW1haWwiOiJhb
 ## Завершить сеанс пользователя
 
 DELETE http://localhost:5000/users/logout HTTP/1.1
-
-###
