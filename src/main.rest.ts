@@ -100,6 +100,7 @@ bootstrap();
   35. PathTransformer проверить обработку массива строк Offer.images
   36. Проверить создание папки upload при первой загрузке изображения!
   37. что еще придумать! getRandomStringEnumValue и убрать "as UserType" и "as CityName" хотябы в tsv.offer-generator.ts
+  38. await где async нужен?
 
 
   50. tsconfig добавил алиасы / vscode распознает пути, а копилятор нет
