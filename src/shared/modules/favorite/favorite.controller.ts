@@ -5,7 +5,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { Component } from '../../types/index.js';
 import { FavoriteService } from './favorite-service.interface.js';
-import { DetailOfferRdo, OfferName, OfferService, ParamOfferId } from '../offer/index.js';
+import { DetailOfferRdo, OfferName, OfferRdo, OfferService, ParamOfferId } from '../offer/index.js';
 import { FavoriteRoute } from './favorite.const.js';
 
 
@@ -47,8 +47,13 @@ export class FavoriteController extends BaseController {
 
   public async index({ tokenPayload }: Request, res: Response): Promise<void> {
     const favorites = await this.favoriteService.findByUserId(tokenPayload.user.id);
+    const result = favorites.map((favorite) => {
+      const offer = fillDTO(OfferRdo, favorite.offerId);
 
-    this.ok(res, favorites);
+      return { ...offer, isFavorite: true };
+    });
+
+    this.ok(res, result);
   }
 
   public async add({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {

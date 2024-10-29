@@ -4,6 +4,7 @@ import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { FavoriteService } from './favorite-service.interface.js';
 import { FavoriteEntity } from './favorite.entity.js';
+import { OfferName } from '../offer/offer.const.js';
 
 @injectable()
 export class DefaultFavoriteService implements FavoriteService {
@@ -16,11 +17,10 @@ export class DefaultFavoriteService implements FavoriteService {
     return this.favoriteModel.findOne({ offerId, userId });
   }
 
-  public async findByUserId(_userId: string): Promise<DocumentType<FavoriteEntity>[]> {
-    this.logger.info('DefaultFavoriteService.findByUserId');
-    this.logger.info(this.favoriteModel.collection.name);
-
-    return [];
+  public async findByUserId(userId: string): Promise<DocumentType<FavoriteEntity>[]> {
+    return this.favoriteModel
+      .find({ userId })
+      .populate(OfferName.Id);
   }
 
   public async add(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null> {

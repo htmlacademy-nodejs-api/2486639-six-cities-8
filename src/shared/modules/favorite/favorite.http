@@ -3,6 +3,7 @@
 ## Список избранный предложений
 
 GET http://localhost:5000/favorites HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7Im5hbWUiOiJNYXgiLCJlbWFpbCI6Imt1am8tZmFuQHN0b3J5LmxvY2FsIiwiaWQiOiI2NzIwNDhmNGY3NGVlZDRjZjQwYjllNGIifSwiaWF0IjoxNzMwMTg1NjYwLCJleHAiOjE3MzAzNTg0NjB9.6wqSvTs_TGD5dYTYOhBok7Uu1eJJUrZCHe5Pt5qRz-I
 
 ###
 
