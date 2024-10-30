@@ -4,6 +4,7 @@ import { ReviewService } from './review-service.interface.js';
 import { Component, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { ReviewEntity } from './review.entity.js';
+import { OfferEntity } from '../offer/offer.entity.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 import { UserName } from '../user/index.js';
 import { DEFAULT_REVIEW_COUNT } from './review.const.js';
@@ -12,11 +13,23 @@ import { DEFAULT_REVIEW_COUNT } from './review.const.js';
 export class DefaultReviewService implements ReviewService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.ReviewModel) private readonly reviewModel: types.ModelType<ReviewEntity>
+    @inject(Component.ReviewModel) private readonly reviewModel: types.ModelType<ReviewEntity>,
+    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
   ) { }
+
+  private async getTotalRatingByOfferId(offerId: string): Promise<number> {
+    const reviews = await this.reviewModel.find({ offerId });
+    const ratingReviews = reviews.map(({ rating }) => rating);
+    const totalRating = ratingReviews.reduce((total, rating) => total + rating, 0);
+
+    return totalRating / ratingReviews.length;
+  }
 
   public async create(dto: CreateReviewDto, offerId: string, userId: string): Promise<DocumentType<ReviewEntity>> {
     const result = await this.reviewModel.create({ ...dto, offerId, userId });
+    const rating = await this.getTotalRatingByOfferId(offerId);
+
+    await this.offerModel.findByIdAndUpdate(offerId, { rating });
     this.logger.info(`New review created: ${dto.comment}`);
 
     return result.populate(UserName.Id);
@@ -29,17 +42,8 @@ export class DefaultReviewService implements ReviewService {
       .sort({ publishDate: SortType.Down });
   }
 
-  public async getRatingOfferId(offerId: string): Promise<number> {
-    const reviews = await this.reviewModel.find({ offerId });
-    const ratingReviews = reviews.map(({ rating }) => rating);
-    const totalRating = ratingReviews.reduce((total, rating) => total + rating, 0);
-
-    return totalRating / ratingReviews.length;
-  }
-
   public async deleteByOfferId(offerId: string): Promise<number> {
-    const result = await this.reviewModel
-      .deleteMany({ offerId });
+    const result = await this.reviewModel.deleteMany({ offerId });
 
     return result.deletedCount;
   }

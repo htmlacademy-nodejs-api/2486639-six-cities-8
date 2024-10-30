@@ -29,6 +29,12 @@ export class DefaultFavoriteService implements FavoriteService {
 
   public async findByUserId(userId: string): Promise<DocumentType<FavoriteEntity>[]> {
     return this.favoriteModel
+      .find({ userId });
+  }
+
+
+  public async findOffersByUserId(userId: string): Promise<DocumentType<FavoriteEntity>[]> {
+    return this.favoriteModel
       .find({ userId })
       .populate(OfferName.Id);
   }
@@ -49,5 +55,11 @@ export class DefaultFavoriteService implements FavoriteService {
     }
 
     return result;
+  }
+
+  public async deleteByOfferId(offerId: string): Promise<number> {
+    const result = await this.favoriteModel.deleteMany({ offerId });
+
+    return result.deletedCount;
   }
 }

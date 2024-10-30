@@ -88,6 +88,8 @@ paths:
                 $ref: "#/components/schemas/user"
         400:
           description: Не корректные данные
+        404:
+          description: Пользователь не найден.
 
   /users/login:
     post:
@@ -162,10 +164,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/detailOffer"
-        403:
-          description: Доступ запрещен.
         400:
           description: Не корректные данные.
+        403:
+          description: Доступ запрещен.
 
     get:
       tags:
@@ -220,10 +222,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/detailOffer"
-        403:
-          description: Доступ запрещен.
         400:
           description: Не корректные данные.
+        403:
+          description: Доступ запрещен.
+        404:
+          description: Предложение не найдено.
 
     get:
       tags:
@@ -252,6 +256,8 @@ paths:
           description: Предложение удалено.
         403:
           description: Доступ запрещен.
+        404:
+          description: Предложение не найдено.
 
   /reviews/{offerId}:
     parameters:
@@ -276,6 +282,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/review"
+        404:
+          description: Предложение не найдено.
 
     post:
       tags:
@@ -298,10 +306,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/review"
-        403:
-          description: Достур запрещен.
         400:
           description: Не корректные данные.
+        403:
+          description: Достур запрещен.
+        404:
+          description: Предложение не найдено.
 
   /favorites:
     get:

@@ -1,11 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { BaseController, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { FavoriteService } from '../favorite/index.js';
+import { ReviewService } from '../review/review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
@@ -21,7 +23,8 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.FavoriteService) private readonly favoriteService: FavoriteService
+    @inject(Component.FavoriteService) private readonly favoriteService: FavoriteService,
+    @inject(Component.ReviewService) private readonly reviewService: ReviewService
   ) {
     super(logger);
 
@@ -84,13 +87,29 @@ export class OfferController extends BaseController {
   }
 
   public async index({ query, tokenPayload }: IndexOffersRequest, res: Response): Promise<void> {
+    const { count } = query;
+    let limit = undefined;
+
+    // при передачи неправильного числа RequestQuery.count содержит string, хотя указано number
+    if (count) {
+      limit = parseInt(count.toString(), 10);
+      if (isNaN(limit) || (limit <= 0)) {
+        this.send(res, StatusCodes.BAD_REQUEST, 'count must be over zero');
+
+        return;
+      }
+    }
+
     const offers = (query.isPremium)
       ? await this.offerService.findPremium()
-      : await this.offerService.find(query.count);
-    const favorites = await this.favoriteService.findByUserId(tokenPayload?.user.id);
-    if (favorites) {
+      : await this.offerService.find(limit);
+    const favoriteIds =
+      (await this.favoriteService.findByUserId(tokenPayload?.user.id))
+        .map((favorite) => (favorite.offerId.toString()));
+
+    if (favoriteIds.length) {
       offers.forEach((offer) => {
-        offer.isFavorite = !!favorites.find((favorite) => (favorite.offerId.id === offer.id));
+        offer.isFavorite = favoriteIds.includes(offer.id);
       });
     }
 
@@ -98,14 +117,20 @@ export class OfferController extends BaseController {
   }
 
   public async update({ body, params, tokenPayload }: UpdateOfferRequest, res: Response): Promise<void> {
-    //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
+    const { id: userId } = tokenPayload.user;
     const offer = await this.offerService.updateById(offerId, body);
 
     if (offer) {
-      offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
-      this.ok(res, fillDTO(DetailOfferRdo, offer));
+      if (offer.hostId.id === userId) {
+        offer.isFavorite = await this.favoriteService.exists(offerId, userId);
+
+        this.ok(res, fillDTO(DetailOfferRdo, offer));
+      } else {
+        this.notAllow(res, 'Offer is not yours');
+      }
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }
@@ -116,20 +141,31 @@ export class OfferController extends BaseController {
 
     if (offer) {
       offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
+
       this.ok(res, fillDTO(DetailOfferRdo, offer));
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }
 
-  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    //! наверное нужно проверить что предложение этого пользователя
+  public async delete({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
-    const offer = await this.offerService.deleteById(offerId);
+    const { id: userId } = tokenPayload.user;
+    const offer = await this.offerService.findById(offerId);
 
     if (offer) {
-      this.noContent(res);
+      if (offer.hostId.id === userId) {
+        await this.favoriteService.deleteByOfferId(offerId);
+        await this.reviewService.deleteByOfferId(offerId);
+        await this.offerService.deleteById(offerId);
+
+        this.noContent(res);
+      } else {
+        this.notAllow(res, 'Offer is not yours');
+      }
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }

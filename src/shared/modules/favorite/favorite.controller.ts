@@ -46,14 +46,17 @@ export class FavoriteController extends BaseController {
   }
 
   public async index({ tokenPayload }: Request, res: Response): Promise<void> {
-    const favorites = await this.favoriteService.findByUserId(tokenPayload.user.id);
-    const result = favorites.map((favorite) => {
-      const offer = fillDTO(OfferRdo, favorite.offerId);
+    const favoriteOffers = await this.favoriteService.findOffersByUserId(tokenPayload.user.id);
+    const offers: OfferRdo[] = [];
 
-      return { ...offer, isFavorite: true };
+    favoriteOffers.forEach((favorite) => {
+      if (favorite.offerId) {
+        const offer = fillDTO(OfferRdo, favorite.offerId);
+        offers.push({ ...offer, isFavorite: true });
+      }
     });
 
-    this.ok(res, result);
+    this.ok(res, offers);
   }
 
   public async add({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {

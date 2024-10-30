@@ -66,7 +66,7 @@ export class TSVOfferParser implements OfferParser {
 
   private parseUser(name: string, email: string, avatarPath: string, userType: string): User {
     this.validateValueInObject(userType, UserType);
-    //! одинаковый код, тоже бы обернуть дженериком но enum это не type, а фактически Object, а если в enum key!==value, Property 'Ordinary12345' does not exist on type 'typeof UserType'.
+
     const type = userType as UserType;
 
     return {
