@@ -8,4 +8,5 @@ export interface FavoriteService {
   findOffersByUserId(userId: string): Promise<DocumentType<FavoriteEntity>[]>;
   add(offerId: string, userId: string): Promise<DocumentType<FavoriteEntity> | null>;
   deleteById(id: string): Promise<DocumentType<FavoriteEntity> | null>;
+  deleteByOfferId(offerId: string): Promise<number>;
 }
