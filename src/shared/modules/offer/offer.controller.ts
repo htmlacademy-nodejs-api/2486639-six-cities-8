@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { BaseController, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -86,9 +87,22 @@ export class OfferController extends BaseController {
   }
 
   public async index({ query, tokenPayload }: IndexOffersRequest, res: Response): Promise<void> {
+    const { count } = query;
+    let limit = undefined;
+
+    // при передачи неправильного числа RequestQuery.count содержит string, хотя указано number
+    if (count) {
+      limit = parseInt(count.toString(), 10);
+      if (isNaN(limit) || (limit <= 0)) {
+        this.send(res, StatusCodes.BAD_REQUEST, 'count must be over zero');
+
+        return;
+      }
+    }
+
     const offers = (query.isPremium)
       ? await this.offerService.findPremium()
-      : await this.offerService.find(query.count);
+      : await this.offerService.find(limit);
     const favoriteIds =
       (await this.favoriteService.findByUserId(tokenPayload?.user.id))
         .map((favorite) => (favorite.offerId.toString()));
