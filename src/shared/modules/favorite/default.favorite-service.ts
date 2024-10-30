@@ -56,4 +56,10 @@ export class DefaultFavoriteService implements FavoriteService {
 
     return result;
   }
+
+  public async deleteByOfferId(offerId: string): Promise<number> {
+    const result = await this.favoriteModel.deleteMany({ offerId });
+
+    return result.deletedCount;
+  }
 }
