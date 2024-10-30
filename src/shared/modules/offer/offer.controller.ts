@@ -6,6 +6,7 @@ import { Component } from '../../types/index.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { OfferService } from './offer-service.interface.js';
 import { FavoriteService } from '../favorite/index.js';
+import { ReviewService } from '../review/review-service.interface.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
@@ -21,7 +22,8 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.FavoriteService) private readonly favoriteService: FavoriteService
+    @inject(Component.FavoriteService) private readonly favoriteService: FavoriteService,
+    @inject(Component.ReviewService) private readonly reviewService: ReviewService
   ) {
     super(logger);
 
@@ -140,6 +142,8 @@ export class OfferController extends BaseController {
 
     if (offer) {
       if (offer.hostId.id === userId) {
+        await this.favoriteService.deleteByOfferId(offerId);
+        await this.reviewService.deleteByOfferId(offerId);
         await this.offerService.deleteById(offerId);
 
         this.noContent(res);
