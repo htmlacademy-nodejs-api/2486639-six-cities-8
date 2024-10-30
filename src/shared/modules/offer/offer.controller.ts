@@ -87,11 +87,13 @@ export class OfferController extends BaseController {
     const offers = (query.isPremium)
       ? await this.offerService.findPremium()
       : await this.offerService.find(query.count);
-    const favorites = await this.favoriteService.findByUserId(tokenPayload?.user.id);
-    if (favorites) {
+    const favoriteIds =
+      (await this.favoriteService.findByUserId(tokenPayload?.user.id))
+        .map((favorite) => (favorite.offerId.toString()));
+
+    if (favoriteIds.length) {
       offers.forEach((offer) => {
-        //! favorite.offerId?.id т.к. могут остаться в избранных
-        offer.isFavorite = !!favorites.find((favorite) => (favorite.offerId?.id === offer.id));
+        offer.isFavorite = favoriteIds.includes(offer.id);
       });
     }
 
