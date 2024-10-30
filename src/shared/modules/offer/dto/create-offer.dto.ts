@@ -17,13 +17,13 @@ export class CreateOfferDto {
   @IsEnum(CityName, { message: OfferValidationMessage.city.invalidFormat })
   public city: CityName;
 
-  @IsUrl({}, { message: OfferValidationMessage.previewImage.invalidFormat })
+  @IsUrl({ 'require_tld': false }, { message: OfferValidationMessage.previewImage.invalidFormat })
   public previewImage: string;
 
   @IsArray({ message: OfferValidationMessage.images.invalidFormat })
   @ArrayMinSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
   @ArrayMaxSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
-  @IsUrl({}, { each: true, message: OfferValidationMessage.images.invalidFormatItem })
+  @IsUrl({ 'require_tld': false }, { each: true, message: OfferValidationMessage.images.invalidFormatItem })
   public images: string[];
 
   @IsBoolean({ message: OfferValidationMessage.isPremium.invalidFormat })

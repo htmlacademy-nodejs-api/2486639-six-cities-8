@@ -22,14 +22,14 @@ export class UpdateOfferDto {
   public city?: CityName;
 
   @IsOptional()
-  @IsUrl({}, { message: OfferValidationMessage.previewImage.invalidFormat })
+  @IsUrl({ 'require_tld': false }, { message: OfferValidationMessage.previewImage.invalidFormat })
   public previewImage?: string;
 
   @IsOptional()
   @IsArray({ message: OfferValidationMessage.images.invalidFormat })
   @ArrayMinSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
   @ArrayMaxSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
-  @IsUrl({}, { each: true, message: OfferValidationMessage.images.invalidFormatItem })
+  @IsUrl({ 'require_tld': false }, { each: true, message: OfferValidationMessage.images.invalidFormatItem })
   public images?: string[];
 
   @IsOptional()

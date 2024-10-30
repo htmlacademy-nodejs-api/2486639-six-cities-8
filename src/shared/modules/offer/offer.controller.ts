@@ -101,14 +101,20 @@ export class OfferController extends BaseController {
   }
 
   public async update({ body, params, tokenPayload }: UpdateOfferRequest, res: Response): Promise<void> {
-    //! наверное нужно проверить что предложение этого пользователя
     const { offerId } = params;
+    const { id: userId } = tokenPayload.user;
     const offer = await this.offerService.updateById(offerId, body);
 
     if (offer) {
-      offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
-      this.ok(res, fillDTO(DetailOfferRdo, offer));
+      if (offer.hostId.id === userId) {
+        offer.isFavorite = await this.favoriteService.exists(offerId, userId);
+
+        this.ok(res, fillDTO(DetailOfferRdo, offer));
+      } else {
+        this.notAllow(res, 'Offer is not yours');
+      }
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }
@@ -119,20 +125,29 @@ export class OfferController extends BaseController {
 
     if (offer) {
       offer.isFavorite = await this.favoriteService.exists(offerId, tokenPayload?.user.id);
+
       this.ok(res, fillDTO(DetailOfferRdo, offer));
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }
 
-  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    //! наверное нужно проверить что предложение этого пользователя
+  public async delete({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
-    const offer = await this.offerService.deleteById(offerId);
+    const { id: userId } = tokenPayload.user;
+    const offer = await this.offerService.findById(offerId);
 
     if (offer) {
-      this.noContent(res);
+      if (offer.hostId.id === userId) {
+        await this.offerService.deleteById(offerId);
+
+        this.noContent(res);
+      } else {
+        this.notAllow(res, 'Offer is not yours');
+      }
     } else {
+      // на случай если в другой сессии кто то успел удалить предложение, после проверки наличия объекта
       this.notFound(res, { offerId });
     }
   }

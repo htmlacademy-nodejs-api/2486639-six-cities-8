@@ -13,7 +13,6 @@ export class ReviewRdo {
 
   @Expose({ name: 'createdAt' })
   public publishDate: string;
-  //? сработает
 
   @Expose({ name: 'userId' })
   @Type(() => UserRdo)
