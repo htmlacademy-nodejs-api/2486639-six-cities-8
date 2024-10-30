@@ -26,44 +26,14 @@ bootstrap();
 
 /*
 Вопросы:
-  1. а почему OFFER_TYPES не string[] и приходиться [...OFFER_TYPES]
-    т.к. export const OFFER_TYPES = ['apartment', 'house', 'room', 'hotel'] as const;  и это не string[], а readonly ['..','..']
-  2. а как передать параметр для конструктора? если понадобится
-    container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
-    как модель? toConstantValue? userContainer.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
-  3. название component.enum.ts в types? но там фактически перечисление, для enum нельзя исмользовать Symbol...
-  4. установли @typegoose/typegoose в основные зависимости, но там же TS, а значит в зависимости разработки
-  5. почему "пропадает" контекст this в ImportCommand.execute, после смены async для await подключения к БД
-      this.onImportedOffer = this.onImportedOffer.bind(this);
-      this.onCompleteImport = this.onCompleteImport.bind(this);
-  6. обязательно ли .exec()? для .findById(id).exec() и .findOne({...}).exec()
-  7. Для описания пропа "type: UserType" обязательно ли указывать все? без указания все отрабоатывает
-    @prop({
-      required: true,
-      type: () => String,
-      enum: UserType
-    })
-    public type: UserType;
-  8. а можно проще при запуске события EventEmitter.emit ?
-      await new Promise((resolve) => {
-        this.emit('line', parsedOffer, resolve);
-      });
-  9. всем полям UserEntity добавить трим?
-  10. implements Offer и Review у Entity будет позднее?
-  11. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
+  1. как задать для pino - console codepage - вместо вывода спец.символов (»,...) всякие артефакты, может это проблемма отображения PS?
           в лог файл пишет нормально.
-  12. GET http://localhost:5000/offers?count=absd если не число, то ошибка или count === undefined ?
-  13. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
-  14. class-validator не срабатывает
+  2. если использовать один экзепляр new ValidateObjectIdMiddleware('offerId')] для всех методах в контроллере?
+  3. class-validator не срабатывает
         @IsObject location
-  15. ParseTokenMiddleware
+  4. ParseTokenMiddleware
          подключено на все запросы. то необходимо ошибку отдать next(err) ?
-  16. city: this.getCity(dto.city)
-        возможно другим способом заполнить данные или как будут приходить с клиента
-  17. обязательно ли в ДТО все поля для передачи сервису БД, можно чать передать параметрами?
-    CreateOfferDto, CreateReviewDto
-  18. что еще придумать! getRandomStringEnumValue и убрать "as UserType" и "as CityName" хотябы в tsv.offer-generator.ts
-  19. await где async нужен?
+  5. что еще придумать! getRandomStringEnumValue и убрать "as UserType" и "as CityName" хотябы в tsv.offer-generator.ts
 
 
 Сделать:
